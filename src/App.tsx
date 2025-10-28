@@ -51,6 +51,7 @@ const i18n = {
       ['Висока успеваемост', 'Фокус върху сигурност и увереност.']
     ],
     processTitle: 'Как протича обучението',
+    stepLabel: 'Стъпка',
     steps: ['Записване', 'Медицинско', 'Теория', 'Практика', 'Държавен изпит'],
     coursesTitle: 'Курсове',
     coursesLead: 'Изберете програма според нуждите си. Всички включват теория и практика.',
@@ -150,6 +151,7 @@ const i18n = {
       ['High success rate', 'Focus on safety and confidence.']
     ],
     processTitle: 'How the training works',
+    stepLabel: 'Step',
     steps: ['Enrollment', 'Medical', 'Theory', 'Practice', 'State exam'],
     coursesTitle: 'Courses',
     coursesLead: 'Choose a program for your needs. All include theory and practice.',
@@ -249,6 +251,7 @@ const i18n = {
       ['Высокая успешность', 'Фокус на безопасность и уверенность.']
     ],
     processTitle: 'Как проходит обучение',
+    stepLabel: 'Шаг',
     steps: ['Запись', 'Медкомиссия', 'Теория', 'Практика', 'Госэкзамен'],
     coursesTitle: 'Курсы',
     coursesLead: 'Выберите программу под ваши задачи. Все включают теорию и практику.',
@@ -588,6 +591,7 @@ export default function App() {
     gdpr: false
   });
   const formRef = useRef<HTMLFormElement | null>(null);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!startDate && upcomingStarts.length > 0) {
@@ -654,9 +658,12 @@ export default function App() {
   };
 
   const handleScrollTo = (id: NavSection) => {
+    setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const elementTop = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: elementTop - headerHeight, behavior: 'smooth' });
     }
   };
 
@@ -670,7 +677,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
-      <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
+      <header
+        ref={headerRef}
+        className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur"
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-8">
             <span className="text-lg font-semibold text-red-600">{t.brand}</span>
@@ -686,6 +696,7 @@ export default function App() {
                     className={`rounded-full px-3 py-2 text-sm transition ${
                       active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
                     }`}
+                    aria-current={active ? 'true' : undefined}
                   >
                     {label}
                   </button>
@@ -751,6 +762,7 @@ export default function App() {
                 </div>
                 {t.nav.map((label, index) => {
                   const id = NAV_SECTION_IDS[index];
+                  const active = activeSection === id;
                   return (
                     <button
                       key={label}
@@ -759,7 +771,10 @@ export default function App() {
                         setMenuOpen(false);
                         handleScrollTo(id);
                       }}
-                      className="block w-full rounded-xl px-3 py-2 text-left text-sm hover:bg-neutral-100"
+                      className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition ${
+                        active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
+                      }`}
+                      aria-current={active ? 'true' : undefined}
                     >
                       {label}
                     </button>
@@ -874,7 +889,7 @@ export default function App() {
                 { title: t.steps[4], icon: <GraduationCap /> }
               ].map((step, index) => (
                 <li key={step.title} className="rounded-2xl border bg-white p-4 text-sm shadow-sm">
-                  <div className="mb-1 text-xs text-neutral-500">{index + 1}.</div>
+                  <div className="mb-1 text-xs text-neutral-500">{t.stepLabel} {index + 1}</div>
                   <div className="font-semibold text-center">{step.title}</div>
                   <div className="mt-2 flex justify-center">
                     <div className="inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">{step.icon}</div>

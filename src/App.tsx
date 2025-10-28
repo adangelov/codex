@@ -588,6 +588,7 @@ export default function App() {
     gdpr: false
   });
   const formRef = useRef<HTMLFormElement | null>(null);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!startDate && upcomingStarts.length > 0) {
@@ -657,7 +658,9 @@ export default function App() {
     setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const elementTop = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: elementTop - headerHeight, behavior: 'smooth' });
     }
   };
 
@@ -671,7 +674,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
-      <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
+      <header
+        ref={headerRef}
+        className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur"
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-8">
             <span className="text-lg font-semibold text-red-600">{t.brand}</span>

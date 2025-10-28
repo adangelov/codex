@@ -600,29 +600,28 @@ export default function App() {
   }, [startDate, upcomingStarts]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id as NavSection;
-            setActiveSection(id);
-          }
-        });
-      },
-      {
-        rootMargin: '-50% 0px -45% 0px',
-        threshold: 0.2
-      }
-    );
+    const handleScroll = () => {
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const scrollPosition = window.scrollY + headerHeight + 1;
 
-    NAV_SECTION_IDS.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) {
-        observer.observe(element);
+      let currentSection: NavSection | null = null;
+      for (const id of NAV_SECTION_IDS) {
+        const element = document.getElementById(id);
+        if (!element) {
+          continue;
+        }
+        if (scrollPosition >= element.offsetTop) {
+          currentSection = id;
+        }
       }
-    });
 
-    return () => observer.disconnect();
+      const nextSection = currentSection ?? NAV_SECTION_IDS[0];
+      setActiveSection((prev) => (prev === nextSection ? prev : nextSection));
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -854,12 +853,12 @@ export default function App() {
             <div>
               <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl border bg-white shadow-sm">
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Hyundai_i30_PD_Fiery_Red_%2814%29.jpg"
+                  src="https://media.drive.com.au/obj/tx_q:50,rs:auto:1920:1080:1/driveau/upload/cms/uploads/X3qgFrmQnyB7iCa6jmWA"
                   alt="Hyundai i30"
                   className="h-full w-full object-cover"
                 />
               </div>
-              <p className="mt-2 text-center text-xs text-neutral-500">Hyundai i30 (stock image).</p>
+              <p className="mt-2 text-center text-xs text-neutral-500">Hyundai i30 (учебен автомобил).</p>
             </div>
           </div>
         </section>
@@ -1020,19 +1019,14 @@ export default function App() {
             </div>
             <h3 className="mt-10 text-xl font-semibold md:text-2xl">{t.carSection}</h3>
             <div className="mt-4 rounded-2xl border bg-white p-5 shadow-sm">
-              <div className="mb-2 inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">
-                <Car size={18} />
-              </div>
-              <ul className="space-y-1 text-sm text-neutral-700">
-                <li>{t.carBullet}</li>
-              </ul>
-              <div className="mt-3 overflow-hidden rounded-xl border">
+              <div className="overflow-hidden rounded-xl border">
                 <img
                   alt="Hyundai i30"
                   className="h-full w-full object-cover"
                   src="https://media.drive.com.au/obj/tx_q:50,rs:auto:1920:1080:1/driveau/upload/cms/uploads/X3qgFrmQnyB7iCa6jmWA"
                 />
               </div>
+              <p className="mt-3 text-sm text-neutral-700">{t.carBullet}</p>
             </div>
           </div>
         </section>

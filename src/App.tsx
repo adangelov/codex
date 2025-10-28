@@ -51,6 +51,7 @@ const i18n = {
       ['Висока успеваемост', 'Фокус върху сигурност и увереност.']
     ],
     processTitle: 'Как протича обучението',
+    stepLabel: 'Стъпка',
     steps: ['Записване', 'Медицинско', 'Теория', 'Практика', 'Държавен изпит'],
     coursesTitle: 'Курсове',
     coursesLead: 'Изберете програма според нуждите си. Всички включват теория и практика.',
@@ -150,6 +151,7 @@ const i18n = {
       ['High success rate', 'Focus on safety and confidence.']
     ],
     processTitle: 'How the training works',
+    stepLabel: 'Step',
     steps: ['Enrollment', 'Medical', 'Theory', 'Practice', 'State exam'],
     coursesTitle: 'Courses',
     coursesLead: 'Choose a program for your needs. All include theory and practice.',
@@ -249,6 +251,7 @@ const i18n = {
       ['Высокая успешность', 'Фокус на безопасность и уверенность.']
     ],
     processTitle: 'Как проходит обучение',
+    stepLabel: 'Шаг',
     steps: ['Запись', 'Медкомиссия', 'Теория', 'Практика', 'Госэкзамен'],
     coursesTitle: 'Курсы',
     coursesLead: 'Выберите программу под ваши задачи. Все включают теорию и практику.',
@@ -886,7 +889,7 @@ export default function App() {
                 { title: t.steps[4], icon: <GraduationCap /> }
               ].map((step, index) => (
                 <li key={step.title} className="rounded-2xl border bg-white p-4 text-sm shadow-sm">
-                  <div className="mb-1 text-xs text-neutral-500">{index + 1}.</div>
+                  <div className="mb-1 text-xs text-neutral-500">{t.stepLabel} {index + 1}</div>
                   <div className="font-semibold text-center">{step.title}</div>
                   <div className="mt-2 flex justify-center">
                     <div className="inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">{step.icon}</div>

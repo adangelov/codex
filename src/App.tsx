@@ -906,9 +906,6 @@ export default function App() {
             <p className="mt-2 text-neutral-600">{t.coursesLead}</p>
             <div className="mt-6 grid items-stretch gap-4 md:grid-cols-3">
               <div className="flex flex-col rounded-2xl border p-4 shadow-sm">
-                <div className="mb-3 inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">
-                  <Car size={18} />
-                </div>
                 <div className="font-semibold">{t.bStandard}</div>
                 <div className="mt-2 text-sm text-neutral-600">{t.bStandardDesc}</div>
                 <div className="mt-auto flex gap-2 pt-3">
@@ -930,9 +927,6 @@ export default function App() {
               </div>
 
               <div className="flex flex-col rounded-2xl border p-4 shadow-sm">
-                <div className="mb-3 inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">
-                  <Car size={18} />
-                </div>
                 <div className="font-semibold">{t.refreshTitle}</div>
                 <div className="mt-auto flex gap-2 pt-3">
                   <button
@@ -953,9 +947,6 @@ export default function App() {
               </div>
 
               <div className="flex flex-col rounded-2xl border p-4 shadow-sm">
-                <div className="mb-3 inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">
-                  <Car size={18} />
-                </div>
                 <div className="font-semibold">{t.voucherTitle}</div>
                 <div className="text-sm text-neutral-600">{t.voucherLead}</div>
                 <div className="mt-auto pt-3">

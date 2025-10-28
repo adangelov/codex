@@ -22,16 +22,16 @@ import {
 
 type Lang = 'bg' | 'en' | 'ru';
 
-type NavSection = 'process' | 'courses' | 'pricing' | 'instructor' | 'faq' | 'contact';
+type NavSection = 'process' | 'courses' | 'instructor' | 'faq' | 'contact';
 
 const VERSION = 3;
 
-const NAV_SECTION_IDS: NavSection[] = ['process', 'courses', 'pricing', 'instructor', 'faq', 'contact'];
+const NAV_SECTION_IDS: NavSection[] = ['process', 'courses', 'instructor', 'faq', 'contact'];
 
 const i18n = {
   bg: {
     brand: 'РУМИ · Автошкола',
-    nav: ['Как протича', 'Курсове', 'Цени', 'Инструктор', 'FAQ', 'Контакти'],
+    nav: ['Как протича', 'Курсове', 'Инструктор', 'FAQ', 'Контакти'],
     heroTitle: 'Увереното шофиране започва тук.',
     heroLead:
       'Лицензиран инструктор. Реални ситуации. Модерна учебна среда. Практика с Hyundai i30 (дизел, ръчни скорости).',
@@ -56,15 +56,38 @@ const i18n = {
     coursesTitle: 'Курсове',
     coursesLead: 'Изберете програма според нуждите си. Всички включват теория и практика.',
     bStandard: 'Категория B – стандартен курс',
-    bStandardDesc: 'Теория + 31 учебни часа практика',
+    bStandardDesc:
+      'Пълен курс теория + 31 учебни часа практика, вътрешни изпити и включени учебни материали.',
+    bStandardPrice: '1 390 лв/710,71 €',
+    bStandardHighlights: [
+      'Учебници + онлайн подготовка',
+      'Вътрешен изпит теория и практика',
+      'Гъвкав график с личен инструктор'
+    ],
     seeDetails: 'Виж детайли',
     enroll: 'Запиши се',
     refreshTitle: 'Опреснителни и индивидуални часове',
-    price: 'Цена',
+    refreshDesc:
+      'Индивидуални кормилни занятия за връщане на увереност или подготовка преди изпит/пътуване.',
+    refreshHighlights: [
+      'Персонални маршрути и обратна връзка',
+      'Възможност за часове сутрин/вечер/уикенд',
+      'Сценарии в реални градски условия'
+    ],
+    price: 'Ценоразпис',
     plan: 'Планирай час',
-    voucherTitle: 'Подари ваучер 🎁',
-    voucherLead: 'Подари на близък ваучер за теория и практика.',
-    getVoucher: 'Вземи ваучер',
+    refreshPriceLabel: 'Тарифи',
+    coursePriceLabel: 'Цена',
+    intensiveTitle: 'Категория B – интензивен курс',
+    intensiveDesc:
+      'Ускорена програма с приоритетни графици, комбинирани занятия и допълнителни практически упражнения.',
+    intensivePrice: '1 690 лв/864,08 €',
+    intensiveHighlights: [
+      'Два пъти повече практика седмично',
+      'Приоритетни часове и маршрут с инструктор',
+      'Подкрепа до изпита и финален пробен ден'
+    ],
+    intensiveCta: 'Запиши се за интензивен курс',
     faqTitle: 'Често задавани въпроси',
     faqs: [
       ['На колко навършени години трябва да съм, за да се запиша?', 'Минимум 17 г. и 9 месеца към датата на започване на курса (за категория B).'],
@@ -74,9 +97,7 @@ const i18n = {
       ['Какви документи трябват?', 'Лична карта, снимка, медицинско и други при необходимост.'],
       ['Мога ли да плащам разсрочено?', 'Да — предлагаме гъвкави планове.']
     ],
-    pricingTitle: 'Цени и график',
-    planStandard: ['Стандартен', 'Всичко необходимо за изпита', 'Включва теория + практика + вътрешни изпити.'],
-    planInstallments: ['Разсрочено', 'Плащане на части', 'Гъвкави планове и индивидуален график.'],
+    installmentsNote: 'Предлагаме разсрочено плащане за всички курсове.',
     instructorTitle: 'Инструктор и класна стая',
     instructorCardTitle: 'Димитър — лицензиран инструктор',
     instructorCardText: 'Дългогодишен опит, спокоен подход и ясни обяснения. Индивидуално внимание според темпото ви.',
@@ -101,6 +122,7 @@ const i18n = {
     courseOptions: {
       b_standard: 'Категория B - стандартен курс',
       b_refresh: 'Категория B - опреснителни курсове',
+      b_intensive: 'Категория B - интензивен курс',
       b_extra: 'Категория B - допълнителни часове'
     },
     detailsTitle: 'Категория B — детайли',
@@ -121,17 +143,19 @@ const i18n = {
     close: 'Затвори',
     chooseDateRefresh: 'Избери дата за опреснителни',
     priceTitle: 'Цени — опреснителни/индивидуални',
-    prices: ['до 5 часа — 45 лв/час', '6–10 часа — 40 лв/час', '11–15 часа — 38 лв/час', '20–30 часа — 35 лв/час'],
+    prices: [
+      'до 5 часа — 45 лв/час / 23,01 €/час',
+      '6–10 часа — 40 лв/час / 20,45 €/час',
+      '11–15 часа — 38 лв/час / 19,43 €/час',
+      '20–30 часа — 35 лв/час / 17,90 €/час'
+    ],
     perHour: 'лв/час',
-    voucherModalTitle: 'Подаръчен ваучер 🎁',
-    voucherText: 'Подари ваучер за пълен курс теория + практика или за пакет индивидуални часове. Идеален подарък за близък човек, който иска да започне уверено.',
-    orderVoucher: 'Поръчай ваучер',
     footer: (year: number) => `© Руми ${year} · Всички права запазени · Версия ${VERSION}`,
     locale: 'bg-BG'
   },
   en: {
     brand: 'RUMI · Driving School',
-    nav: ['How it works', 'Courses', 'Pricing', 'Instructor', 'FAQ', 'Contacts'],
+    nav: ['How it works', 'Courses', 'Instructor', 'FAQ', 'Contacts'],
     heroTitle: 'Confident driving starts here.',
     heroLead:
       'Licensed instructor. Real-world situations. Modern classroom. Practice with Hyundai i30 (diesel, manual).',
@@ -156,15 +180,38 @@ const i18n = {
     coursesTitle: 'Courses',
     coursesLead: 'Choose a program for your needs. All include theory and practice.',
     bStandard: 'Category B – standard course',
-    bStandardDesc: 'Theory + 31 practice lessons',
+    bStandardDesc:
+      'Complete theory + 31 driving lessons, internal exams and learning materials included.',
+    bStandardPrice: 'BGN 1,390 / €710.71',
+    bStandardHighlights: [
+      'Course books + online prep tools',
+      'Internal theory & driving mock exams',
+      'Flexible schedule with a dedicated instructor'
+    ],
     seeDetails: 'See details',
     enroll: 'Enroll',
     refreshTitle: 'Refresher & individual lessons',
-    price: 'Price',
-    plan: 'Plan a lesson',
-    voucherTitle: 'Gift a voucher 🎁',
-    voucherLead: 'Gift a voucher for theory and practice.',
-    getVoucher: 'Get voucher',
+    refreshDesc:
+      'One-to-one driving practice to regain confidence or prepare before an exam/trip.',
+    refreshHighlights: [
+      'Personal routes and actionable feedback',
+      'Morning, evening or weekend availability',
+      'Real traffic scenarios around the city'
+    ],
+    price: 'Pricing',
+    plan: 'Schedule lesson',
+    refreshPriceLabel: 'Rates',
+    coursePriceLabel: 'Price',
+    intensiveTitle: 'Category B – intensive course',
+    intensiveDesc:
+      'Accelerated program with priority scheduling, combined sessions and extra driving drills.',
+    intensivePrice: 'BGN 1,690 / €864.08',
+    intensiveHighlights: [
+      'Twice the weekly driving practice',
+      'Priority timeslots and tailored routes',
+      'Support until the exam with a mock drive day'
+    ],
+    intensiveCta: 'Apply for intensive course',
     faqTitle: 'Frequently asked questions',
     faqs: [
       ['What minimum age do I need?', 'At least 17 years and 9 months at course start (Category B).'],
@@ -174,9 +221,7 @@ const i18n = {
       ['What documents are required?', 'ID, photo, medical certificate, others if needed.'],
       ['Can I pay in installments?', 'Yes — flexible plans available.']
     ],
-    pricingTitle: 'Pricing & schedule',
-    planStandard: ['Standard', 'Everything needed for the exam', 'Includes theory + practice + internal mock exams.'],
-    planInstallments: ['Installments', 'Pay in parts', 'Flexible plans tailored to your calendar.'],
+    installmentsNote: 'Installment payments are available for every course.',
     instructorTitle: 'Instructor & classroom',
     instructorCardTitle: 'Dimitar — licensed instructor',
     instructorCardText: 'Many years of experience, calm approach and clear explanations.',
@@ -201,6 +246,7 @@ const i18n = {
     courseOptions: {
       b_standard: 'Category B - standard course',
       b_refresh: 'Category B - refresher lessons',
+      b_intensive: 'Category B - intensive course',
       b_extra: 'Category B - additional hours'
     },
     detailsTitle: 'Category B — details',
@@ -221,17 +267,19 @@ const i18n = {
     close: 'Close',
     chooseDateRefresh: 'Choose date for refresher',
     priceTitle: 'Prices — refresher/individual',
-    prices: ['up to 5 lessons — 45 BGN/hour', '6–10 lessons — 40 BGN/hour', '11–15 lessons — 38 BGN/hour', '20–30 lessons — 35 BGN/hour'],
+    prices: [
+      'up to 5 lessons — 45 BGN/hour / €23.01/hour',
+      '6–10 lessons — 40 BGN/hour / €20.45/hour',
+      '11–15 lessons — 38 BGN/hour / €19.43/hour',
+      '20–30 lessons — 35 BGN/hour / €17.90/hour'
+    ],
     perHour: 'BGN/hour',
-    voucherModalTitle: 'Gift voucher 🎁',
-    voucherText: 'Gift a voucher for a full course or a package of individual lessons. Perfect for a loved one who wants to start driving confidently.',
-    orderVoucher: 'Get voucher',
     footer: (year: number) => `© Rumi ${year} · All rights reserved · Version ${VERSION}`,
     locale: 'en-US'
   },
   ru: {
     brand: 'РУМИ · Автошкола',
-    nav: ['Как проходит', 'Курсы', 'Цены', 'Инструктор', 'Вопросы', 'Контакты'],
+    nav: ['Как проходит', 'Курсы', 'Инструктор', 'Вопросы', 'Контакты'],
     heroTitle: 'Уверенное вождение начинается здесь.',
     heroLead:
       'Лицензированный инструктор. Реальные ситуации. Современный класс. Практика на Hyundai i30 (дизель, механика).',
@@ -256,15 +304,38 @@ const i18n = {
     coursesTitle: 'Курсы',
     coursesLead: 'Выберите программу под ваши задачи. Все включают теорию и практику.',
     bStandard: 'Категория B – стандартный курс',
-    bStandardDesc: 'Теория + 31 урок практики',
+    bStandardDesc:
+      'Полный курс: теория + 31 урок практики, внутренние экзамены и включённые учебные материалы.',
+    bStandardPrice: '1 390 лв/710,71 €',
+    bStandardHighlights: [
+      'Учебники и онлайн-подготовка',
+      'Внутренние экзамены теория и практика',
+      'Гибкий график с личным инструктором'
+    ],
     seeDetails: 'Подробнее',
     enroll: 'Записаться',
     refreshTitle: 'Повторные и индивидуальные занятия',
-    price: 'Цена',
+    refreshDesc:
+      'Индивидуальные уроки для восстановления навыков или подготовки к экзамену/поездке.',
+    refreshHighlights: [
+      'Персональные маршруты и подробная обратная связь',
+      'Утренние, вечерние и выходные слоты',
+      'Реальные дорожные ситуации в городе'
+    ],
+    price: 'Цены',
     plan: 'Запланировать',
-    voucherTitle: 'Подарочный ваучер 🎁',
-    voucherLead: 'Подарите ваучер на теорию и практику.',
-    getVoucher: 'Получить ваучер',
+    refreshPriceLabel: 'Тарифы',
+    coursePriceLabel: 'Цена',
+    intensiveTitle: 'Категория B – интенсивный курс',
+    intensiveDesc:
+      'Ускоренная программа с приоритетным расписанием, комбинированными занятиями и дополнительной практикой.',
+    intensivePrice: '1 690 лв/864,08 €',
+    intensiveHighlights: [
+      'Вдвое больше практики каждую неделю',
+      'Приоритетные слоты и индивидуальные маршруты',
+      'Поддержка до экзамена и финальный пробный заезд'
+    ],
+    intensiveCta: 'Записаться на интенсивный курс',
     faqTitle: 'Частые вопросы',
     faqs: [
       ['С какого возраста можно записаться?', 'Минимум 17 лет и 9 месяцев на дату начала курса (кат. B).'],
@@ -274,9 +345,7 @@ const i18n = {
       ['Какие документы нужны?', 'Удостоверение личности, фото, медсправка и др. при необходимости.'],
       ['Можно ли платить частями?', 'Да — гибкие планы оплаты.']
     ],
-    pricingTitle: 'Цены и расписание',
-    planStandard: ['Стандарт', 'Всё для экзамена', 'Включает теорию + практику + внутренние проверки.'],
-    planInstallments: ['В рассрочку', 'Оплата частями', 'Гибкие планы и индивидуальный график.'],
+    installmentsNote: 'Рассрочка доступна для всех курсов.',
     instructorTitle: 'Инструктор и класс',
     instructorCardTitle: 'Димитар — лицензированный инструктор',
     instructorCardText: 'Большой опыт, спокойный подход и понятные пояснения.',
@@ -301,6 +370,7 @@ const i18n = {
     courseOptions: {
       b_standard: 'Категория B - стандартный курс',
       b_refresh: 'Категория B - повторные занятия',
+      b_intensive: 'Категория B - интенсивный курс',
       b_extra: 'Категория B - дополнительные часы'
     },
     detailsTitle: 'Категория B — детали',
@@ -321,11 +391,13 @@ const i18n = {
     close: 'Закрыть',
     chooseDateRefresh: 'Выберите дату для повторных',
     priceTitle: 'Цены — повторные/индивидуальные',
-    prices: ['до 5 часов — 45 лв/час', '6–10 часов — 40 лв/час', '11–15 часов — 38 лв/час', '20–30 часов — 35 лв/час'],
+    prices: [
+      'до 5 часов — 45 лв/час / 23,01 €/час',
+      '6–10 часов — 40 лв/час / 20,45 €/час',
+      '11–15 часов — 38 лв/час / 19,43 €/час',
+      '20–30 часов — 35 лв/час / 17,90 €/час'
+    ],
     perHour: 'лв/час',
-    voucherModalTitle: 'Подарочный ваучер 🎁',
-    voucherText: 'Подарите ваучер на полный курс или пакет индивидуальных занятий. Прекрасный подарок близкому человеку, который хочет уверенно водить.',
-    orderVoucher: 'Заказать ваучер',
     footer: (year: number) => `© Руми ${year} · Все права защищены · Версия ${VERSION}`,
     locale: 'ru-RU'
   }
@@ -576,7 +648,7 @@ export default function App() {
   const t = i18n[lang];
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<NavSection>('process');
-  const [modal, setModal] = useState<null | 'course' | 'price' | 'schedule' | 'voucher'>(null);
+  const [modal, setModal] = useState<null | 'course' | 'price' | 'schedule'>(null);
   const [showTheoryTopics, setShowTheoryTopics] = useState(false);
   const [viewDate, setViewDate] = useState(() => new Date());
   const upcomingStarts = useMemo(() => listUpcomingStarts(BASE_MONDAY, 12), []);
@@ -904,61 +976,118 @@ export default function App() {
             <h2 className="text-2xl font-bold md:text-3xl">{t.coursesTitle}</h2>
             <p className="mt-2 text-neutral-600">{t.coursesLead}</p>
             <div className="mt-6 grid items-stretch gap-4 md:grid-cols-3">
-              <div className="flex flex-col rounded-2xl border p-4 shadow-sm">
-                <div className="font-semibold">{t.bStandard}</div>
-                <div className="mt-2 text-sm text-neutral-600">{t.bStandardDesc}</div>
-                <div className="mt-auto flex gap-2 pt-3">
+              <article className="flex h-full flex-col rounded-2xl border bg-white p-6 shadow-sm">
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900">{t.bStandard}</h3>
+                  <p className="mt-2 text-sm text-neutral-600">{t.bStandardDesc}</p>
+                </div>
+                <div className="mt-6 rounded-2xl bg-neutral-50 p-4">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                    {t.coursePriceLabel}
+                  </div>
+                  <div className="mt-2 text-2xl font-semibold text-neutral-900">{t.bStandardPrice}</div>
+                </div>
+                <ul className="mt-6 space-y-2 text-sm text-neutral-700">
+                  {t.bStandardHighlights.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:gap-2">
                   <button
                     type="button"
                     onClick={() => setModal('course')}
-                    className="flex-1 rounded-xl border px-3 py-2 text-sm hover:bg-neutral-100"
+                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
                   >
                     {t.seeDetails}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleScrollTo('contact')}
-                    className="flex-1 rounded-xl border px-3 py-2 text-sm hover:bg-neutral-100"
+                    className="w-full rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
                   >
                     {t.enroll}
                   </button>
                 </div>
-              </div>
+              </article>
 
-              <div className="flex flex-col rounded-2xl border p-4 shadow-sm">
-                <div className="font-semibold">{t.refreshTitle}</div>
-                <div className="mt-auto flex gap-2 pt-3">
+              <article className="flex h-full flex-col rounded-2xl border bg-white p-6 shadow-sm">
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900">{t.refreshTitle}</h3>
+                  <p className="mt-2 text-sm text-neutral-600">{t.refreshDesc}</p>
+                </div>
+                <div className="mt-6 rounded-2xl bg-neutral-50 p-4">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                    {t.refreshPriceLabel}
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-neutral-700">
+                    {t.prices.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <Clock className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <ul className="mt-6 space-y-2 text-sm text-neutral-700">
+                  {t.refreshHighlights.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:gap-2">
                   <button
                     type="button"
                     onClick={() => setModal('price')}
-                    className="flex-1 rounded-xl border px-3 py-2 text-sm hover:bg-neutral-100"
+                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
                   >
                     {t.price}
                   </button>
                   <button
                     type="button"
                     onClick={() => setModal('schedule')}
-                    className="flex-1 rounded-xl border px-3 py-2 text-sm hover:bg-neutral-100"
+                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
                   >
                     {t.plan}
                   </button>
                 </div>
-              </div>
+              </article>
 
-              <div className="flex flex-col rounded-2xl border p-4 shadow-sm">
-                <div className="font-semibold">{t.voucherTitle}</div>
-                <div className="text-sm text-neutral-600">{t.voucherLead}</div>
-                <div className="mt-auto pt-3">
+              <article className="flex h-full flex-col rounded-2xl border bg-white p-6 shadow-sm">
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900">{t.intensiveTitle}</h3>
+                  <p className="mt-2 text-sm text-neutral-600">{t.intensiveDesc}</p>
+                </div>
+                <div className="mt-6 rounded-2xl bg-neutral-50 p-4">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                    {t.coursePriceLabel}
+                  </div>
+                  <div className="mt-2 text-2xl font-semibold text-neutral-900">{t.intensivePrice}</div>
+                </div>
+                <ul className="mt-6 space-y-2 text-sm text-neutral-700">
+                  {t.intensiveHighlights.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-auto pt-6">
                   <button
                     type="button"
-                    onClick={() => setModal('voucher')}
-                    className="w-full rounded-xl border px-3 py-2 text-sm hover:bg-neutral-100"
+                    onClick={() => handleScrollTo('contact')}
+                    className="w-full rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800"
                   >
-                    {t.getVoucher}
+                    {t.intensiveCta}
                   </button>
                 </div>
-              </div>
+              </article>
             </div>
+            <p className="mt-6 text-sm text-neutral-500">{t.installmentsNote}</p>
           </div>
         </section>
 
@@ -974,28 +1103,6 @@ export default function App() {
                   </summary>
                   <p className="mt-2 text-sm text-neutral-700">{answer}</p>
                 </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-t bg-neutral-50" id="pricing">
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <h2 className="text-2xl font-bold md:text-3xl">{t.pricingTitle}</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {[t.planStandard, t.planInstallments].map(([title, subtitle, note]) => (
-                <div key={title} className="rounded-2xl border bg-white p-6 shadow-sm">
-                  <div className="text-lg font-semibold">{title}</div>
-                  <div className="text-sm text-neutral-600">{subtitle}</div>
-                  <div className="mt-4 rounded-xl bg-neutral-50 p-4 text-sm text-neutral-700">{note}</div>
-                  <button
-                    type="button"
-                    onClick={() => handleScrollTo('contact')}
-                    className="mt-5 w-full rounded-xl bg-red-600 py-2 font-semibold text-white hover:bg-red-700"
-                  >
-                    {t.formSubmit}
-                  </button>
-                </div>
               ))}
             </div>
           </div>
@@ -1282,21 +1389,6 @@ export default function App() {
             </li>
           ))}
         </ul>
-      </Modal>
-
-      <Modal
-        open={modal === 'voucher'}
-        onClose={() => setModal(null)}
-        title={t.voucherModalTitle}
-      >
-        <p>{t.voucherText}</p>
-        <button
-          type="button"
-          className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
-          onClick={() => setModal(null)}
-        >
-          {t.orderVoucher}
-        </button>
       </Modal>
     </div>
   );

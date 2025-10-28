@@ -22,16 +22,16 @@ import {
 
 type Lang = 'bg' | 'en' | 'ru';
 
-type NavSection = 'process' | 'courses' | 'pricing' | 'instructor' | 'faq' | 'contact';
+type NavSection = 'process' | 'courses' | 'instructor' | 'faq' | 'contact';
 
 const VERSION = 3;
 
-const NAV_SECTION_IDS: NavSection[] = ['process', 'courses', 'pricing', 'instructor', 'faq', 'contact'];
+const NAV_SECTION_IDS: NavSection[] = ['process', 'courses', 'instructor', 'faq', 'contact'];
 
 const i18n = {
   bg: {
     brand: 'РУМИ · Автошкола',
-    nav: ['Как протича', 'Курсове', 'Цени', 'Инструктор', 'FAQ', 'Контакти'],
+    nav: ['Как протича', 'Курсове', 'Инструктор', 'FAQ', 'Контакти'],
     heroTitle: 'Увереното шофиране започва тук.',
     heroLead:
       'Лицензиран инструктор. Реални ситуации. Модерна учебна среда. Практика с Hyundai i30 (дизел, ръчни скорости).',
@@ -58,7 +58,7 @@ const i18n = {
     bStandard: 'Категория B – стандартен курс',
     bStandardDesc:
       'Пълен курс теория + 31 учебни часа практика, вътрешни изпити и включени учебни материали.',
-    bStandardPrice: '1 390 лв',
+    bStandardPrice: '1 390 лв/710,71 €',
     bStandardHighlights: [
       'Учебници + онлайн подготовка',
       'Вътрешен изпит теория и практика',
@@ -81,7 +81,7 @@ const i18n = {
     intensiveTitle: 'Категория B – интензивен курс',
     intensiveDesc:
       'Ускорена програма с приоритетни графици, комбинирани занятия и допълнителни практически упражнения.',
-    intensivePrice: '1 690 лв',
+    intensivePrice: '1 690 лв/864,08 €',
     intensiveHighlights: [
       'Два пъти повече практика седмично',
       'Приоритетни часове и маршрут с инструктор',
@@ -97,9 +97,7 @@ const i18n = {
       ['Какви документи трябват?', 'Лична карта, снимка, медицинско и други при необходимост.'],
       ['Мога ли да плащам разсрочено?', 'Да — предлагаме гъвкави планове.']
     ],
-    pricingTitle: 'Цени и график',
-    planStandard: ['Стандартен', 'Всичко необходимо за изпита', 'Включва теория + практика + вътрешни изпити.'],
-    planInstallments: ['Разсрочено', 'Плащане на части', 'Гъвкави планове и индивидуален график.'],
+    installmentsNote: 'Предлагаме разсрочено плащане за всички курсове.',
     instructorTitle: 'Инструктор и класна стая',
     instructorCardTitle: 'Димитър — лицензиран инструктор',
     instructorCardText: 'Дългогодишен опит, спокоен подход и ясни обяснения. Индивидуално внимание според темпото ви.',
@@ -145,14 +143,19 @@ const i18n = {
     close: 'Затвори',
     chooseDateRefresh: 'Избери дата за опреснителни',
     priceTitle: 'Цени — опреснителни/индивидуални',
-    prices: ['до 5 часа — 45 лв/час', '6–10 часа — 40 лв/час', '11–15 часа — 38 лв/час', '20–30 часа — 35 лв/час'],
+    prices: [
+      'до 5 часа — 45 лв/час / 23,01 €/час',
+      '6–10 часа — 40 лв/час / 20,45 €/час',
+      '11–15 часа — 38 лв/час / 19,43 €/час',
+      '20–30 часа — 35 лв/час / 17,90 €/час'
+    ],
     perHour: 'лв/час',
     footer: (year: number) => `© Руми ${year} · Всички права запазени · Версия ${VERSION}`,
     locale: 'bg-BG'
   },
   en: {
     brand: 'RUMI · Driving School',
-    nav: ['How it works', 'Courses', 'Pricing', 'Instructor', 'FAQ', 'Contacts'],
+    nav: ['How it works', 'Courses', 'Instructor', 'FAQ', 'Contacts'],
     heroTitle: 'Confident driving starts here.',
     heroLead:
       'Licensed instructor. Real-world situations. Modern classroom. Practice with Hyundai i30 (diesel, manual).',
@@ -179,7 +182,7 @@ const i18n = {
     bStandard: 'Category B – standard course',
     bStandardDesc:
       'Complete theory + 31 driving lessons, internal exams and learning materials included.',
-    bStandardPrice: 'BGN 1,390',
+    bStandardPrice: 'BGN 1,390 / €710.71',
     bStandardHighlights: [
       'Course books + online prep tools',
       'Internal theory & driving mock exams',
@@ -202,7 +205,7 @@ const i18n = {
     intensiveTitle: 'Category B – intensive course',
     intensiveDesc:
       'Accelerated program with priority scheduling, combined sessions and extra driving drills.',
-    intensivePrice: 'BGN 1,690',
+    intensivePrice: 'BGN 1,690 / €864.08',
     intensiveHighlights: [
       'Twice the weekly driving practice',
       'Priority timeslots and tailored routes',
@@ -218,9 +221,7 @@ const i18n = {
       ['What documents are required?', 'ID, photo, medical certificate, others if needed.'],
       ['Can I pay in installments?', 'Yes — flexible plans available.']
     ],
-    pricingTitle: 'Pricing & schedule',
-    planStandard: ['Standard', 'Everything needed for the exam', 'Includes theory + practice + internal mock exams.'],
-    planInstallments: ['Installments', 'Pay in parts', 'Flexible plans tailored to your calendar.'],
+    installmentsNote: 'Installment payments are available for every course.',
     instructorTitle: 'Instructor & classroom',
     instructorCardTitle: 'Dimitar — licensed instructor',
     instructorCardText: 'Many years of experience, calm approach and clear explanations.',
@@ -266,14 +267,19 @@ const i18n = {
     close: 'Close',
     chooseDateRefresh: 'Choose date for refresher',
     priceTitle: 'Prices — refresher/individual',
-    prices: ['up to 5 lessons — 45 BGN/hour', '6–10 lessons — 40 BGN/hour', '11–15 lessons — 38 BGN/hour', '20–30 lessons — 35 BGN/hour'],
+    prices: [
+      'up to 5 lessons — 45 BGN/hour / €23.01/hour',
+      '6–10 lessons — 40 BGN/hour / €20.45/hour',
+      '11–15 lessons — 38 BGN/hour / €19.43/hour',
+      '20–30 lessons — 35 BGN/hour / €17.90/hour'
+    ],
     perHour: 'BGN/hour',
     footer: (year: number) => `© Rumi ${year} · All rights reserved · Version ${VERSION}`,
     locale: 'en-US'
   },
   ru: {
     brand: 'РУМИ · Автошкола',
-    nav: ['Как проходит', 'Курсы', 'Цены', 'Инструктор', 'Вопросы', 'Контакты'],
+    nav: ['Как проходит', 'Курсы', 'Инструктор', 'Вопросы', 'Контакты'],
     heroTitle: 'Уверенное вождение начинается здесь.',
     heroLead:
       'Лицензированный инструктор. Реальные ситуации. Современный класс. Практика на Hyundai i30 (дизель, механика).',
@@ -300,7 +306,7 @@ const i18n = {
     bStandard: 'Категория B – стандартный курс',
     bStandardDesc:
       'Полный курс: теория + 31 урок практики, внутренние экзамены и включённые учебные материалы.',
-    bStandardPrice: '1 390 лв',
+    bStandardPrice: '1 390 лв/710,71 €',
     bStandardHighlights: [
       'Учебники и онлайн-подготовка',
       'Внутренние экзамены теория и практика',
@@ -323,7 +329,7 @@ const i18n = {
     intensiveTitle: 'Категория B – интенсивный курс',
     intensiveDesc:
       'Ускоренная программа с приоритетным расписанием, комбинированными занятиями и дополнительной практикой.',
-    intensivePrice: '1 690 лв',
+    intensivePrice: '1 690 лв/864,08 €',
     intensiveHighlights: [
       'Вдвое больше практики каждую неделю',
       'Приоритетные слоты и индивидуальные маршруты',
@@ -339,9 +345,7 @@ const i18n = {
       ['Какие документы нужны?', 'Удостоверение личности, фото, медсправка и др. при необходимости.'],
       ['Можно ли платить частями?', 'Да — гибкие планы оплаты.']
     ],
-    pricingTitle: 'Цены и расписание',
-    planStandard: ['Стандарт', 'Всё для экзамена', 'Включает теорию + практику + внутренние проверки.'],
-    planInstallments: ['В рассрочку', 'Оплата частями', 'Гибкие планы и индивидуальный график.'],
+    installmentsNote: 'Рассрочка доступна для всех курсов.',
     instructorTitle: 'Инструктор и класс',
     instructorCardTitle: 'Димитар — лицензированный инструктор',
     instructorCardText: 'Большой опыт, спокойный подход и понятные пояснения.',
@@ -387,7 +391,12 @@ const i18n = {
     close: 'Закрыть',
     chooseDateRefresh: 'Выберите дату для повторных',
     priceTitle: 'Цены — повторные/индивидуальные',
-    prices: ['до 5 часов — 45 лв/час', '6–10 часов — 40 лв/час', '11–15 часов — 38 лв/час', '20–30 часов — 35 лв/час'],
+    prices: [
+      'до 5 часов — 45 лв/час / 23,01 €/час',
+      '6–10 часов — 40 лв/час / 20,45 €/час',
+      '11–15 часов — 38 лв/час / 19,43 €/час',
+      '20–30 часов — 35 лв/час / 17,90 €/час'
+    ],
     perHour: 'лв/час',
     footer: (year: number) => `© Руми ${year} · Все права защищены · Версия ${VERSION}`,
     locale: 'ru-RU'
@@ -1078,6 +1087,7 @@ export default function App() {
                 </div>
               </article>
             </div>
+            <p className="mt-6 text-sm text-neutral-500">{t.installmentsNote}</p>
           </div>
         </section>
 
@@ -1093,28 +1103,6 @@ export default function App() {
                   </summary>
                   <p className="mt-2 text-sm text-neutral-700">{answer}</p>
                 </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-t bg-neutral-50" id="pricing">
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <h2 className="text-2xl font-bold md:text-3xl">{t.pricingTitle}</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {[t.planStandard, t.planInstallments].map(([title, subtitle, note]) => (
-                <div key={title} className="rounded-2xl border bg-white p-6 shadow-sm">
-                  <div className="text-lg font-semibold">{title}</div>
-                  <div className="text-sm text-neutral-600">{subtitle}</div>
-                  <div className="mt-4 rounded-xl bg-neutral-50 p-4 text-sm text-neutral-700">{note}</div>
-                  <button
-                    type="button"
-                    onClick={() => handleScrollTo('contact')}
-                    className="mt-5 w-full rounded-xl bg-red-600 py-2 font-semibold text-white hover:bg-red-700"
-                  >
-                    {t.formSubmit}
-                  </button>
-                </div>
               ))}
             </div>
           </div>

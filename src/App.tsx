@@ -654,6 +654,7 @@ export default function App() {
   };
 
   const handleScrollTo = (id: NavSection) => {
+    setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -686,6 +687,7 @@ export default function App() {
                     className={`rounded-full px-3 py-2 text-sm transition ${
                       active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
                     }`}
+                    aria-current={active ? 'true' : undefined}
                   >
                     {label}
                   </button>
@@ -751,6 +753,7 @@ export default function App() {
                 </div>
                 {t.nav.map((label, index) => {
                   const id = NAV_SECTION_IDS[index];
+                  const active = activeSection === id;
                   return (
                     <button
                       key={label}
@@ -759,7 +762,10 @@ export default function App() {
                         setMenuOpen(false);
                         handleScrollTo(id);
                       }}
-                      className="block w-full rounded-xl px-3 py-2 text-left text-sm hover:bg-neutral-100"
+                      className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition ${
+                        active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
+                      }`}
+                      aria-current={active ? 'true' : undefined}
                     >
                       {label}
                     </button>

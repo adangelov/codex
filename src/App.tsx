@@ -588,6 +588,7 @@ export default function App() {
     gdpr: false
   });
   const formRef = useRef<HTMLFormElement | null>(null);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!startDate && upcomingStarts.length > 0) {
@@ -654,9 +655,12 @@ export default function App() {
   };
 
   const handleScrollTo = (id: NavSection) => {
+    setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const elementTop = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: elementTop - headerHeight, behavior: 'smooth' });
     }
   };
 
@@ -670,7 +674,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
-      <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
+      <header
+        ref={headerRef}
+        className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur"
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-8">
             <span className="text-lg font-semibold text-red-600">{t.brand}</span>
@@ -686,6 +693,7 @@ export default function App() {
                     className={`rounded-full px-3 py-2 text-sm transition ${
                       active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
                     }`}
+                    aria-current={active ? 'true' : undefined}
                   >
                     {label}
                   </button>
@@ -751,6 +759,7 @@ export default function App() {
                 </div>
                 {t.nav.map((label, index) => {
                   const id = NAV_SECTION_IDS[index];
+                  const active = activeSection === id;
                   return (
                     <button
                       key={label}
@@ -759,7 +768,10 @@ export default function App() {
                         setMenuOpen(false);
                         handleScrollTo(id);
                       }}
-                      className="block w-full rounded-xl px-3 py-2 text-left text-sm hover:bg-neutral-100"
+                      className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition ${
+                        active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
+                      }`}
+                      aria-current={active ? 'true' : undefined}
                     >
                       {label}
                     </button>

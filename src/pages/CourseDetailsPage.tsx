@@ -62,8 +62,8 @@ export default function CourseDetailsPage() {
         </div>
 
         <section className="mt-8 rounded-3xl border bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-            <div className="space-y-4 md:max-w-xl">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+            <div className="space-y-4">
               <div>
                 <h1 className="text-2xl font-bold md:text-3xl">{t.detailsTitle}</h1>
                 <p className="mt-2 text-sm text-neutral-600">{t.detailsIntro}</p>
@@ -87,25 +87,62 @@ export default function CourseDetailsPage() {
                 ))}
               </ul>
             </div>
-            <div className="flex flex-col gap-4 rounded-2xl border bg-neutral-50 p-4 text-sm text-neutral-700 md:w-72">
-              <div className="font-semibold uppercase tracking-wide text-neutral-500">{t.theory}</div>
-              <button
-                type="button"
-                onClick={() => setShowTopics((prev) => !prev)}
-                className="inline-flex items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left font-medium hover:bg-white"
-              >
-                <span>{showTopics ? t.hideContent : t.showContent}</span>
-                <ChevronDown className={`transition ${showTopics ? 'rotate-180' : ''}`} size={16} />
-              </button>
-              {showTopics && (
-                <ul className="space-y-1 text-xs text-neutral-600">
-                  {t.topics.map((topic) => (
-                    <li key={topic}>{topic}</li>
-                  ))}
-                </ul>
-              )}
+            <div className="space-y-5">
+              <div className="space-y-4">
+                <div className="overflow-hidden rounded-3xl shadow-lg">
+                  <img
+                    src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1600&q=80"
+                    alt="Впечатляващ салон на модерен автомобил"
+                    className="h-56 w-full object-cover sm:h-64 lg:h-80"
+                  />
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <div className="overflow-hidden rounded-2xl shadow">
+                    <img
+                      src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=800&q=80"
+                      alt="Детайл от табло с дигитални дисплеи"
+                      className="h-28 w-full object-cover sm:h-24 lg:h-28"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-2xl shadow">
+                    <img
+                      src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=800&q=80"
+                      alt="Изглед към екстериора на автомобил в движение"
+                      className="h-28 w-full object-cover sm:h-24 lg:h-28"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-2xl shadow">
+                    <img
+                      src="https://images.unsplash.com/photo-1517940310602-0052c1d53016?auto=format&fit=crop&w=800&q=80"
+                      alt="Студенти обсъждат стратегия за управление"
+                      className="h-28 w-full object-cover sm:h-24 lg:h-28"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 rounded-2xl border bg-neutral-50 p-4 text-sm text-neutral-700">
+                <div className="font-semibold uppercase tracking-wide text-neutral-500">{t.theory}</div>
+                <button
+                  type="button"
+                  onClick={() => setShowTopics((prev) => !prev)}
+                  className="inline-flex items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left font-medium hover:bg-white"
+                >
+                  <span>{showTopics ? t.hideContent : t.showContent}</span>
+                  <ChevronDown className={`transition ${showTopics ? 'rotate-180' : ''}`} size={16} />
+                </button>
+                {showTopics && (
+                  <ul className="space-y-1 text-xs text-neutral-600">
+                    {t.topics.map((topic) => (
+                      <li key={topic}>{topic}</li>
+                    ))}
+                  </ul>
+                )}
+                <p className="text-xs text-neutral-500">
+                  {t.detailsIntro}
+                </p>
+              </div>
               <p className="text-xs text-neutral-500">
-                {t.detailsIntro}
+                Галерията представя атмосферата на обучението – от модерната техника до динамичните практически сесии.
               </p>
             </div>
           </div>

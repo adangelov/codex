@@ -216,7 +216,6 @@ export default function HomePage() {
   const locationState = location.state as { scrollTo?: NavSection } | null;
   const [viewDate, setViewDate] = useState(() => new Date());
   const upcomingStarts = useMemo(() => listUpcomingStarts(BASE_MONDAY, 12), []);
-  const allowedStartSet = useMemo(() => new Set(upcomingStarts.map((item) => item.iso)), [upcomingStarts]);
   const [startDate, setStartDate] = useState<string>(() => upcomingStarts[0]?.iso ?? '');
   const [formState, setFormState] = useState<'idle' | 'sending' | 'success'>('idle');
   const [form, setForm] = useState<ContactFormState>({
@@ -287,9 +286,7 @@ export default function HomePage() {
   };
 
   const onPickTheoryDate = (iso: string) => {
-    if (allowedStartSet.has(iso)) {
-      setStartDate(iso);
-    }
+    setStartDate(iso);
   };
 
   const handleScrollTo = useCallback((id: NavSection) => {
@@ -312,6 +309,16 @@ export default function HomePage() {
     return undefined;
   }, [locationState, navigate, handleScrollTo]);
 
+  const startOptions = useMemo(() => {
+    if (startDate && !upcomingStarts.some((item) => item.iso === startDate)) {
+      const parsed = new Date(startDate);
+      return [...upcomingStarts, { iso: startDate, date: parsed }].sort(
+        (a, b) => a.date.getTime() - b.date.getTime()
+      );
+    }
+    return upcomingStarts;
+  }, [startDate, upcomingStarts]);
+
   const selectedStartDateLabel = startDate
     ? new Date(startDate).toLocaleDateString(t.locale, {
         day: '2-digit',
@@ -319,6 +326,7 @@ export default function HomePage() {
         year: 'numeric'
       })
     : '';
+  const mapAddress = t.mapAddress;
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
@@ -758,10 +766,13 @@ export default function HomePage() {
                   <Phone size={18} /> +359 8977 777 430
                 </div>
                 <div className="flex items-center gap-2">
-                  <Mail size={18} /> info@rumi-autoshkola.bg
+                  <Mail size={18} />
+                  <a href="mailto:office@karailesno.bg" className="text-red-700 hover:underline">
+                    office@karailesno.bg
+                  </a>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin size={18} /> {t.addressPrefix}g.k. TroshevoMladost, бул. „Владислав Варненчик“ 184, 9009 Varna
+                  <MapPin size={18} /> {mapAddress}
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock size={18} /> {t.hours}
@@ -775,7 +786,7 @@ export default function HomePage() {
                     loading="lazy"
                     allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
-                    src={`https://www.google.com/maps?q=${encodeURIComponent('g.k. TroshevoMladost, бул. „Владислав Варненчик“ 184, 9009 Varna')}&output=embed`}
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(mapAddress)}&t=&z=17&ie=UTF8&iwloc=&output=embed`}
                   />
                 </div>
               </div>
@@ -851,7 +862,7 @@ export default function HomePage() {
                       onChange={(event) => setStartDate(event.target.value)}
                       className="mt-1 w-full rounded-xl border px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-100"
                     >
-                      {upcomingStarts.map((item) => (
+                      {startOptions.map((item) => (
                         <option key={item.iso} value={item.iso}>
                           {new Date(item.iso).toLocaleDateString(t.locale, {
                             day: '2-digit',

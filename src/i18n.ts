@@ -5,7 +5,7 @@ export type Lang = 'bg' | 'en' | 'ru';
 export const i18n = {
   bg: {
     brand: 'РУМИ · Автошкола',
-    nav: ['Как протича', 'Курсове', 'Инструктор', 'FAQ', 'Контакти'],
+    nav: ['Как протича', 'Курсове', 'Категория B', 'Инструктор', 'FAQ', 'Контакти'],
     heroTitle: 'Увереното шофиране започва тук.',
     heroLead:
       'Лицензиран инструктор. Реални ситуации. Модерна учебна среда. Практика с Hyundai i30 (дизел, ръчни скорости).',
@@ -129,7 +129,7 @@ export const i18n = {
   },
   en: {
     brand: 'RUMI · Driving School',
-    nav: ['How it works', 'Courses', 'Instructor', 'FAQ', 'Contacts'],
+    nav: ['How it works', 'Courses', 'Category B', 'Instructor', 'FAQ', 'Contacts'],
     heroTitle: 'Confident driving starts here.',
     heroLead:
       'Licensed instructor. Real-world situations. Modern classroom. Practice with Hyundai i30 (diesel, manual).',
@@ -253,7 +253,7 @@ export const i18n = {
   },
   ru: {
     brand: 'РУМИ · Автошкола',
-    nav: ['Как проходит', 'Курсы', 'Инструктор', 'Вопросы', 'Контакты'],
+    nav: ['Как проходит', 'Курсы', 'Категория B', 'Инструктор', 'Вопросы', 'Контакты'],
     heroTitle: 'Уверенное вождение начинается здесь.',
     heroLead:
       'Лицензированный инструктор. Реальные ситуации. Современный класс. Практика на Hyundai i30 (дизель, механика).',

@@ -324,7 +324,7 @@ export default function HomePage() {
                     type="button"
                     onClick={() => {
                       if (id === 'courses') {
-                        navigate('/courses/category-b');
+                        handleScrollTo('courses');
                       } else {
                         handleScrollTo(id);
                       }
@@ -406,7 +406,7 @@ export default function HomePage() {
                       onClick={() => {
                         setMenuOpen(false);
                         if (id === 'courses') {
-                          navigate('/courses/category-b');
+                          handleScrollTo('courses');
                         } else {
                           handleScrollTo(id);
                         }

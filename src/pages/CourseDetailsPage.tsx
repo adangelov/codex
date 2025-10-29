@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ChevronDown, ChevronLeft } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronLeft, Phone } from 'lucide-react';
 
 import { i18n, type Lang } from '../i18n';
 
@@ -9,6 +9,27 @@ export default function CourseDetailsPage() {
   const t = i18n[lang];
   const [showTopics, setShowTopics] = useState(false);
   const navigate = useNavigate();
+
+  const gallery = {
+    main: {
+      src: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1600&q=80',
+      alt: t.galleryLabels.main
+    },
+    thumbs: [
+      {
+        src: 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=800&q=80',
+        alt: t.galleryLabels.dash
+      },
+      {
+        src: 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=800&q=80',
+        alt: t.galleryLabels.exterior
+      },
+      {
+        src: 'https://images.unsplash.com/photo-1517940310602-0052c1d53016?auto=format&fit=crop&w=800&q=80',
+        alt: t.galleryLabels.class
+      }
+    ]
+  } as const;
 
   const handleContact = () => {
     navigate('/', { state: { scrollTo: 'contact' } });
@@ -62,21 +83,47 @@ export default function CourseDetailsPage() {
         </div>
 
         <section className="mt-8 rounded-3xl border bg-white p-6 shadow-sm">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-            <div className="space-y-4">
-              <div>
-                <h1 className="text-2xl font-bold md:text-3xl">{t.detailsTitle}</h1>
-                <p className="mt-2 text-sm text-neutral-600">{t.detailsIntro}</p>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+            <div className="space-y-5">
+              <div className="space-y-3">
+                <span className="text-xs font-semibold uppercase tracking-wide text-red-600/80">
+                  {t.galleryTitle}
+                </span>
+                <figure className="space-y-4">
+                  <div className="overflow-hidden rounded-3xl shadow-lg">
+                    <img
+                      src={gallery.main.src}
+                      alt={gallery.main.alt}
+                      className="h-60 w-full object-cover sm:h-72 lg:h-[24rem]"
+                    />
+                  </div>
+                  <figcaption className="text-xs text-neutral-500">{t.galleryDescription}</figcaption>
+                </figure>
               </div>
-              <div>
-                <h2 className="text-lg font-semibold text-neutral-900">{t.bStandard}</h2>
-                <p className="mt-2 text-sm text-neutral-600">{t.bStandardDesc}</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {gallery.thumbs.map((image) => (
+                  <div key={image.src} className="overflow-hidden rounded-2xl border bg-white shadow-sm">
+                    <img src={image.src} alt={image.alt} className="h-28 w-full object-cover sm:h-24 lg:h-28" />
+                  </div>
+                ))}
               </div>
-              <div className="rounded-2xl bg-neutral-50 p-4">
-                <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                  {t.coursePriceLabel}
+            </div>
+            <div className="flex flex-col gap-6">
+              <div className="space-y-4">
+                <div>
+                  <h1 className="text-2xl font-bold md:text-3xl">{t.detailsTitle}</h1>
+                  <p className="mt-2 text-sm text-neutral-600">{t.detailsIntro}</p>
                 </div>
-                <div className="mt-2 text-2xl font-semibold text-neutral-900">{t.bStandardPrice}</div>
+                <div>
+                  <h2 className="text-lg font-semibold text-neutral-900">{t.bStandard}</h2>
+                  <p className="mt-2 text-sm text-neutral-600">{t.bStandardDesc}</p>
+                </div>
+                <div className="rounded-2xl bg-neutral-50 p-4">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                    {t.coursePriceLabel}
+                  </div>
+                  <div className="mt-2 text-2xl font-semibold text-neutral-900">{t.bStandardPrice}</div>
+                </div>
               </div>
               <ul className="space-y-2 text-sm text-neutral-700">
                 {t.bStandardHighlights.map((item) => (
@@ -86,40 +133,6 @@ export default function CourseDetailsPage() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="space-y-5">
-              <div className="space-y-4">
-                <div className="overflow-hidden rounded-3xl shadow-lg">
-                  <img
-                    src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1600&q=80"
-                    alt="Впечатляващ салон на модерен автомобил"
-                    className="h-56 w-full object-cover sm:h-64 lg:h-80"
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <div className="overflow-hidden rounded-2xl shadow">
-                    <img
-                      src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=800&q=80"
-                      alt="Детайл от табло с дигитални дисплеи"
-                      className="h-28 w-full object-cover sm:h-24 lg:h-28"
-                    />
-                  </div>
-                  <div className="overflow-hidden rounded-2xl shadow">
-                    <img
-                      src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=800&q=80"
-                      alt="Изглед към екстериора на автомобил в движение"
-                      className="h-28 w-full object-cover sm:h-24 lg:h-28"
-                    />
-                  </div>
-                  <div className="overflow-hidden rounded-2xl shadow">
-                    <img
-                      src="https://images.unsplash.com/photo-1517940310602-0052c1d53016?auto=format&fit=crop&w=800&q=80"
-                      alt="Студенти обсъждат стратегия за управление"
-                      className="h-28 w-full object-cover sm:h-24 lg:h-28"
-                    />
-                  </div>
-                </div>
-              </div>
               <div className="flex flex-col gap-4 rounded-2xl border bg-neutral-50 p-4 text-sm text-neutral-700">
                 <div className="font-semibold uppercase tracking-wide text-neutral-500">{t.theory}</div>
                 <button
@@ -137,29 +150,26 @@ export default function CourseDetailsPage() {
                     ))}
                   </ul>
                 )}
-                <p className="text-xs text-neutral-500">
-                  {t.detailsIntro}
-                </p>
+                <p className="text-xs text-neutral-500">{t.detailsIntro}</p>
               </div>
-              <p className="text-xs text-neutral-500">
-                Галерията представя атмосферата на обучението – от модерната техника до динамичните практически сесии.
-              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={handleContact}
+                  className="w-full rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-red-700"
+                >
+                  {t.enroll}
+                </button>
+                <a
+                  href="tel:+3598977777430"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
+                >
+                  <Phone size={16} />
+                  <span>{t.call}</span>
+                  <span className="hidden text-xs text-neutral-500 sm:inline">+359 8977 777 430</span>
+                </a>
+              </div>
             </div>
-          </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={handleContact}
-              className="w-full rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-red-700"
-            >
-              {t.enroll}
-            </button>
-            <Link
-              to="/"
-              className="w-full rounded-xl border px-4 py-2 text-center text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
-            >
-              {t.coursesTitle}
-            </Link>
           </div>
         </section>
       </main>

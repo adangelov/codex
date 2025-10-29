@@ -1,4 +1,4 @@
-export const VERSION = 3;
+export const VERSION = 4;
 
 export type Lang = 'bg' | 'en' | 'ru';
 
@@ -101,6 +101,15 @@ export const i18n = {
     },
     detailsTitle: 'Категория B — детайли',
     detailsIntro: 'Пълна програма на теоретичното обучение + информация за практиката.',
+    galleryTitle: 'Галерия от обучението',
+    galleryDescription:
+      'Поглед към Hyundai i30, кабината и средата за обучение по време на реални занятия.',
+    galleryLabels: {
+      main: 'Hyundai i30 по време на обучение с инструктор',
+      dash: 'Модерно табло и контролни прибори на Hyundai i30',
+      exterior: 'Hyundai i30 в движение по градски маршрут',
+      class: 'Курсисти обсъждат маневри в класната стая'
+    },
     showContent: 'Съдържание на теоретично обучение',
     hideContent: 'Скрий съдържанието',
     topics: [
@@ -225,6 +234,15 @@ export const i18n = {
     },
     detailsTitle: 'Category B — details',
     detailsIntro: 'Full theory syllabus + practice information.',
+    galleryTitle: 'Training gallery',
+    galleryDescription:
+      'A look at the Hyundai i30, cabin details and the learning environment during real lessons.',
+    galleryLabels: {
+      main: 'Hyundai i30 during a driving lesson with the instructor',
+      dash: 'Modern Hyundai i30 dashboard with digital displays',
+      exterior: 'Hyundai i30 driving along a city route',
+      class: 'Students discussing maneuvers inside the classroom'
+    },
     showContent: 'Show theory syllabus',
     hideContent: 'Hide syllabus',
     topics: [
@@ -349,6 +367,15 @@ export const i18n = {
     },
     detailsTitle: 'Категория B — детали',
     detailsIntro: 'Полная программа теории + информация о практике.',
+    galleryTitle: 'Галерея обучения',
+    galleryDescription:
+      'Hyundai i30, интерьер и учебная среда во время реальных занятий.',
+    galleryLabels: {
+      main: 'Hyundai i30 на уроке с инструктором',
+      dash: 'Современная приборная панель Hyundai i30',
+      exterior: 'Hyundai i30 в движении по городскому маршруту',
+      class: 'Ученики обсуждают манёвры в аудитории'
+    },
     showContent: 'Показать программу теории',
     hideContent: 'Скрыть программу',
     topics: [

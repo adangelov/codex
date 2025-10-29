@@ -573,7 +573,7 @@ export default function HomePage() {
                   <h3 className="text-lg font-semibold text-neutral-900">{t.bStandard}</h3>
                   <p className="mt-2 text-sm text-neutral-600">{t.bStandardDesc}</p>
                 </div>
-                <div className="mt-6 rounded-2xl bg-neutral-50 p-4">
+                <div className="mt-6 rounded-2xl bg-neutral-50 p-4 text-center">
                   <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
                     {t.coursePriceLabel}
                   </div>
@@ -653,7 +653,7 @@ export default function HomePage() {
                   <h3 className="text-lg font-semibold text-neutral-900">{t.intensiveTitle}</h3>
                   <p className="mt-2 text-sm text-neutral-600">{t.intensiveDesc}</p>
                 </div>
-                <div className="mt-6 rounded-2xl bg-neutral-50 p-4">
+                <div className="mt-6 rounded-2xl bg-neutral-50 p-4 text-center">
                   <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
                     {t.coursePriceLabel}
                   </div>

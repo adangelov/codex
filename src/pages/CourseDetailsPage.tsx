@@ -118,7 +118,7 @@ export default function CourseDetailsPage() {
                   <h2 className="text-lg font-semibold text-neutral-900">{t.bStandard}</h2>
                   <p className="mt-2 text-sm text-neutral-600">{t.bStandardDesc}</p>
                 </div>
-                <div className="rounded-2xl bg-neutral-50 p-4">
+                <div className="rounded-2xl bg-neutral-50 p-4 text-center">
                   <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
                     {t.coursePriceLabel}
                   </div>

@@ -1,4 +1,4 @@
-export const VERSION = 5;
+export const VERSION = 6;
 
 export type Lang = 'bg' | 'en' | 'ru';
 

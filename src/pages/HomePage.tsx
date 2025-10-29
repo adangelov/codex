@@ -24,7 +24,22 @@ import { i18n, type Lang, type Strings } from '../i18n';
 
 type NavSection = 'process' | 'courses' | 'instructor' | 'faq' | 'contact';
 
-const NAV_SECTION_IDS: NavSection[] = ['process', 'courses', 'instructor', 'faq', 'contact'];
+type NavItem =
+  | { type: 'section'; section: NavSection }
+  | { type: 'route'; to: string };
+
+const NAV_ITEMS: readonly NavItem[] = [
+  { type: 'section', section: 'process' },
+  { type: 'section', section: 'courses' },
+  { type: 'route', to: '/courses/category-b' },
+  { type: 'section', section: 'instructor' },
+  { type: 'section', section: 'faq' },
+  { type: 'section', section: 'contact' }
+];
+
+const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
+  (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
+).map((item) => item.section);
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -316,17 +331,21 @@ export default function HomePage() {
             <span className="text-lg font-semibold text-red-600">{t.brand}</span>
             <nav className="hidden gap-4 md:flex">
               {t.nav.map((label, index) => {
-                const id = NAV_SECTION_IDS[index];
-                const active = activeSection === id;
+                const item = NAV_ITEMS[index];
+                if (!item) {
+                  return null;
+                }
+                const isSection = item.type === 'section';
+                const active = isSection && activeSection === item.section;
                 return (
                   <button
-                    key={label}
+                    key={`${item.type}-${label}`}
                     type="button"
                     onClick={() => {
-                      if (id === 'courses') {
-                        handleScrollTo('courses');
+                      if (item.type === 'section') {
+                        handleScrollTo(item.section);
                       } else {
-                        handleScrollTo(id);
+                        navigate(item.to);
                       }
                     }}
                     className={`rounded-full px-3 py-2 text-sm transition ${
@@ -397,18 +416,22 @@ export default function HomePage() {
                   ))}
                 </div>
                 {t.nav.map((label, index) => {
-                  const id = NAV_SECTION_IDS[index];
-                  const active = activeSection === id;
+                  const item = NAV_ITEMS[index];
+                  if (!item) {
+                    return null;
+                  }
+                  const isSection = item.type === 'section';
+                  const active = isSection && activeSection === item.section;
                   return (
                     <button
-                      key={label}
+                      key={`${item.type}-${label}`}
                       type="button"
                       onClick={() => {
                         setMenuOpen(false);
-                        if (id === 'courses') {
-                          handleScrollTo('courses');
+                        if (item.type === 'section') {
+                          handleScrollTo(item.section);
                         } else {
-                          handleScrollTo(id);
+                          navigate(item.to);
                         }
                       }}
                       className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition ${

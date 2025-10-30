@@ -41,7 +41,7 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
-const SITE_VERSION = 'v1.0.1';
+const SITE_VERSION = 'v1.0.2';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -301,6 +301,10 @@ export default function HomePage() {
     }
   }, []);
 
+  const handleBrandClick = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   useEffect(() => {
     const target = locationState?.scrollTo;
     if (target && NAV_SECTION_IDS.includes(target)) {
@@ -340,7 +344,8 @@ export default function HomePage() {
           <div className="flex items-center gap-8">
             <button
               type="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={handleBrandClick}
+              aria-label={t.brand}
               className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
             >
               {t.brand}

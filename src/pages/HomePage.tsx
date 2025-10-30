@@ -42,7 +42,7 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
-const SITE_VERSION = 'v1.0.3';
+const SITE_VERSION = 'v1.0.4';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -617,7 +617,7 @@ export default function HomePage() {
                 <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:gap-2">
                   <Link
                     to="/courses/category-b"
-                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
+                    className="inline-flex w-full justify-center rounded-xl border px-4 py-2 text-center text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
                   >
                     {t.seeDetails}
                   </Link>

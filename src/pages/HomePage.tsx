@@ -12,6 +12,7 @@ import {
   ClipboardCheck,
   Clock,
   GraduationCap,
+  Home,
   Mail,
   MapPin,
   Phone,
@@ -41,7 +42,7 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
-const SITE_VERSION = 'v1.0.1';
+const SITE_VERSION = 'v1.0.2';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -732,6 +733,9 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-neutral-700">{t.instructorCardText}</p>
               </div>
               <div className="rounded-2xl border bg-white p-5 shadow-sm">
+                <div className="mb-3 inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">
+                  <Home size={18} />
+                </div>
                 <div className="font-semibold">{t.classroomTitle}</div>
                 <p className="mt-2 text-sm text-neutral-700">{t.classroomText}</p>
               </div>

@@ -12,6 +12,7 @@ import {
   ClipboardCheck,
   Clock,
   GraduationCap,
+  Home,
   Mail,
   MapPin,
   Phone,
@@ -41,7 +42,7 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
-const SITE_VERSION = 'v1.0.1';
+const SITE_VERSION = 'v1.0.4';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -301,6 +302,10 @@ export default function HomePage() {
     }
   }, []);
 
+  const handleBrandClick = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   useEffect(() => {
     const target = locationState?.scrollTo;
     if (target && NAV_SECTION_IDS.includes(target)) {
@@ -338,7 +343,14 @@ export default function HomePage() {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-8">
-            <span className="text-lg font-semibold text-red-600">{t.brand}</span>
+            <button
+              type="button"
+              onClick={handleBrandClick}
+              aria-label={t.brand}
+              className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+            >
+              {t.brand}
+            </button>
             <nav className="hidden gap-4 md:flex">
               {t.nav.map((label, index) => {
                 const item = NAV_ITEMS[index];
@@ -605,7 +617,7 @@ export default function HomePage() {
                 <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:gap-2">
                   <Link
                     to="/courses/category-b"
-                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
+                    className="inline-flex w-full justify-center rounded-xl border px-4 py-2 text-center text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
                   >
                     {t.seeDetails}
                   </Link>
@@ -726,6 +738,9 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-neutral-700">{t.instructorCardText}</p>
               </div>
               <div className="rounded-2xl border bg-white p-5 shadow-sm">
+                <div className="mb-3 inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">
+                  <Home size={18} />
+                </div>
                 <div className="font-semibold">{t.classroomTitle}</div>
                 <p className="mt-2 text-sm text-neutral-700">{t.classroomText}</p>
               </div>

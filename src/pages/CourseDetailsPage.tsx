@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, ChevronDown, ChevronLeft, Phone } from 'lucide-react';
 
 import { i18n, type Lang } from '../i18n';
+import { useCategoryBTransition } from '../transition/CategoryBTransitionContext';
 
 export default function CourseDetailsPage() {
   const [lang, setLang] = useState<Lang>('bg');
   const t = i18n[lang];
   const [showTopics, setShowTopics] = useState(false);
   const navigate = useNavigate();
+  const { trigger } = useCategoryBTransition();
+
+  useEffect(() => {
+    trigger('enter');
+
+    return () => {
+      trigger('exit');
+    };
+  }, [trigger]);
 
   const gallery = {
     main: {

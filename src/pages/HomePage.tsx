@@ -42,7 +42,7 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
-const SITE_VERSION = 'v1.0.5';
+const SITE_VERSION = 'v1.0.6';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));

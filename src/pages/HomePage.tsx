@@ -41,7 +41,7 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
-const SITE_VERSION = 'v1.0.0';
+const SITE_VERSION = 'v1.0.1';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -338,7 +338,13 @@ export default function HomePage() {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-8">
-            <span className="text-lg font-semibold text-red-600">{t.brand}</span>
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+            >
+              {t.brand}
+            </button>
             <nav className="hidden gap-4 md:flex">
               {t.nav.map((label, index) => {
                 const item = NAV_ITEMS[index];

@@ -469,7 +469,7 @@ export default function HomePage() {
                 <div className="flex gap-2">
                   <a
                     href="tel:+3598977777430"
-                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
                   >
                     {t.call}
                     <Phone size={16} />
@@ -480,7 +480,7 @@ export default function HomePage() {
                       setMenuOpen(false);
                       handleScrollTo('contact');
                     }}
-                    className="flex-1 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
+                    className="w-full rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
                   >
                     {t.ctaEnroll}
                   </button>

@@ -41,6 +41,8 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
+const SITE_VERSION = 'v1.0.1';
+
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
 
@@ -384,9 +386,10 @@ export default function HomePage() {
             </div>
             <a
               href="tel:+3598977777430"
-              className="hidden rounded-full border px-4 py-2 text-sm md:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 md:inline-flex"
             >
               {t.call}
+              <Phone size={16} />
             </a>
             <button
               type="button"
@@ -452,8 +455,12 @@ export default function HomePage() {
                   );
                 })}
                 <div className="flex gap-2">
-                  <a href="tel:+3598977777430" className="flex-1 rounded-xl border px-3 py-2 text-sm">
+                  <a
+                    href="tel:+3598977777430"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+                  >
                     {t.call}
+                    <Phone size={16} />
                   </a>
                   <button
                     type="button"
@@ -461,7 +468,7 @@ export default function HomePage() {
                       setMenuOpen(false);
                       handleScrollTo('contact');
                     }}
-                    className="flex-1 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
+                    className="w-full rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
                   >
                     {t.ctaEnroll}
                   </button>
@@ -904,6 +911,7 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-neutral-600 md:flex-row md:items-center md:justify-between">
           <div>{t.footer(new Date().getFullYear())}</div>
           <div className="text-xs text-neutral-400">Hyundai imagery © respective owners.</div>
+          <div className="text-xs text-neutral-400">Site version: {SITE_VERSION}</div>
         </div>
       </footer>
 

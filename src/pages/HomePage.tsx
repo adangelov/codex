@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   BookOpen,
   CalendarDays,
@@ -22,9 +22,10 @@ import {
 } from 'lucide-react';
 
 import { i18n, type Lang, type Strings } from '../i18n';
-import { NAV_ITEMS, NAV_SECTION_IDS, type NavItem, type NavSection } from '../navigation';
+import { NAV_SECTION_IDS, type NavSection } from '../navigation';
 import { SITE_VERSION } from '../siteVersion';
 import ScrollToTopButton from '../components/ScrollToTopButton';
+import SiteHeader from '../components/SiteHeader';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -194,7 +195,6 @@ interface ContactFormState {
 export default function HomePage() {
   const [lang, setLang] = useState<Lang>('bg');
   const t = i18n[lang];
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<NavSection>('process');
   const navigate = useNavigate();
   const location = useLocation();
@@ -251,20 +251,6 @@ export default function HomePage() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (!menuOpen) {
-      return undefined;
-    }
-    const handler = (event: MouseEvent) => {
-      if (event.target instanceof HTMLElement && event.target.closest('[data-nav-panel]')) {
-        return;
-      }
-      setMenuOpen(false);
-    };
-    document.addEventListener('click', handler);
-    return () => document.removeEventListener('click', handler);
-  }, [menuOpen]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -327,159 +313,21 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
-      <header
+      <SiteHeader
         ref={headerRef}
-        className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur"
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-8">
-            <button
-              type="button"
-              onClick={handleBrandClick}
-              aria-label={t.brand}
-              className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
-            >
-              {t.brand}
-            </button>
-            <nav className="hidden gap-4 md:flex">
-              {t.nav.map((label, index) => {
-                const item = NAV_ITEMS[index];
-                if (!item) {
-                  return null;
-                }
-                const isSection = item.type === 'section';
-                const active = isSection && activeSection === item.section;
-                return (
-                  <button
-                    key={`${item.type}-${label}`}
-                    type="button"
-                    onClick={() => {
-                      if (item.type === 'section') {
-                        handleScrollTo(item.section);
-                      } else {
-                        navigate(item.to);
-                      }
-                    }}
-                    className={`rounded-full px-3 py-2 text-sm transition ${
-                      active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
-                    }`}
-                    aria-current={active ? 'true' : undefined}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-2 md:flex">
-              {(['bg', 'en', 'ru'] as const).map((code) => (
-                <button
-                  key={code}
-                  type="button"
-                  onClick={() => setLang(code)}
-                  className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
-                    lang === code ? 'bg-red-600 text-white' : 'border'
-                  }`}
-                >
-                  {code.toUpperCase()}
-                </button>
-              ))}
-            </div>
-            <a
-              href="tel:+3598977777430"
-              className="hidden items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 md:inline-flex"
-            >
-              {t.call}
-              <Phone size={16} />
-            </a>
-            <button
-              type="button"
-              className="rounded-full border px-3 py-2 text-sm md:hidden"
-              onClick={() => setMenuOpen((prev) => !prev)}
-              aria-expanded={menuOpen}
-              aria-controls="mobile-menu"
-            >
-              ☰
-            </button>
-          </div>
-        </div>
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              id="mobile-menu"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="border-t bg-white md:hidden"
-            >
-              <div className="space-y-3 px-4 py-4" data-nav-panel>
-                <div className="flex gap-2">
-                  {(['bg', 'en', 'ru'] as const).map((code) => (
-                    <button
-                      key={code}
-                      type="button"
-                      onClick={() => setLang(code)}
-                      className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
-                        lang === code ? 'bg-red-600 text-white' : 'border'
-                      }`}
-                    >
-                      {code.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-                {t.nav.map((label, index) => {
-                  const item = NAV_ITEMS[index];
-                  if (!item) {
-                    return null;
-                  }
-                  const isSection = item.type === 'section';
-                  const active = isSection && activeSection === item.section;
-                  return (
-                    <button
-                      key={`${item.type}-${label}`}
-                      type="button"
-                      onClick={() => {
-                        setMenuOpen(false);
-                        if (item.type === 'section') {
-                          handleScrollTo(item.section);
-                        } else {
-                          navigate(item.to);
-                        }
-                      }}
-                      className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition ${
-                        active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
-                      }`}
-                      aria-current={active ? 'true' : undefined}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-                <div className="flex gap-2">
-                  <a
-                    href="tel:+3598977777430"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
-                  >
-                    {t.call}
-                    <Phone size={16} />
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMenuOpen(false);
-                      handleScrollTo('contact');
-                    }}
-                    className="w-full rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
-                  >
-                    {t.ctaEnroll}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
+        lang={lang}
+        navLabels={t.nav}
+        brandLabel={t.brand}
+        callLabel={t.call}
+        mobileCtaLabel={t.ctaEnroll}
+        activeSection={activeSection}
+        activeRoute={location.pathname}
+        isHomePage
+        onLangChange={setLang}
+        onSectionSelect={handleScrollTo}
+        onMobileCtaClick={() => handleScrollTo('contact')}
+        onBrandClick={handleBrandClick}
+      />
 
       <main>
         <section className="border-b bg-gradient-to-b from-white to-neutral-100">

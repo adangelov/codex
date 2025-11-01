@@ -1,14 +1,38 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, ChevronDown, ChevronLeft, Phone } from 'lucide-react';
 
 import { i18n, type Lang } from '../i18n';
+import { NAV_ITEMS, type NavItem } from '../navigation';
+import { SITE_VERSION } from '../siteVersion';
 
 export default function CourseDetailsPage() {
   const [lang, setLang] = useState<Lang>('bg');
   const t = i18n[lang];
   const [showTopics, setShowTopics] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const navEntries = t.nav
+    .map((label, index) => {
+      const item = NAV_ITEMS[index];
+      if (!item) {
+        return null;
+      }
+      return { label, item } as const;
+    })
+    .filter((entry): entry is { label: string; item: NavItem } => entry !== null);
+
+  const handleNavClick = (item: NavItem) => {
+    setMenuOpen(false);
+    if (item.type === 'section') {
+      navigate('/', { state: { scrollTo: item.section } });
+    } else {
+      navigate('/courses/category-b');
+    }
+  };
 
   const gallery = {
     main: {
@@ -32,6 +56,7 @@ export default function CourseDetailsPage() {
   } as const;
 
   const handleContact = () => {
+    setMenuOpen(false);
     navigate('/', { state: { scrollTo: 'contact' } });
   };
 
@@ -39,31 +64,122 @@ export default function CourseDetailsPage() {
     <div className="min-h-screen bg-white text-neutral-900">
       <header className="border-b bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
-          <Link to="/" className="text-lg font-semibold text-red-600">
-            {t.brand}
-          </Link>
-          <div className="flex items-center gap-2">
-            {(['bg', 'en', 'ru'] as const).map((code) => (
-              <button
-                key={code}
-                type="button"
-                onClick={() => setLang(code)}
-                className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
-                  lang === code ? 'bg-red-600 text-white' : 'border'
-                }`}
-              >
-                {code.toUpperCase()}
-              </button>
-            ))}
+          <div className="flex items-center gap-6">
+            <Link to="/" className="text-lg font-semibold text-red-600">
+              {t.brand}
+            </Link>
+            <nav className="hidden gap-4 md:flex">
+              {navEntries.map(({ label, item }) => {
+                const active = item.type === 'route' && location.pathname === item.to;
+                return (
+                  <button
+                    key={`${item.type}-${label}`}
+                    type="button"
+                    onClick={() => handleNavClick(item)}
+                    className={`rounded-full px-3 py-2 text-sm transition ${
+                      active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
+                    }`}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-2 md:flex">
+              {(['bg', 'en', 'ru'] as const).map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => setLang(code)}
+                  className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
+                    lang === code ? 'bg-red-600 text-white' : 'border'
+                  }`}
+                >
+                  {code.toUpperCase()}
+                </button>
+              ))}
+            </div>
+            <a
+              href="tel:+3598977777430"
+              className="hidden items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 md:inline-flex"
+            >
+              {t.call}
+              <Phone size={16} />
+            </a>
             <button
               type="button"
-              onClick={handleContact}
-              className="hidden rounded-full border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100 sm:inline-flex"
+              className="rounded-full border px-3 py-2 text-sm md:hidden"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-expanded={menuOpen}
+              aria-controls="course-mobile-menu"
             >
-              {t.contacts}
+              ☰
             </button>
           </div>
         </div>
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              id="course-mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="border-t bg-white md:hidden"
+            >
+              <div className="space-y-3 px-4 py-4" data-nav-panel>
+                <div className="flex gap-2">
+                  {(['bg', 'en', 'ru'] as const).map((code) => (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => setLang(code)}
+                      className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
+                        lang === code ? 'bg-red-600 text-white' : 'border'
+                      }`}
+                    >
+                      {code.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+                {navEntries.map(({ label, item }) => {
+                  const active = item.type === 'route' && location.pathname === item.to;
+                  return (
+                    <button
+                      key={`${item.type}-${label}`}
+                      type="button"
+                      onClick={() => handleNavClick(item)}
+                      className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition ${
+                        active ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
+                      }`}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+                <div className="flex gap-2">
+                  <a
+                    href="tel:+3598977777430"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+                  >
+                    {t.call}
+                    <Phone size={16} />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleContact}
+                    className="w-full rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
+                  >
+                    {t.contacts}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <main className="mx-auto max-w-4xl px-4 py-12">
@@ -178,6 +294,7 @@ export default function CourseDetailsPage() {
         <div className="mx-auto flex max-w-4xl flex-col gap-2 px-4 py-6 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
           <div>{t.footer(new Date().getFullYear())}</div>
           <div className="text-[11px] text-neutral-400">Hyundai imagery © respective owners.</div>
+          <div className="text-[11px] text-neutral-400">Site version: {SITE_VERSION}</div>
         </div>
       </footer>
     </div>

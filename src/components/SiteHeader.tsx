@@ -1,0 +1,291 @@
+import { forwardRef, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Phone } from 'lucide-react';
+
+import { type Lang } from '../i18n';
+import { NAV_ITEMS, type NavItem, type NavSection } from '../navigation';
+
+const LANG_OPTIONS = ['bg', 'en', 'ru'] as const;
+const PHONE_NUMBER = '+3598977777430';
+const MOBILE_MENU_ID = 'site-mobile-menu';
+
+interface SiteHeaderProps {
+  lang: Lang;
+  navLabels: readonly string[];
+  brandLabel: string;
+  callLabel: string;
+  mobileCtaLabel: string;
+  activeSection: NavSection | null;
+  activeRoute?: string;
+  isHomePage?: boolean;
+  onLangChange: (lang: Lang) => void;
+  onSectionSelect: (section: NavSection) => void;
+  onRouteSelect?: (to: string) => void;
+  onMobileCtaClick: () => void;
+  onBrandClick?: () => void;
+  brandHref?: string;
+}
+
+type NavEntry = { label: string; item: NavItem };
+
+const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function SiteHeader(
+  {
+    lang,
+    navLabels,
+    brandLabel,
+    callLabel,
+    mobileCtaLabel,
+    activeSection,
+    activeRoute,
+    isHomePage = false,
+    onLangChange,
+    onSectionSelect,
+    onRouteSelect,
+    onMobileCtaClick,
+    onBrandClick,
+    brandHref = '/'
+  },
+  ref
+) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  const setHeaderRef = (node: HTMLElement | null) => {
+    headerRef.current = node;
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      (ref as MutableRefObject<HTMLElement | null>).current = node;
+    }
+  };
+
+  useEffect(() => {
+    if (!menuOpen) {
+      return undefined;
+    }
+    const handler = (event: MouseEvent) => {
+      if (event.target instanceof HTMLElement && event.target.closest('[data-nav-panel]')) {
+        return;
+      }
+      setMenuOpen(false);
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
+  }, [menuOpen]);
+
+  const navEntries = useMemo<NavEntry[]>(() => {
+    return navLabels
+      .map((label, index) => {
+        const item = NAV_ITEMS[index];
+        if (!item) {
+          return null;
+        }
+        return { label, item } as const;
+      })
+      .filter((entry): entry is NavEntry => entry !== null);
+  }, [navLabels]);
+
+  const handleSection = (section: NavSection) => {
+    onSectionSelect(section);
+    setMenuOpen(false);
+  };
+
+  const handleRoute = (to: string) => {
+    onRouteSelect?.(to);
+    setMenuOpen(false);
+  };
+
+  const handleBrand = () => {
+    setMenuOpen(false);
+    onBrandClick?.();
+  };
+
+  const headerClasses = isHomePage
+    ? 'sticky top-0 z-40 border-b bg-white/90 backdrop-blur'
+    : 'border-b bg-white/95 backdrop-blur';
+  const containerMaxWidth = isHomePage ? 'max-w-6xl' : 'max-w-4xl';
+  const brandGap = isHomePage ? 'gap-8' : 'gap-6';
+
+  return (
+    <header ref={setHeaderRef} className={headerClasses}>
+      <div className={`mx-auto flex ${containerMaxWidth} items-center justify-between px-4 py-4`}>
+        <div className={`flex items-center ${brandGap}`}>
+          {isHomePage ? (
+            <button
+              type="button"
+              onClick={handleBrand}
+              aria-label={brandLabel}
+              className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+            >
+              {brandLabel}
+            </button>
+          ) : (
+            <Link
+              to={brandHref}
+              onClick={handleBrand}
+              className="text-lg font-semibold text-red-600 transition hover:text-red-700"
+            >
+              {brandLabel}
+            </Link>
+          )}
+          <nav className="hidden gap-4 md:flex">
+            {navEntries.map(({ label, item }) => {
+              const isSection = item.type === 'section';
+              const isActive = isSection
+                ? activeSection === item.section
+                : activeRoute === item.to;
+              const baseClasses = 'rounded-full px-3 py-2 text-sm transition';
+              const className = `${baseClasses} ${
+                isActive ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
+              }`;
+
+              if (isSection) {
+                return (
+                  <button
+                    key={`${item.type}-${label}`}
+                    type="button"
+                    onClick={() => handleSection(item.section)}
+                    className={className}
+                    aria-current={isActive ? 'true' : undefined}
+                  >
+                    {label}
+                  </button>
+                );
+              }
+
+              return (
+                <Link
+                  key={`${item.type}-${label}`}
+                  to={item.to}
+                  className={className}
+                  onClick={() => handleRoute(item.to)}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="hidden items-center gap-2 md:flex">
+            {LANG_OPTIONS.map((code) => (
+              <button
+                key={code}
+                type="button"
+                onClick={() => onLangChange(code)}
+                className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
+                  lang === code ? 'bg-red-600 text-white' : 'border'
+                }`}
+              >
+                {code.toUpperCase()}
+              </button>
+            ))}
+          </div>
+          <a
+            href={`tel:${PHONE_NUMBER}`}
+            className="hidden items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 md:inline-flex"
+          >
+            {callLabel}
+            <Phone size={16} />
+          </a>
+          <button
+            type="button"
+            className="rounded-full border px-3 py-2 text-sm md:hidden"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-expanded={menuOpen}
+            aria-controls={MOBILE_MENU_ID}
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            id={MOBILE_MENU_ID}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="border-t bg-white md:hidden"
+          >
+            <div className="space-y-3 px-4 py-4" data-nav-panel>
+              <div className="flex gap-2">
+                {LANG_OPTIONS.map((code) => (
+                  <button
+                    key={code}
+                    type="button"
+                    onClick={() => onLangChange(code)}
+                    className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
+                      lang === code ? 'bg-red-600 text-white' : 'border'
+                    }`}
+                  >
+                    {code.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+              {navEntries.map(({ label, item }) => {
+                const isSection = item.type === 'section';
+                const isActive = isSection
+                  ? activeSection === item.section
+                  : activeRoute === item.to;
+                const baseClasses = 'block w-full rounded-xl px-3 py-2 text-left text-sm transition';
+                const className = `${baseClasses} ${
+                  isActive ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
+                }`;
+
+                if (isSection) {
+                  return (
+                    <button
+                      key={`${item.type}-${label}`}
+                      type="button"
+                      onClick={() => handleSection(item.section)}
+                      className={className}
+                      aria-current={isActive ? 'true' : undefined}
+                    >
+                      {label}
+                    </button>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={`${item.type}-${label}`}
+                    to={item.to}
+                    className={className}
+                    onClick={() => handleRoute(item.to)}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+              <div className="flex gap-2">
+                <a
+                  href={`tel:${PHONE_NUMBER}`}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+                >
+                  {callLabel}
+                  <Phone size={16} />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onMobileCtaClick();
+                  }}
+                  className="w-full rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
+                >
+                  {mobileCtaLabel}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+});
+
+export default SiteHeader;

@@ -13,6 +13,8 @@ const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: smtpPort,
   secure: true,
+  logger: true,
+  debug: true,
   auth: {
     user: smtpUser,
     pass: smtpPass
@@ -26,6 +28,13 @@ transporter
   })
   .catch((error) => {
     console.error('SMTP verification failed', error);
+    console.error('SMTP verification error details', {
+      code: error?.code,
+      command: error?.command,
+      responseCode: error?.responseCode,
+      response: error?.response,
+      stack: error?.stack
+    });
   });
 
 const app = express();
@@ -116,6 +125,15 @@ app.post('/api/contact', async (req, res) => {
     <p><strong>GDPR съгласие:</strong> ${gdpr ? 'да' : 'не'}</p>
   `;
 
+  console.log('Sanitized contact submission', {
+    name,
+    phone,
+    email,
+    course,
+    startDate: startDateLabel,
+    gdpr
+  });
+
   try {
     await transporter.sendMail({
       from: `Website Notification <${smtpUser}>`,
@@ -128,6 +146,13 @@ app.post('/api/contact', async (req, res) => {
     return res.status(200).json({ message: 'ok' });
   } catch (error) {
     console.error('Failed to send contact email', error);
+    console.error('Contact email error details', {
+      code: error?.code,
+      command: error?.command,
+      responseCode: error?.responseCode,
+      response: error?.response,
+      stack: error?.stack
+    });
     return res.status(500).json({ message: 'Failed to send email' });
   }
 });

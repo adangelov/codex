@@ -191,6 +191,7 @@ interface ContactFormState {
   phone: string;
   email: string;
   course: keyof Strings['courseOptions'];
+  note: string;
   gdpr: boolean;
 }
 export default function HomePage() {
@@ -210,6 +211,7 @@ export default function HomePage() {
     phone: '',
     email: '',
     course: 'b_standard',
+    note: '',
     gdpr: false
   });
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -268,6 +270,7 @@ export default function HomePage() {
         phone: form.phone.trim(),
         email: form.email.trim(),
         course: form.course,
+        note: form.note.trim(),
         startDate: startDate || null,
         lang
       });
@@ -747,6 +750,20 @@ export default function HomePage() {
                         </option>
                       ))}
                     </select>
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-neutral-600" htmlFor="note">
+                      {t.formNote}
+                    </label>
+                    <textarea
+                      id="note"
+                      name="note"
+                      value={form.note}
+                      onChange={(event) => setForm((prev) => ({ ...prev, note: event.target.value }))}
+                      placeholder={t.formNotePlaceholder}
+                      rows={4}
+                      className="mt-1 w-full rounded-xl border px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-100"
+                    />
                   </div>
                   <label className="flex items-center gap-2 text-xs text-neutral-600">
                     <input

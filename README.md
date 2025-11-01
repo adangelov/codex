@@ -21,6 +21,33 @@ npm run preview
 
 The build output lives in `dist/` and can be deployed on any static hosting provider.
 
+## Environment configuration
+
+The contact form uses an SMTP transport. Copy `.env.example` to `.env.local` and fill in your real credentials (enter the raw values without wrapping them in quotes):
+
+```ini
+SMTP_HOST=mail.karailesno.bg
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=no-reply@karailesno.bg
+SMTP_PASS=********
+```
+
+> Replace the example values with the actual credentials provided by your email provider. Optionally override `CONTACT_TO_EMAIL` if the default inbox should change.
+
+### Netlify deployment
+
+When deploying on Netlify, configure the same variables in **Site settings → Environment variables** (again, enter the values without quotes):
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- (optional) `CONTACT_TO_EMAIL`
+
+Re-deploy the site after saving the new variables so that the serverless function receives the updated configuration.
+
 ## Tech stack
 
 - React 18 with TypeScript

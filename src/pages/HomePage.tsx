@@ -26,6 +26,7 @@ import { NAV_SECTION_IDS, type NavSection } from '../navigation';
 import { SITE_VERSION } from '../siteVersion';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import SiteHeader from '../components/SiteHeader';
+import { submitContactForm } from '../services/contact';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -203,6 +204,7 @@ export default function HomePage() {
   const upcomingStarts = useMemo(() => listUpcomingStarts(BASE_MONDAY, 12), []);
   const [startDate, setStartDate] = useState<string>(() => upcomingStarts[0]?.iso ?? '');
   const [formState, setFormState] = useState<'idle' | 'sending' | 'success'>('idle');
+  const [formError, setFormError] = useState<string | null>(null);
   const [form, setForm] = useState<ContactFormState>({
     name: '',
     phone: '',
@@ -252,16 +254,29 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     if (!form.gdpr) {
       formRef.current?.querySelector<HTMLInputElement>('[name="gdpr"]')?.focus();
       return;
     }
+    setFormError(null);
     setFormState('sending');
-    window.setTimeout(() => {
+    try {
+      await submitContactForm({
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        email: form.email.trim(),
+        course: form.course,
+        startDate: startDate || null,
+        lang
+      });
       setFormState('success');
-    }, 800);
+    } catch (error) {
+      console.error('Failed to submit contact form', error);
+      setFormState('idle');
+      setFormError(t.sendError);
+    }
   };
 
   const onPickTheoryDate = (iso: string) => {
@@ -750,6 +765,9 @@ export default function HomePage() {
                   >
                     {formState === 'success' ? t.sentOk : t.formSubmit}
                   </button>
+                  {formError && (
+                    <div className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-700">{formError}</div>
+                  )}
                   {formState === 'success' && (
                     <div className="rounded-xl bg-green-50 px-3 py-2 text-xs text-green-700">{t.sentThanks}</div>
                   )}

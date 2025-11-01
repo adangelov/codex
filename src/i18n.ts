@@ -93,6 +93,7 @@ export const i18n = {
     formGDPR: 'Съгласен/на съм с обработката на личните ми данни (GDPR)',
     sentThanks: 'Благодарим! Ще се свържем с вас за потвърждение.',
     sentOk: 'Изпратено! Ще ви потърсим до скоро.',
+    sendError: 'Възникна проблем при изпращането. Моля, опитайте отново след малко.',
     courseOptions: {
       b_standard: 'Категория B - стандартен курс',
       b_refresh: 'Категория B - опреснителни курсове',
@@ -226,6 +227,7 @@ export const i18n = {
     formGDPR: 'I agree to personal data processing (GDPR)',
     sentThanks: 'Thanks! We will contact you shortly.',
     sentOk: 'Sent! We will reach out soon.',
+    sendError: 'Something went wrong while sending. Please try again in a moment.',
     courseOptions: {
       b_standard: 'Category B - standard course',
       b_refresh: 'Category B - refresher lessons',
@@ -359,6 +361,7 @@ export const i18n = {
     formGDPR: 'Согласен(на) на обработку персональных данных (GDPR)',
     sentThanks: 'Спасибо! Мы свяжемся с вами для подтверждения.',
     sentOk: 'Отправлено! Скоро свяжемся.',
+    sendError: 'Не удалось отправить сообщение. Попробуйте снова чуть позже.',
     courseOptions: {
       b_standard: 'Категория B - стандартный курс',
       b_refresh: 'Категория B - повторные занятия',

@@ -1,4 +1,4 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
 type ContactPayload = {
   name?: string;
@@ -24,10 +24,43 @@ type NetlifyResponse = {
 
 const CONTACT_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'office@karailesno.bg';
 
-const resendApiKey = process.env.RESEND_API_KEY;
-const fromEmail = process.env.RESEND_FROM_EMAIL;
+const smtpHost = process.env.SMTP_HOST;
+const smtpPortRaw = process.env.SMTP_PORT;
+const smtpSecureRaw = process.env.SMTP_SECURE;
+const smtpUser = process.env.SMTP_USER;
+const smtpPass = process.env.SMTP_PASS;
 
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
+const parseSecureFlag = (value: string | undefined): boolean | undefined => {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'true') {
+    return true;
+  }
+  if (normalized === 'false') {
+    return false;
+  }
+
+  return undefined;
+};
+
+const smtpPort = smtpPortRaw ? Number.parseInt(smtpPortRaw, 10) : undefined;
+const smtpSecure = parseSecureFlag(smtpSecureRaw);
+
+const transporter: nodemailer.Transporter | null =
+  smtpHost && smtpPort && smtpUser && smtpPass
+    ? nodemailer.createTransport({
+        host: smtpHost,
+        port: smtpPort,
+        secure: typeof smtpSecure === 'boolean' ? smtpSecure : smtpPort === 465,
+        auth: {
+          user: smtpUser,
+          pass: smtpPass
+        }
+      })
+    : null;
 
 const jsonResponse = (statusCode: number, payload: Record<string, unknown>): NetlifyResponse => ({
   statusCode,
@@ -81,8 +114,13 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
     return jsonResponse(405, { error: 'Method not allowed' });
   }
 
-  if (!resend || !fromEmail) {
-    console.error('Email service missing configuration');
+  if (!transporter) {
+    console.error('Email service missing configuration', {
+      hasHost: Boolean(smtpHost),
+      hasPort: Boolean(smtpPort),
+      hasUser: Boolean(smtpUser),
+      hasPass: Boolean(smtpPass)
+    });
     return jsonResponse(500, { error: 'Email service is not configured' });
   }
 
@@ -105,25 +143,48 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
   }
 
   try {
-    await resend.emails.send({
-      from: fromEmail,
+    const normalizedPayload = {
+      name,
+      phone,
+      email,
+      course,
+      startDate: startDate ?? null,
+      lang: lang ?? 'bg',
+      note: note ?? ''
+    } as const;
+
+    const html = renderEmailHtml(normalizedPayload);
+
+    const startLabel = normalizedPayload.startDate
+      ? new Date(normalizedPayload.startDate).toLocaleDateString(normalizedPayload.lang || 'bg', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        })
+      : 'Не е избрана дата';
+    const trimmedNote = normalizedPayload.note.trim();
+
+    const text = `Ново запитване за курс (${normalizedPayload.course})\n` +
+      `Име: ${normalizedPayload.name}\n` +
+      `Телефон: ${normalizedPayload.phone}\n` +
+      `Email: ${normalizedPayload.email}\n` +
+      `Предпочитана дата: ${startLabel}\n` +
+      `Забележка: ${trimmedNote || 'Няма допълнителна забележка'}\n` +
+      'Изпратено чрез уеб сайта.';
+
+    await transporter.sendMail({
+      from: smtpUser,
       to: CONTACT_EMAIL,
-      reply_to: email,
-      subject: `Ново запитване за курс (${course})`,
-      html: renderEmailHtml({
-        name,
-        phone,
-        email,
-        course,
-        startDate: startDate ?? null,
-        lang: lang ?? 'bg',
-        note: note ?? ''
-      })
+      replyTo: email,
+      subject: `Ново запитване за курс (${normalizedPayload.course})`,
+      html,
+      text
     });
     return jsonResponse(200, { ok: true });
   } catch (error) {
     console.error('Failed to send email', error);
-    return jsonResponse(500, { error: 'Failed to send email' });
+    const message = error instanceof Error ? error.message : 'Failed to send email';
+    return jsonResponse(500, { error: message });
   }
 };
 

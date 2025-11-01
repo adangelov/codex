@@ -22,13 +22,33 @@ type NetlifyResponse = {
   body: string;
 };
 
-const CONTACT_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'office@karailesno.bg';
+const normalizeEnvValue = (value: string | undefined): string | undefined => {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
 
-const smtpHost = process.env.SMTP_HOST;
-const smtpPortRaw = process.env.SMTP_PORT;
-const smtpSecureRaw = process.env.SMTP_SECURE;
-const smtpUser = process.env.SMTP_USER;
-const smtpPass = process.env.SMTP_PASS;
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    return trimmed.slice(1, -1).trim();
+  }
+
+  return trimmed;
+};
+
+const CONTACT_EMAIL = normalizeEnvValue(process.env.CONTACT_TO_EMAIL) ?? 'office@karailesno.bg';
+
+const smtpHost = normalizeEnvValue(process.env.SMTP_HOST);
+const smtpPortRaw = normalizeEnvValue(process.env.SMTP_PORT);
+const smtpSecureRaw = normalizeEnvValue(process.env.SMTP_SECURE);
+const smtpUser = normalizeEnvValue(process.env.SMTP_USER);
+const smtpPass = normalizeEnvValue(process.env.SMTP_PASS);
 
 const parseSecureFlag = (value: string | undefined): boolean | undefined => {
   if (typeof value !== 'string') {
@@ -36,17 +56,18 @@ const parseSecureFlag = (value: string | undefined): boolean | undefined => {
   }
 
   const normalized = value.trim().toLowerCase();
-  if (normalized === 'true') {
+  if (['true', '1', 'yes', 'y', 'on'].includes(normalized)) {
     return true;
   }
-  if (normalized === 'false') {
+  if (['false', '0', 'no', 'n', 'off'].includes(normalized)) {
     return false;
   }
 
   return undefined;
 };
 
-const smtpPort = smtpPortRaw ? Number.parseInt(smtpPortRaw, 10) : undefined;
+const parsedPort = smtpPortRaw ? Number.parseInt(smtpPortRaw, 10) : undefined;
+const smtpPort = Number.isNaN(parsedPort) ? undefined : parsedPort;
 const smtpSecure = parseSecureFlag(smtpSecureRaw);
 
 const transporter: nodemailer.Transporter | null =
@@ -173,9 +194,15 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
       'Изпратено чрез уеб сайта.';
 
     await transporter.sendMail({
-      from: smtpUser,
+      from: {
+        name: 'РУМИ Автошкола',
+        address: smtpUser
+      },
       to: CONTACT_EMAIL,
-      replyTo: email,
+      replyTo: {
+        name: normalizedPayload.name,
+        address: email
+      },
       subject: `Ново запитване за курс (${normalizedPayload.course})`,
       html,
       text

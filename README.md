@@ -23,7 +23,7 @@ The build output lives in `dist/` and can be deployed on any static hosting prov
 
 ## Environment configuration
 
-The contact form uses an SMTP transport. Copy `.env.example` to `.env.local` and fill in your real credentials:
+The contact form uses an SMTP transport. Copy `.env.example` to `.env.local` and fill in your real credentials (enter the raw values without wrapping them in quotes):
 
 ```ini
 SMTP_HOST=mail.karailesno.bg
@@ -37,7 +37,7 @@ SMTP_PASS=********
 
 ### Netlify deployment
 
-When deploying on Netlify, configure the same variables in **Site settings → Environment variables**:
+When deploying on Netlify, configure the same variables in **Site settings → Environment variables** (again, enter the values without quotes):
 
 - `SMTP_HOST`
 - `SMTP_PORT`

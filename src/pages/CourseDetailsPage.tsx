@@ -6,6 +6,7 @@ import { CheckCircle2, ChevronDown, ChevronLeft, Phone } from 'lucide-react';
 import { i18n, type Lang } from '../i18n';
 import { NAV_ITEMS, type NavItem } from '../navigation';
 import { SITE_VERSION } from '../siteVersion';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 export default function CourseDetailsPage() {
   const [lang, setLang] = useState<Lang>('bg');
@@ -289,6 +290,8 @@ export default function CourseDetailsPage() {
           </div>
         </section>
       </main>
+
+      <ScrollToTopButton className="fixed bottom-6 right-6 z-50" />
 
       <footer className="border-t bg-neutral-50">
         <div className="mx-auto flex max-w-4xl flex-col gap-2 px-4 py-6 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">

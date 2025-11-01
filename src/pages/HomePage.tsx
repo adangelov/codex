@@ -24,6 +24,7 @@ import {
 import { i18n, type Lang, type Strings } from '../i18n';
 import { NAV_ITEMS, NAV_SECTION_IDS, type NavItem, type NavSection } from '../navigation';
 import { SITE_VERSION } from '../siteVersion';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -902,6 +903,8 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+
+      <ScrollToTopButton className="fixed bottom-6 right-6 z-50" />
 
       <footer className="border-t bg-neutral-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-neutral-600 md:flex-row md:items-center md:justify-between">

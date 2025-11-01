@@ -1,0 +1,146 @@
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import nodemailer from 'nodemailer';
+
+const requiredEnvVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
+const missingEnv = requiredEnvVars.filter((key) => !process.env[key]);
+if (missingEnv.length > 0) {
+  console.error(`Missing required SMTP environment variables: ${missingEnv.join(', ')}`);
+  process.exit(1);
+}
+
+const smtpHost = process.env.SMTP_HOST;
+const smtpPort = Number.parseInt(process.env.SMTP_PORT ?? '465', 10);
+const smtpUser = process.env.SMTP_USER;
+const smtpPass = process.env.SMTP_PASS;
+const contactRecipient = process.env.CONTACT_RECIPIENT ?? 'office@karailesno.bg';
+const corsOrigins = process.env.CONTACT_ALLOWED_ORIGINS;
+
+const transporter = nodemailer.createTransport({
+  host: smtpHost,
+  port: Number.isNaN(smtpPort) ? 465 : smtpPort,
+  secure: smtpPort === 465,
+  auth: {
+    user: smtpUser,
+    pass: smtpPass
+  }
+});
+
+transporter
+  .verify()
+  .then(() => {
+    console.log('SMTP transport ready');
+  })
+  .catch((error) => {
+    console.error('SMTP verification failed', error);
+  });
+
+const app = express();
+
+if (corsOrigins) {
+  const origins = corsOrigins
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  app.use(
+    cors({
+      origin: origins,
+      methods: ['POST'],
+      allowedHeaders: ['Content-Type']
+    })
+  );
+} else {
+  app.use(cors());
+}
+
+app.use(express.json());
+
+function sanitize(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function escapeHtml(value) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function isValidEmail(value) {
+  return /.+@.+\..+/.test(value);
+}
+
+function isValidPhone(value) {
+  return /[0-9+()\-\s]{5,}/.test(value);
+}
+
+app.post('/api/contact', async (req, res) => {
+  const name = sanitize(req.body?.name);
+  const phone = sanitize(req.body?.phone);
+  const email = sanitize(req.body?.email);
+  const course = sanitize(req.body?.course);
+  const startDate = sanitize(req.body?.startDate);
+  const gdpr = Boolean(req.body?.gdpr);
+
+  const errors = [];
+  if (!name) errors.push('name');
+  if (!phone || !isValidPhone(phone)) errors.push('phone');
+  if (!email || !isValidEmail(email)) errors.push('email');
+  if (!course) errors.push('course');
+  if (!startDate) errors.push('startDate');
+  if (!gdpr) errors.push('gdpr');
+
+  if (errors.length > 0) {
+    return res.status(400).json({ message: 'Invalid form submission', errors });
+  }
+
+  const safeStartDate = new Date(startDate);
+  const startDateLabel = Number.isNaN(safeStartDate.getTime())
+    ? startDate
+    : safeStartDate.toLocaleDateString('bg-BG', {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit'
+      });
+
+  const escapedName = escapeHtml(name);
+  const escapedPhone = escapeHtml(phone);
+  const escapedEmail = escapeHtml(email);
+  const escapedCourse = escapeHtml(course);
+  const escapedStartDate = escapeHtml(startDateLabel);
+
+  const plainText = `Нова заявка от сайта:\n\nИме: ${name}\nТелефон: ${phone}\nИмейл: ${email}\nКурс: ${course}\nПредпочитана начална дата: ${startDateLabel}\nGDPR съгласие: ${gdpr ? 'да' : 'не'}`;
+
+  const htmlContent = `
+    <h2>Нова заявка от сайта</h2>
+    <p><strong>Име:</strong> ${escapedName}</p>
+    <p><strong>Телефон:</strong> ${escapedPhone}</p>
+    <p><strong>Имейл:</strong> ${escapedEmail}</p>
+    <p><strong>Курс:</strong> ${escapedCourse}</p>
+    <p><strong>Предпочитана начална дата:</strong> ${escapedStartDate}</p>
+    <p><strong>GDPR съгласие:</strong> ${gdpr ? 'да' : 'не'}</p>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `Website Notification <${smtpUser}>`,
+      to: contactRecipient,
+      replyTo: email,
+      subject: 'Нова заявка за курс',
+      text: plainText,
+      html: htmlContent
+    });
+    return res.status(200).json({ message: 'ok' });
+  } catch (error) {
+    console.error('Failed to send contact email', error);
+    return res.status(500).json({ message: 'Failed to send email' });
+  }
+});
+
+const port = Number.parseInt(process.env.PORT ?? '3000', 10);
+app.listen(port, () => {
+  console.log(`Contact API listening on port ${port}`);
+});

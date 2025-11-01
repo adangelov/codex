@@ -3,6 +3,7 @@ export interface ContactFormSubmission {
   phone: string;
   email: string;
   course: string;
+  note: string;
   startDate: string | null;
   lang: string;
 }

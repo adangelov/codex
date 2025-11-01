@@ -5,6 +5,7 @@ type ContactPayload = {
   phone?: string;
   email?: string;
   course?: string;
+  note?: string | null;
   startDate?: string | null;
   lang?: string;
 };
@@ -39,13 +40,25 @@ const jsonResponse = (statusCode: number, payload: Record<string, unknown>): Net
   body: JSON.stringify(payload)
 });
 
-const renderEmailHtml = (payload: Required<ContactPayload>): string => {
-  const { name, phone, email, course, startDate, lang } = payload;
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+const renderEmailHtml = (
+  payload: Required<Omit<ContactPayload, 'note'>> & { note?: string | null }
+): string => {
+  const { name, phone, email, course, startDate, lang, note } = payload;
   const startLabel = startDate ? new Date(startDate).toLocaleDateString(lang || 'bg', {
     day: '2-digit',
     month: 'long',
     year: 'numeric'
   }) : 'Не е избрана дата';
+  const trimmedNote = note?.trim() ?? '';
+  const formattedNote = trimmedNote ? escapeHtml(trimmedNote).replace(/\n/g, '<br />') : 'Няма допълнителна забележка';
   return `
     <div style="font-family: Arial, sans-serif; line-height: 1.6;">
       <h2>Ново запитване за курс (${course})</h2>
@@ -53,6 +66,7 @@ const renderEmailHtml = (payload: Required<ContactPayload>): string => {
       <p><strong>Телефон:</strong> ${phone}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Предпочитана дата:</strong> ${startLabel}</p>
+      <p><strong>Забележка:</strong> ${formattedNote}</p>
       <p>Изпратено чрез уеб сайта.</p>
     </div>
   `;
@@ -84,7 +98,7 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
     return jsonResponse(400, { error: 'Invalid JSON payload' });
   }
 
-  const { name, phone, email, course, startDate, lang } = payload;
+  const { name, phone, email, course, startDate, lang, note } = payload;
 
   if (!name || !phone || !email || !course) {
     return jsonResponse(400, { error: 'Missing required fields' });
@@ -102,7 +116,8 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
         email,
         course,
         startDate: startDate ?? null,
-        lang: lang ?? 'bg'
+        lang: lang ?? 'bg',
+        note: note ?? ''
       })
     });
     return jsonResponse(200, { ok: true });

@@ -22,6 +22,11 @@ type NetlifyResponse = {
   body: string;
 };
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __CONTACT_FORM_TRANSPORT__: nodemailer.Transporter | null | undefined;
+}
+
 const normalizeEnvValue = (value: string | undefined): string | undefined => {
   if (typeof value !== 'string') {
     return undefined;
@@ -44,12 +49,6 @@ const normalizeEnvValue = (value: string | undefined): string | undefined => {
 
 const CONTACT_EMAIL = normalizeEnvValue(process.env.CONTACT_TO_EMAIL) ?? 'office@karailesno.bg';
 
-const smtpHost = normalizeEnvValue(process.env.SMTP_HOST);
-const smtpPortRaw = normalizeEnvValue(process.env.SMTP_PORT);
-const smtpSecureRaw = normalizeEnvValue(process.env.SMTP_SECURE);
-const smtpUser = normalizeEnvValue(process.env.SMTP_USER);
-const smtpPass = normalizeEnvValue(process.env.SMTP_PASS);
-
 const parseSecureFlag = (value: string | undefined): boolean | undefined => {
   if (typeof value !== 'string') {
     return undefined;
@@ -66,22 +65,88 @@ const parseSecureFlag = (value: string | undefined): boolean | undefined => {
   return undefined;
 };
 
-const parsedPort = smtpPortRaw ? Number.parseInt(smtpPortRaw, 10) : undefined;
-const smtpPort = Number.isNaN(parsedPort) ? undefined : parsedPort;
-const smtpSecure = parseSecureFlag(smtpSecureRaw);
+type TransportMode = 'smtp' | 'json' | 'stream';
 
-const transporter: nodemailer.Transporter | null =
-  smtpHost && smtpPort && smtpUser && smtpPass
-    ? nodemailer.createTransport({
-        host: smtpHost,
-        port: smtpPort,
-        secure: typeof smtpSecure === 'boolean' ? smtpSecure : smtpPort === 465,
-        auth: {
-          user: smtpUser,
-          pass: smtpPass
-        }
-      })
-    : null;
+type TransportConfig = {
+  mode: TransportMode;
+  host?: string;
+  port?: number;
+  secure?: boolean;
+  user?: string;
+  pass?: string;
+};
+
+const readTransportConfig = (): TransportConfig => {
+  const transportOverride = normalizeEnvValue(process.env.SMTP_TRANSPORT)?.toLowerCase();
+  const mode: TransportMode = transportOverride === 'json' || transportOverride === 'stream' ? transportOverride : 'smtp';
+
+  const smtpHost = normalizeEnvValue(process.env.SMTP_HOST);
+  const smtpPortRaw = normalizeEnvValue(process.env.SMTP_PORT);
+  const parsedPort = smtpPortRaw ? Number.parseInt(smtpPortRaw, 10) : undefined;
+  const smtpPort = Number.isNaN(parsedPort) ? undefined : parsedPort;
+  const smtpSecureRaw = normalizeEnvValue(process.env.SMTP_SECURE);
+  const smtpSecure = parseSecureFlag(smtpSecureRaw);
+  const smtpUser = normalizeEnvValue(process.env.SMTP_USER);
+  const smtpPass = normalizeEnvValue(process.env.SMTP_PASS);
+
+  return {
+    mode,
+    host: smtpHost,
+    port: smtpPort,
+    secure: typeof smtpSecure === 'boolean' ? smtpSecure : undefined,
+    user: smtpUser,
+    pass: smtpPass
+  };
+};
+
+const createTransporterFromConfig = (config: TransportConfig): nodemailer.Transporter | null => {
+  if (config.mode === 'json') {
+    return nodemailer.createTransport({ jsonTransport: true });
+  }
+
+  if (config.mode === 'stream') {
+    return nodemailer.createTransport({ streamTransport: true, buffer: true });
+  }
+
+  if (!config.host || !config.port || !config.user || !config.pass) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: config.host,
+    port: config.port,
+    secure: typeof config.secure === 'boolean' ? config.secure : config.port === 465,
+    auth: {
+      user: config.user,
+      pass: config.pass
+    }
+  });
+};
+
+let cachedTransporter: nodemailer.Transporter | null | undefined;
+let cachedConfig: TransportConfig | null = null;
+
+const getTransporter = (): nodemailer.Transporter | null => {
+  if (typeof globalThis.__CONTACT_FORM_TRANSPORT__ !== 'undefined') {
+    return globalThis.__CONTACT_FORM_TRANSPORT__;
+  }
+
+  if (typeof cachedTransporter !== 'undefined') {
+    return cachedTransporter;
+  }
+
+  cachedConfig = readTransportConfig();
+  cachedTransporter = createTransporterFromConfig(cachedConfig);
+  return cachedTransporter;
+};
+
+const getCachedConfig = (): TransportConfig | null => {
+  if (cachedConfig) {
+    return cachedConfig;
+  }
+  cachedConfig = readTransportConfig();
+  return cachedConfig;
+};
 
 const jsonResponse = (statusCode: number, payload: Record<string, unknown>): NetlifyResponse => ({
   statusCode,
@@ -102,28 +167,77 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 
-const renderEmailHtml = (
-  payload: Required<Omit<ContactPayload, 'note'>> & { note?: string | null }
-): string => {
+const getPreferredDateLabel = (startDate: string | null | undefined, locale: string): string => {
+  if (!startDate) {
+    return 'Не е избрана дата';
+  }
+
+  try {
+    const parsed = new Date(startDate);
+    if (Number.isNaN(parsed.getTime())) {
+      return 'Не е избрана дата';
+    }
+    return parsed.toLocaleDateString(locale, {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch (error) {
+    console.error('Failed to format start date', { error, startDate, locale });
+    return 'Не е избрана дата';
+  }
+};
+
+type NormalizedPayload = {
+  name: string;
+  phone: string;
+  email: string;
+  course: string;
+  note: string;
+  startDate: string | null;
+  lang: string;
+};
+
+const renderEmailHtml = (payload: NormalizedPayload): string => {
   const { name, phone, email, course, startDate, lang, note } = payload;
-  const startLabel = startDate ? new Date(startDate).toLocaleDateString(lang || 'bg', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric'
-  }) : 'Не е избрана дата';
-  const trimmedNote = note?.trim() ?? '';
+  const startLabel = getPreferredDateLabel(startDate ?? null, lang || 'bg');
+  const trimmedNote = note.trim();
   const formattedNote = trimmedNote ? escapeHtml(trimmedNote).replace(/\n/g, '<br />') : 'Няма допълнителна забележка';
+
   return `
     <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-      <h2>Ново запитване за курс (${course})</h2>
-      <p><strong>Име:</strong> ${name}</p>
-      <p><strong>Телефон:</strong> ${phone}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Предпочитана дата:</strong> ${startLabel}</p>
+      <h2>Ново запитване за курс (${escapeHtml(course)})</h2>
+      <p><strong>Име:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Телефон:</strong> ${escapeHtml(phone)}</p>
+      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+      <p><strong>Предпочитана дата:</strong> ${escapeHtml(startLabel)}</p>
       <p><strong>Забележка:</strong> ${formattedNote}</p>
       <p>Изпратено чрез уеб сайта.</p>
     </div>
   `;
+};
+
+const normalizePayload = (payload: ContactPayload): NormalizedPayload | null => {
+  const requiredFields = ['name', 'phone', 'email', 'course'] as const;
+  for (const field of requiredFields) {
+    if (!payload[field] || typeof payload[field] !== 'string' || !payload[field]?.trim()) {
+      return null;
+    }
+  }
+
+  const normalizedNote = typeof payload.note === 'string' ? payload.note.trim() : '';
+  const normalizedStartDate = typeof payload.startDate === 'string' ? payload.startDate.trim() : null;
+  const normalizedLang = typeof payload.lang === 'string' && payload.lang.trim() ? payload.lang.trim() : 'bg';
+
+  return {
+    name: payload.name!.trim(),
+    phone: payload.phone!.trim(),
+    email: payload.email!.trim(),
+    course: payload.course!.trim(),
+    note: normalizedNote || '',
+    startDate: normalizedStartDate || null,
+    lang: normalizedLang
+  };
 };
 
 export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => {
@@ -135,12 +249,15 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
     return jsonResponse(405, { error: 'Method not allowed' });
   }
 
+  const transporter = getTransporter();
+  const transportConfig = getCachedConfig();
   if (!transporter) {
     console.error('Email service missing configuration', {
-      hasHost: Boolean(smtpHost),
-      hasPort: Boolean(smtpPort),
-      hasUser: Boolean(smtpUser),
-      hasPass: Boolean(smtpPass)
+      mode: transportConfig?.mode,
+      hasHost: Boolean(transportConfig?.host),
+      hasPort: Boolean(transportConfig?.port),
+      hasUser: Boolean(transportConfig?.user),
+      hasPass: Boolean(transportConfig?.pass)
     });
     return jsonResponse(500, { error: 'Email service is not configured' });
   }
@@ -157,34 +274,16 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
     return jsonResponse(400, { error: 'Invalid JSON payload' });
   }
 
-  const { name, phone, email, course, startDate, lang, note } = payload;
-
-  if (!name || !phone || !email || !course) {
+  const normalizedPayload = normalizePayload(payload);
+  if (!normalizedPayload) {
     return jsonResponse(400, { error: 'Missing required fields' });
   }
 
   try {
-    const normalizedPayload = {
-      name,
-      phone,
-      email,
-      course,
-      startDate: startDate ?? null,
-      lang: lang ?? 'bg',
-      note: note ?? ''
-    } as const;
-
-    const html = renderEmailHtml(normalizedPayload);
-
-    const startLabel = normalizedPayload.startDate
-      ? new Date(normalizedPayload.startDate).toLocaleDateString(normalizedPayload.lang || 'bg', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        })
-      : 'Не е избрана дата';
+    const startLabel = getPreferredDateLabel(normalizedPayload.startDate, normalizedPayload.lang);
     const trimmedNote = normalizedPayload.note.trim();
 
+    const html = renderEmailHtml(normalizedPayload);
     const text = `Ново запитване за курс (${normalizedPayload.course})\n` +
       `Име: ${normalizedPayload.name}\n` +
       `Телефон: ${normalizedPayload.phone}\n` +
@@ -193,21 +292,19 @@ export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => 
       `Забележка: ${trimmedNote || 'Няма допълнителна забележка'}\n` +
       'Изпратено чрез уеб сайта.';
 
-    await transporter.sendMail({
+    const fromAddress = transportConfig?.user ?? CONTACT_EMAIL;
+    const info = await transporter.sendMail({
       from: {
         name: 'РУМИ Автошкола',
-        address: smtpUser
+        address: fromAddress
       },
       to: CONTACT_EMAIL,
-      replyTo: {
-        name: normalizedPayload.name,
-        address: email
-      },
+      replyTo: `${normalizedPayload.name} <${normalizedPayload.email}>`,
       subject: `Ново запитване за курс (${normalizedPayload.course})`,
       html,
       text
     });
-    return jsonResponse(200, { ok: true });
+    return jsonResponse(200, { ok: true, messageId: info.messageId ?? null });
   } catch (error) {
     console.error('Failed to send email', error);
     const message = error instanceof Error ? error.message : 'Failed to send email';

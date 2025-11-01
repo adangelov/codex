@@ -31,9 +31,19 @@ SMTP_PORT=465
 SMTP_SECURE=true
 SMTP_USER=no-reply@karailesno.bg
 SMTP_PASS=********
+# Optionally enable a JSON transport for local smoke tests
+# SMTP_TRANSPORT=json
 ```
 
 > Replace the example values with the actual credentials provided by your email provider. Optionally override `CONTACT_TO_EMAIL` if the default inbox should change.
+
+When developing locally without access to the production SMTP server you can simulate a delivery with Nodemailer's JSON transport by setting `SMTP_TRANSPORT=json` and running:
+
+```bash
+npx ts-node --esm tests/send-email.test.ts
+```
+
+The script exercises the Netlify function end-to-end and prints the generated message ID.
 
 ### Netlify deployment
 

@@ -223,6 +223,7 @@ export default function HomePage() {
     const handleScroll = () => {
       const headerHeight = headerRef.current?.offsetHeight ?? 0;
       const scrollPosition = window.scrollY + headerHeight + 1;
+      const atBottomBuffer = 96;
 
       let currentSection: NavSection | null = null;
       for (const id of NAV_SECTION_IDS) {
@@ -233,6 +234,13 @@ export default function HomePage() {
         if (scrollPosition >= element.offsetTop) {
           currentSection = id;
         }
+      }
+
+      const doc = document.documentElement;
+      const reachedBottom =
+        window.innerHeight + window.scrollY >= doc.scrollHeight - atBottomBuffer;
+      if (reachedBottom) {
+        currentSection = 'contact';
       }
 
       const nextSection = currentSection ?? NAV_SECTION_IDS[0];

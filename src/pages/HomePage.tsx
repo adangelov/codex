@@ -192,6 +192,14 @@ interface ContactFormState {
   course: keyof Strings['courseOptions'];
   gdpr: boolean;
 }
+
+const DEFAULT_CONTACT_FORM: ContactFormState = {
+  name: '',
+  phone: '',
+  email: '',
+  course: 'b_standard',
+  gdpr: false
+};
 export default function HomePage() {
   const [lang, setLang] = useState<Lang>('bg');
   const t = i18n[lang];
@@ -202,14 +210,8 @@ export default function HomePage() {
   const [viewDate, setViewDate] = useState(() => new Date());
   const upcomingStarts = useMemo(() => listUpcomingStarts(BASE_MONDAY, 12), []);
   const [startDate, setStartDate] = useState<string>(() => upcomingStarts[0]?.iso ?? '');
-  const [formState, setFormState] = useState<'idle' | 'sending' | 'success'>('idle');
-  const [form, setForm] = useState<ContactFormState>({
-    name: '',
-    phone: '',
-    email: '',
-    course: 'b_standard',
-    gdpr: false
-  });
+  const [formState, setFormState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [form, setForm] = useState<ContactFormState>(() => ({ ...DEFAULT_CONTACT_FORM }));
   const formRef = useRef<HTMLFormElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
 
@@ -252,16 +254,58 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  useEffect(() => {
+    if (formState === 'success' || formState === 'error') {
+      const timer = window.setTimeout(() => {
+        setFormState('idle');
+      }, 5000);
+      return () => window.clearTimeout(timer);
+    }
+    return undefined;
+  }, [formState]);
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     if (!form.gdpr) {
       formRef.current?.querySelector<HTMLInputElement>('[name="gdpr"]')?.focus();
       return;
     }
+    if (formState === 'sending') {
+      return;
+    }
     setFormState('sending');
-    window.setTimeout(() => {
+    const endpointValue =
+      typeof import.meta.env.VITE_CONTACT_ENDPOINT === 'string' &&
+      import.meta.env.VITE_CONTACT_ENDPOINT.trim().length > 0
+        ? import.meta.env.VITE_CONTACT_ENDPOINT
+        : '/api/contact';
+
+    try {
+      const response = await fetch(endpointValue, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          course: form.course,
+          startDate,
+          gdpr: form.gdpr
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Contact request failed with status ${response.status}`);
+      }
+
+      setForm(() => ({ ...DEFAULT_CONTACT_FORM }));
       setFormState('success');
-    }, 800);
+    } catch (error) {
+      console.error('Неуспешно изпращане на заявка', error);
+      setFormState('error');
+    }
   };
 
   const onPickTheoryDate = (iso: string) => {
@@ -748,10 +792,17 @@ export default function HomePage() {
                     disabled={formState === 'sending'}
                     className="w-full rounded-xl bg-red-600 py-2 font-semibold text-white shadow hover:bg-red-700 disabled:opacity-60"
                   >
-                    {formState === 'success' ? t.sentOk : t.formSubmit}
+                    {formState === 'success'
+                      ? t.sentOk
+                      : formState === 'sending'
+                        ? t.formSending
+                        : t.formSubmit}
                   </button>
                   {formState === 'success' && (
                     <div className="rounded-xl bg-green-50 px-3 py-2 text-xs text-green-700">{t.sentThanks}</div>
+                  )}
+                  {formState === 'error' && (
+                    <div className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-700">{t.sentError}</div>
                   )}
                 </form>
               </div>

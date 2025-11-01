@@ -42,7 +42,7 @@ const NAV_SECTION_IDS: readonly NavSection[] = NAV_ITEMS.filter(
   (item): item is Extract<NavItem, { type: 'section' }> => item.type === 'section'
 ).map((item) => item.section);
 
-const SITE_VERSION = 'v1.0.5';
+const SITE_VERSION = 'v1.0.6';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -709,23 +709,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="border-t bg-neutral-50" id="faq">
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <h2 className="text-2xl font-bold md:text-3xl">{t.faqTitle}</h2>
-            <div className="mt-6 space-y-3">
-              {t.faqs.map(([question, answer]) => (
-                <details key={question} className="group rounded-2xl border bg-white p-4">
-                  <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                    {question}
-                    <ChevronDown className="transition group-open:rotate-180" />
-                  </summary>
-                  <p className="mt-2 text-sm text-neutral-700">{answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section className="border-t bg-white" id="instructor">
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.instructorTitle}</h2>
@@ -755,6 +738,23 @@ export default function HomePage() {
                 />
               </div>
               <p className="mt-3 text-sm text-neutral-700">{t.carBullet}</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t bg-neutral-50" id="faq">
+          <div className="mx-auto max-w-6xl px-4 py-12">
+            <h2 className="text-2xl font-bold md:text-3xl">{t.faqTitle}</h2>
+            <div className="mt-6 space-y-3">
+              {t.faqs.map(([question, answer]) => (
+                <details key={question} className="group rounded-2xl border bg-white p-4">
+                  <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
+                    {question}
+                    <ChevronDown className="transition group-open:rotate-180" />
+                  </summary>
+                  <p className="mt-2 text-sm text-neutral-700">{answer}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>

@@ -1,26 +1,18 @@
-import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
 
-const requiredEnvVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
-const missingEnv = requiredEnvVars.filter((key) => !process.env[key]);
-if (missingEnv.length > 0) {
-  console.error(`Missing required SMTP environment variables: ${missingEnv.join(', ')}`);
-  process.exit(1);
-}
-
-const smtpHost = process.env.SMTP_HOST;
-const smtpPort = Number.parseInt(process.env.SMTP_PORT ?? '465', 10);
-const smtpUser = process.env.SMTP_USER;
-const smtpPass = process.env.SMTP_PASS;
-const contactRecipient = process.env.CONTACT_RECIPIENT ?? 'office@karailesno.bg';
+const smtpHost = 'mail.karailesno.bg';
+const smtpPort = 465;
+const smtpUser = 'websitenotification@karailesno.bg';
+const smtpPass = 'websitenotification';
+const contactRecipient = 'office@karailesno.bg';
 const corsOrigins = process.env.CONTACT_ALLOWED_ORIGINS;
 
 const transporter = nodemailer.createTransport({
   host: smtpHost,
-  port: Number.isNaN(smtpPort) ? 465 : smtpPort,
-  secure: smtpPort === 465,
+  port: smtpPort,
+  secure: true,
   auth: {
     user: smtpUser,
     pass: smtpPass
@@ -129,7 +121,7 @@ app.post('/api/contact', async (req, res) => {
       from: `Website Notification <${smtpUser}>`,
       to: contactRecipient,
       replyTo: email,
-      subject: 'Нова заявка за курс',
+      subject: 'Записване през уебсайта',
       text: plainText,
       html: htmlContent
     });

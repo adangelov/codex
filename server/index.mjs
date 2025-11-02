@@ -13,28 +13,62 @@ const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: smtpPort,
   secure: true,
+  logger: true,
+  debug: true,
   auth: {
     user: smtpUser,
     pass: smtpPass
   }
 });
 
+const smtpStatus = {
+  lastCheckedAt: null,
+  verified: false,
+  error: null
+};
+
+const lastSendStatus = {
+  lastAttemptAt: null,
+  ok: null,
+  error: null
+};
+
 transporter
   .verify()
   .then(() => {
+    smtpStatus.lastCheckedAt = new Date().toISOString();
+    smtpStatus.verified = true;
+    smtpStatus.error = null;
     console.log('SMTP transport ready');
   })
   .catch((error) => {
+    smtpStatus.lastCheckedAt = new Date().toISOString();
+    smtpStatus.verified = false;
+    smtpStatus.error = {
+      message: error?.message,
+      code: error?.code,
+      command: error?.command,
+      responseCode: error?.responseCode
+    };
     console.error('SMTP verification failed', error);
+    console.error('SMTP verification error details', {
+      code: error?.code,
+      command: error?.command,
+      responseCode: error?.responseCode,
+      response: error?.response,
+      stack: error?.stack
+    });
   });
 
 const app = express();
 
+let configuredOrigins = null;
 if (corsOrigins) {
   const origins = corsOrigins
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
+  configuredOrigins = origins;
   app.use(
     cors({
       origin: origins,
@@ -68,6 +102,16 @@ function isValidEmail(value) {
 function isValidPhone(value) {
   return /[0-9+()\-\s]{5,}/.test(value);
 }
+
+app.use('/api/contact', (req, res, next) => {
+  console.log('Incoming contact API request', {
+    method: req.method,
+    path: req.path,
+    origin: req.headers.origin,
+    referer: req.headers.referer
+  });
+  next();
+});
 
 app.post('/api/contact', async (req, res) => {
   const name = sanitize(req.body?.name);
@@ -116,6 +160,15 @@ app.post('/api/contact', async (req, res) => {
     <p><strong>GDPR съгласие:</strong> ${gdpr ? 'да' : 'не'}</p>
   `;
 
+  console.log('Sanitized contact submission', {
+    name,
+    phone,
+    email,
+    course,
+    startDate: startDateLabel,
+    gdpr
+  });
+
   try {
     await transporter.sendMail({
       from: `Website Notification <${smtpUser}>`,
@@ -125,11 +178,39 @@ app.post('/api/contact', async (req, res) => {
       text: plainText,
       html: htmlContent
     });
+    lastSendStatus.lastAttemptAt = new Date().toISOString();
+    lastSendStatus.ok = true;
+    lastSendStatus.error = null;
     return res.status(200).json({ message: 'ok' });
   } catch (error) {
+    lastSendStatus.lastAttemptAt = new Date().toISOString();
+    lastSendStatus.ok = false;
+    lastSendStatus.error = {
+      message: error?.message,
+      code: error?.code,
+      command: error?.command,
+      responseCode: error?.responseCode
+    };
     console.error('Failed to send contact email', error);
+    console.error('Contact email error details', {
+      code: error?.code,
+      command: error?.command,
+      responseCode: error?.responseCode,
+      response: error?.response,
+      stack: error?.stack
+    });
     return res.status(500).json({ message: 'Failed to send email' });
   }
+});
+
+app.get('/api/contact/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    serverTime: new Date().toISOString(),
+    smtp: smtpStatus,
+    lastSend: lastSendStatus,
+    allowedOrigins: configuredOrigins ?? '*'
+  });
 });
 
 const port = Number.parseInt(process.env.PORT ?? '3000', 10);

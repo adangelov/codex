@@ -31,6 +31,18 @@ For production deployments, expose the server under the same domain as the site 
 `VITE_CONTACT_ENDPOINT` to point to the deployed API. Adjust `CONTACT_ALLOWED_ORIGINS`
 with a comma-separated list of origins that are allowed to call the endpoint.
 
+### Diagnosing missing submissions
+
+- After the server starts it exposes `GET /api/contact/health`. Open this path in a browser
+  (e.g. `https://your-domain.com/api/contact/health`). If you **do not** receive a JSON
+  response, your static hosting is not forwarding requests to the Node service yet.
+- Successful calls to `/api/contact` are logged as `Sanitized contact submission …`. If the
+  health check works but these logs never appear, the frontend is still pointing at the wrong
+  endpoint—set `VITE_CONTACT_ENDPOINT` before building the site so it targets the deployed
+  API URL.
+- The health response also reports the latest SMTP verification status and the timestamp of the
+  last send attempt, which helps confirm whether the mail transport is available from the server.
+
 ## Production build
 
 ```bash

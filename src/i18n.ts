@@ -1,0 +1,413 @@
+export const VERSION = 8;
+
+export type Lang = 'bg' | 'en' | 'ru';
+
+export const i18n = {
+  bg: {
+    brand: 'РУМИ · Автошкола',
+    nav: ['Как протича', 'Курсове', 'Категория B', 'Инструктор', 'FAQ', 'Контакти'],
+    heroTitle: 'Увереното шофиране започва тук.',
+    heroLead:
+      'Лицензиран инструктор. Реални ситуации. Модерна учебна среда. Практика с Hyundai i30 (дизел, ръчни скорости).',
+    call: 'Обади се',
+    ctaEnroll: 'Запиши се',
+    ctaEnrollNow: 'Запиши се сега',
+    theorySchedule: 'График теория',
+    weekdayShort: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'],
+    startTheory: 'Старт на теория',
+    theory: 'Теория',
+    features: [
+      ['Лицензиран инструктор с опит', 'Истинско внимание и личен подход.'],
+      ['Практика в градски условия', 'Подготовка за реални ситуации и маневри.'],
+      ['Специално оборудвана класна стая', 'Комфорт, визуални материали и структуриран курс.'],
+      ['Индивидуален график', 'Удобни часове сутрин/вечер/уикенд.'],
+      ['Подготовка за КАТ', 'Вътрешни изпити и ясни критерии.'],
+      ['Висока успеваемост', 'Фокус върху сигурност и увереност.']
+    ],
+    processTitle: 'Как протича обучението',
+    stepLabel: 'Стъпка',
+    steps: ['Записване', 'Медицинско', 'Теория', 'Практика', 'Държавен изпит'],
+    coursesTitle: 'Курсове',
+    coursesLead: 'Изберете програма според нуждите си. Всички включват теория и практика.',
+    bStandard: 'Категория B – стандартен курс',
+    bStandardDesc:
+      'Пълен курс теория (25 учебни часа) + 31 учебни часа практика, вътрешни изпити и включени учебни материали.',
+    bStandardPrice: '1 400 лв/715,82 €',
+    bStandardHighlights: [
+      'Учебници + онлайн подготовка',
+      'Вътрешен изпит теория и практика',
+      'Гъвкав график с личен инструктор'
+    ],
+    seeDetails: 'Виж детайли',
+    enroll: 'Запиши се',
+    refreshTitle: 'Опреснителни и индивидуални часове',
+    refreshDesc:
+      'Индивидуални кормилни занятия за връщане на увереност или подготовка преди изпит/пътуване.',
+    refreshHighlights: [
+      'Персонални маршрути и обратна връзка',
+      'Възможност за часове сутрин/вечер/уикенд',
+      'Сценарии в реални градски условия'
+    ],
+    price: 'Ценоразпис',
+    plan: 'Планирай час',
+    refreshPriceLabel: 'Тарифи',
+    coursePriceLabel: 'Цена',
+    intensiveTitle: 'Категория B – интензивен курс',
+    intensiveDesc:
+      'Ускорена програма с приоритетни графици, комбинирани занятия и допълнителни практически упражнения.',
+    intensivePrice: '1 700 лв/869,21 €',
+    intensiveHighlights: [
+      'Два пъти повече практика седмично',
+      'Приоритетни часове и маршрут с инструктор',
+      'Подкрепа до изпита и финален пробен ден'
+    ],
+    intensiveCta: 'Запиши се за интензивен курс',
+    faqTitle: 'Често задавани въпроси',
+    faqs: [
+      ['На колко навършени години трябва да съм, за да се запиша?', 'Минимум 17 г. и 9 месеца към датата на започване на курса (за категория B).'],
+      ['Какво влиза като практика в курса?', 'Градско шофиране, извънградско, маневри, паркиране с камера за заден ход и нощно кормуване при възможност.'],
+      ['Колко време продължава курсът?', 'Обичайно 6–8 седмици според графика и натовареността.'],
+      ['Как се провеждат часовете по кормуване?', 'В реални градски условия по утвърден маршрут + маневри и паркиране.'],
+      ['Какви документи трябват?', 'Лична карта, снимка, медицинско и други при необходимост.'],
+      ['Мога ли да плащам разсрочено?', 'Да — предлагаме гъвкави планове.']
+    ],
+    installmentsNote: 'Предлагаме разсрочено плащане за всички курсове.',
+    instructorTitle: 'Инструктор и класна стая',
+    instructorCardTitle: 'Димитър — лицензиран инструктор',
+    instructorCardText: 'Дългогодишен опит, спокоен подход и ясни обяснения. Индивидуално внимание според темпото ви.',
+    classroomTitle: 'Класна стая (Теория)',
+    classroomText: 'Специално оборудвана зала с визуални материали и удобства за ефективно усвояване.',
+    carSection: 'Автомобил',
+    carBullet: 'Hyundai i30 · дизел · ръчна шестстепенна скоростна кутия',
+    reviews: 'Отзиви',
+    contacts: 'Контакти',
+    mapTitle: 'Карта: Автошкола Руми',
+    hours: 'Пн–Пт 09:00–19:00, Сб 10:00–15:00',
+    mapAddress: 'ж.к. Трошево, "бул. Владислав Варненчик" 184, 9009, Варна',
+    formTitle: 'Записване за курс',
+    formName: 'Име и фамилия',
+    formPhone: 'Телефон',
+    formEmail: 'Имейл',
+    formStartDate: 'Дата старт',
+    formSubmit: 'Запази място',
+    formSending: 'Изпращане…',
+    formGDPR: 'Съгласен/на съм с обработката на личните ми данни (GDPR)',
+    sentThanks: 'Благодарим! Ще се свържем с вас за потвърждение.',
+    sentOk: 'Изпратено! Ще ви потърсим до скоро.',
+    sentError: 'Възникна грешка. Моля, опитайте отново.',
+    courseOptions: {
+      b_standard: 'Категория B - стандартен курс',
+      b_refresh: 'Категория B - опреснителни курсове',
+      b_intensive: 'Категория B - интензивен курс',
+      b_extra: 'Категория B - допълнителни часове'
+    },
+    detailsTitle: 'Категория B — детайли',
+    detailsIntro: 'Пълна програма на теоретичното обучение + информация за практиката.',
+    galleryTitle: 'Галерия от обучението',
+    galleryDescription:
+      'Поглед към Hyundai i30, кабината и средата за обучение по време на реални занятия.',
+    galleryLabels: {
+      main: 'Hyundai i30 по време на обучение с инструктор',
+      dash: 'Модерно табло и контролни прибори на Hyundai i30',
+      exterior: 'Hyundai i30 в движение по градски маршрут',
+      class: 'Курсисти обсъждат маневри в класната стая'
+    },
+    showContent: 'Съдържание на теоретично обучение',
+    hideContent: 'Скрий съдържанието',
+    topics: [
+      '• Закон за движение по пътищата, знаци, маркировка',
+      '• Основи на безопасността, дефанзивно шофиране',
+      '• Техника на управление, позиция, огледала',
+      '• Кръстовища, предимство, кръгово',
+      '• Паркиране и маневри (успоредно, перпендикулярно, гараж)',
+      '• Автомагистрала и извънградско',
+      '• Особени условия: нощно, дъжд/сняг',
+      '• Първа помощ и действия при ПТП',
+      '• Подготовка за изпит (теория и практика)'
+    ],
+    close: 'Затвори',
+    chooseDateRefresh: 'Избери дата за опреснителни',
+    priceTitle: 'Цени — опреснителни/индивидуални',
+    prices: [
+      'до 5 часа — 45 лв/час / 23,01 €/час',
+      '6–10 часа — 40 лв/час / 20,45 €/час',
+      '11–15 часа — 38 лв/час / 19,43 €/час',
+      '20–30 часа — 35 лв/час / 17,90 €/час'
+    ],
+    perHour: 'лв/час',
+    footer: (year: number) => `© Руми ${year} · Всички права запазени · Версия ${VERSION}`,
+    locale: 'bg-BG'
+  },
+  en: {
+    brand: 'RUMI · Driving School',
+    nav: ['How it works', 'Courses', 'Category B', 'Instructor', 'FAQ', 'Contacts'],
+    heroTitle: 'Confident driving starts here.',
+    heroLead:
+      'Licensed instructor. Real-world situations. Modern classroom. Practice with Hyundai i30 (diesel, manual).',
+    call: 'Call',
+    ctaEnroll: 'Enroll',
+    ctaEnrollNow: 'Enroll now',
+    theorySchedule: 'Theory schedule',
+    weekdayShort: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    startTheory: 'Theory start',
+    theory: 'Theory',
+    features: [
+      ['Licensed instructor', 'Personal attention and clear guidance.'],
+      ['City driving practice', 'Training for real situations and maneuvers.'],
+      ['Equipped classroom', 'Comfort, visuals and structured course.'],
+      ['Flexible schedule', 'Morning/evening/weekend hours.'],
+      ['Exam preparation', 'Internal tests and clear criteria.'],
+      ['High success rate', 'Focus on safety and confidence.']
+    ],
+    processTitle: 'How the training works',
+    stepLabel: 'Step',
+    steps: ['Enrollment', 'Medical', 'Theory', 'Practice', 'State exam'],
+    coursesTitle: 'Courses',
+    coursesLead: 'Choose a program for your needs. All include theory and practice.',
+    bStandard: 'Category B – standard course',
+    bStandardDesc:
+      'Complete theory + 31 driving lessons, internal exams and learning materials included.',
+    bStandardPrice: 'BGN 1,400 / €715.82',
+    bStandardHighlights: [
+      'Course books + online prep tools',
+      'Internal theory & driving mock exams',
+      'Flexible schedule with a dedicated instructor'
+    ],
+    seeDetails: 'See details',
+    enroll: 'Enroll',
+    refreshTitle: 'Refresher & individual lessons',
+    refreshDesc:
+      'One-to-one driving practice to regain confidence or prepare before an exam/trip.',
+    refreshHighlights: [
+      'Personal routes and actionable feedback',
+      'Morning, evening or weekend availability',
+      'Real traffic scenarios around the city'
+    ],
+    price: 'Pricing',
+    plan: 'Schedule lesson',
+    refreshPriceLabel: 'Rates',
+    coursePriceLabel: 'Price',
+    intensiveTitle: 'Category B – intensive course',
+    intensiveDesc:
+      'Accelerated program with priority scheduling, combined sessions and extra driving drills.',
+    intensivePrice: 'BGN 1,700 / €869.21',
+    intensiveHighlights: [
+      'Twice the weekly driving practice',
+      'Priority timeslots and tailored routes',
+      'Support until the exam with a mock drive day'
+    ],
+    intensiveCta: 'Apply for intensive course',
+    faqTitle: 'Frequently asked questions',
+    faqs: [
+      ['What minimum age do I need?', 'At least 17 years and 9 months at course start (Category B).'],
+      ['What is included in practice?', 'City, highway, maneuvers (parallel/perpendicular/garage), parking with camera, and night driving if possible.'],
+      ['How long is the course?', 'Usually 6–8 weeks depending on schedule.'],
+      ['How are driving lessons held?', 'In real city traffic + maneuvers and parking.'],
+      ['What documents are required?', 'ID, photo, medical certificate, others if needed.'],
+      ['Can I pay in installments?', 'Yes — flexible plans available.']
+    ],
+    installmentsNote: 'Installment payments are available for every course.',
+    instructorTitle: 'Instructor & classroom',
+    instructorCardTitle: 'Dimitar — licensed instructor',
+    instructorCardText: 'Many years of experience, calm approach and clear explanations.',
+    classroomTitle: 'Classroom (Theory)',
+    classroomText: 'Dedicated room with visuals and equipment.',
+    carSection: 'Car',
+    carBullet: 'Hyundai i30 · diesel · six-speed manual gearbox',
+    reviews: 'Reviews',
+    contacts: 'Contacts',
+    mapTitle: 'Map: Rumi Driving School',
+    hours: 'Mon–Fri 09:00–19:00, Sat 10:00–15:00',
+    mapAddress: 'zh.k. Troshevo, "Vladislav Varnenchik" Blvd 184, 9009, Varna',
+    formTitle: 'Course enrollment',
+    formName: 'Full name',
+    formPhone: 'Phone',
+    formEmail: 'Email',
+    formStartDate: 'Start date',
+    formSubmit: 'Save spot',
+    formSending: 'Sending…',
+    formGDPR: 'I agree to personal data processing (GDPR)',
+    sentThanks: 'Thanks! We will contact you shortly.',
+    sentOk: 'Sent! We will reach out soon.',
+    sentError: 'Something went wrong. Please try again.',
+    courseOptions: {
+      b_standard: 'Category B - standard course',
+      b_refresh: 'Category B - refresher lessons',
+      b_intensive: 'Category B - intensive course',
+      b_extra: 'Category B - additional hours'
+    },
+    detailsTitle: 'Category B — details',
+    detailsIntro: 'Full theory syllabus + practice information.',
+    galleryTitle: 'Training gallery',
+    galleryDescription:
+      'A look at the Hyundai i30, cabin details and the learning environment during real lessons.',
+    galleryLabels: {
+      main: 'Hyundai i30 during a driving lesson with the instructor',
+      dash: 'Modern Hyundai i30 dashboard with digital displays',
+      exterior: 'Hyundai i30 driving along a city route',
+      class: 'Students discussing maneuvers inside the classroom'
+    },
+    showContent: 'Show theory syllabus',
+    hideContent: 'Hide syllabus',
+    topics: [
+      '• Road law, signs, markings',
+      '• Safety basics, defensive driving',
+      '• Vehicle control, seating, mirrors',
+      '• Intersections, right of way, roundabouts',
+      '• Parking & maneuvers (parallel, perpendicular, garage)',
+      '• Motorway & rural roads',
+      '• Special conditions: night, rain/snow',
+      '• First aid & at-accident actions',
+      '• Exam preparation (theory & practice)'
+    ],
+    close: 'Close',
+    chooseDateRefresh: 'Choose date for refresher',
+    priceTitle: 'Prices — refresher/individual',
+    prices: [
+      'up to 5 lessons — 45 BGN/hour / €23.01/hour',
+      '6–10 lessons — 40 BGN/hour / €20.45/hour',
+      '11–15 lessons — 38 BGN/hour / €19.43/hour',
+      '20–30 lessons — 35 BGN/hour / €17.90/hour'
+    ],
+    perHour: 'BGN/hour',
+    footer: (year: number) => `© Rumi ${year} · All rights reserved · Version ${VERSION}`,
+    locale: 'en-US'
+  },
+  ru: {
+    brand: 'РУМИ · Автошкола',
+    nav: ['Как проходит', 'Курсы', 'Категория B', 'Инструктор', 'Вопросы', 'Контакты'],
+    heroTitle: 'Уверенное вождение начинается здесь.',
+    heroLead:
+      'Лицензированный инструктор. Реальные ситуации. Современный класс. Практика на Hyundai i30 (дизель, механика).',
+    call: 'Позвонить',
+    ctaEnroll: 'Записаться',
+    ctaEnrollNow: 'Записаться сейчас',
+    theorySchedule: 'Расписание теории',
+    weekdayShort: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+    startTheory: 'Начало теории',
+    theory: 'Теория',
+    features: [
+      ['Лицензированный инструктор', 'Личный подход и понятные объяснения.'],
+      ['Практика в городе', 'Подготовка к реальным ситуациям и манёврам.'],
+      ['Оборудованный класс', 'Комфорт и наглядные материалы.'],
+      ['Гибкий график', 'Утро/вечер/выходные.'],
+      ['Подготовка к экзамену', 'Внутренние проверки и критерии.'],
+      ['Высокая успешность', 'Фокус на безопасность и уверенность.']
+    ],
+    processTitle: 'Как проходит обучение',
+    stepLabel: 'Шаг',
+    steps: ['Запись', 'Медкомиссия', 'Теория', 'Практика', 'Госэкзамен'],
+    coursesTitle: 'Курсы',
+    coursesLead: 'Выберите программу под ваши задачи. Все включают теорию и практику.',
+    bStandard: 'Категория B – стандартный курс',
+    bStandardDesc:
+      'Полный курс: теория + 31 урок практики, внутренние экзамены и включённые учебные материалы.',
+    bStandardPrice: '1 400 лв/715,82 €',
+    bStandardHighlights: [
+      'Учебники и онлайн-подготовка',
+      'Внутренние экзамены теория и практика',
+      'Гибкий график с личным интруктором'
+    ],
+    seeDetails: 'Подробнее',
+    enroll: 'Записаться',
+    refreshTitle: 'Повторные и индивидуальные занятия',
+    refreshDesc:
+      'Индивидуальные уроки для восстановления навыков или подготовки к экзамену/поездке.',
+    refreshHighlights: [
+      'Персональные маршруты и подробная обратная связь',
+      'Утренние, вечерние и выходные слоты',
+      'Реальные дорожные ситуации в городе'
+    ],
+    price: 'Цены',
+    plan: 'Запланировать',
+    refreshPriceLabel: 'Тарифы',
+    coursePriceLabel: 'Цена',
+    intensiveTitle: 'Категория B – интенсивный курс',
+    intensiveDesc:
+      'Ускоренная программа с приоритетным расписанием, комбинированными занятиями и дополнительной практикой.',
+    intensivePrice: '1 700 лв/869,21 €',
+    intensiveHighlights: [
+      'Вдвое больше практики каждую неделю',
+      'Приоритетные слоты и индивидуальные маршруты',
+      'Поддержка до экзамена и финальный пробный заезд'
+    ],
+    intensiveCta: 'Записаться на интенсивный курс',
+    faqTitle: 'Частые вопросы',
+    faqs: [
+      ['С какого возраста можно записаться?', 'Минимум 17 лет и 9 месяцев на дату начала курса (кат. B).'],
+      ['Что входит в практику?', 'Город, трасса, манёвры (параллельная/перпендикулярная/гараж), парковка с камерой и ночное вождение.'],
+      ['Сколько длится курс?', 'Обычно 6–8 недель в зависимости от графика.'],
+      ['Как проходят занятия по вождению?', 'В реальных условиях города + манёвры и парковка.'],
+      ['Какие документы нужны?', 'Удостоверение личности, фото, медсправка и др. при необходимости.'],
+      ['Можно ли платить частями?', 'Да — гибкие планы оплаты.']
+    ],
+    installmentsNote: 'Рассрочка доступна для всех курсов.',
+    instructorTitle: 'Инструктор и класс',
+    instructorCardTitle: 'Димитар — лицензированный инструктор',
+    instructorCardText: 'Большой опыт, спокойный подход и понятные пояснения.',
+    classroomTitle: 'Класс (Теория)',
+    classroomText: 'Отдельный зал с наглядными материалами.',
+    carSection: 'Автомобиль',
+    carBullet: 'Hyundai i30 · дизель · шестиступенчатая механика',
+    reviews: 'Отзывы',
+    contacts: 'Контакты',
+    mapTitle: 'Карта: Автошкола Руми',
+    hours: 'Пн–Пт 09:00–19:00, Сб 10:00–15:00',
+    mapAddress: 'ж.к. Трошево, бул. «Владислав Варненчик» 184, 9009, Варна',
+    formTitle: 'Запись на курс',
+    formName: 'Имя и фамилия',
+    formPhone: 'Телефон',
+    formEmail: 'Email',
+    formStartDate: 'Дата начала',
+    formSubmit: 'Забронировать',
+    formSending: 'Отправка…',
+    formGDPR: 'Согласен(на) на обработку персональных данных (GDPR)',
+    sentThanks: 'Спасибо! Мы свяжемся с вами для подтверждения.',
+    sentOk: 'Отправлено! Скоро свяжемся.',
+    sentError: 'Произошла ошибка. Попробуйте ещё раз.',
+    courseOptions: {
+      b_standard: 'Категория B - стандартный курс',
+      b_refresh: 'Категория B - повторные занятия',
+      b_intensive: 'Категория B - интенсивный курс',
+      b_extra: 'Категория B - дополнительные часы'
+    },
+    detailsTitle: 'Категория B — детали',
+    detailsIntro: 'Полная программа теории + информация о практике.',
+    galleryTitle: 'Галерея обучения',
+    galleryDescription:
+      'Hyundai i30, интерьер и учебная среда во время реальных занятий.',
+    galleryLabels: {
+      main: 'Hyundai i30 на уроке с инструктором',
+      dash: 'Современная приборная панель Hyundai i30',
+      exterior: 'Hyundai i30 в движении по городскому маршруту',
+      class: 'Ученики обсуждают манёвры в аудитории'
+    },
+    showContent: 'Показать программу теории',
+    hideContent: 'Скрыть программу',
+    topics: [
+      '• ПДД, знаки, разметка',
+      '• Основы безопасности, защитное вождение',
+      '• Владение автомобилем, посадка, зеркала',
+      '• Перекрёстки, приоритет, круговое',
+      '• Парковка и манёвры (параллельная, перпендикулярная, гараж)',
+      '• Автомагистраль и загородные дороги',
+      '• Особые условия: ночь, дождь/снег',
+      '• Первая помощь и действия при ДТП',
+      '• Подготовка к экзамену (теория и практика)'
+    ],
+    close: 'Закрыть',
+    chooseDateRefresh: 'Выберите дату для повторных',
+    priceTitle: 'Цены — повторные/индивидуальные',
+    prices: [
+      'до 5 часов — 45 лв/час / 23,01 €/час',
+      '6–10 часов — 40 лв/час / 20,45 €/час',
+      '11–15 часов — 38 лв/час / 19,43 €/час',
+      '20–30 часов — 35 лв/час / 17,90 €/час'
+    ],
+    perHour: 'лв/час',
+    footer: (year: number) => `© Руми ${year} · Все права защищены · Версия ${VERSION}`,
+    locale: 'ru-RU'
+  }
+} as const;
+
+export type Strings = (typeof i18n)[Lang];

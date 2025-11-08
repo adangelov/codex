@@ -32,7 +32,7 @@ export const i18n = {
     bStandard: 'Категория B – стандартен курс',
     bStandardDesc:
       'Пълен курс теория (25 учебни часа) + 31 учебни часа практика, вътрешни изпити и включени учебни материали.',
-    bStandardPrice: '1 400 лв/715,82 €',
+    bStandardPrice: '1 500 лв/766,95 €',
     bStandardHighlights: [
       'Учебници + онлайн подготовка',
       'Вътрешен изпит теория и практика',
@@ -55,7 +55,7 @@ export const i18n = {
     intensiveTitle: 'Категория B – интензивен курс',
     intensiveDesc:
       'Ускорена програма с приоритетни графици, комбинирани занятия и допълнителни практически упражнения.',
-    intensivePrice: '1 700 лв/869,21 €',
+    intensivePrice: '1 850 лв/945,90 €',
     intensiveHighlights: [
       'Два пъти повече практика седмично',
       'Приоритетни часове и маршрут с инструктор',
@@ -167,7 +167,7 @@ export const i18n = {
     bStandard: 'Category B – standard course',
     bStandardDesc:
       'Complete theory + 31 driving lessons, internal exams and learning materials included.',
-    bStandardPrice: 'BGN 1,400 / €715.82',
+    bStandardPrice: 'BGN 1,500 / €766.95',
     bStandardHighlights: [
       'Course books + online prep tools',
       'Internal theory & driving mock exams',
@@ -190,7 +190,7 @@ export const i18n = {
     intensiveTitle: 'Category B – intensive course',
     intensiveDesc:
       'Accelerated program with priority scheduling, combined sessions and extra driving drills.',
-    intensivePrice: 'BGN 1,700 / €869.21',
+    intensivePrice: 'BGN 1,850 / €945.90',
     intensiveHighlights: [
       'Twice the weekly driving practice',
       'Priority timeslots and tailored routes',
@@ -302,7 +302,7 @@ export const i18n = {
     bStandard: 'Категория B – стандартный курс',
     bStandardDesc:
       'Полный курс: теория + 31 урок практики, внутренние экзамены и включённые учебные материалы.',
-    bStandardPrice: '1 400 лв/715,82 €',
+    bStandardPrice: '1 500 лв/766,95 €',
     bStandardHighlights: [
       'Учебники и онлайн-подготовка',
       'Внутренние экзамены теория и практика',
@@ -325,7 +325,7 @@ export const i18n = {
     intensiveTitle: 'Категория B – интенсивный курс',
     intensiveDesc:
       'Ускоренная программа с приоритетным расписанием, комбинированными занятиями и дополнительной практикой.',
-    intensivePrice: '1 700 лв/869,21 €',
+    intensivePrice: '1 850 лв/945,90 €',
     intensiveHighlights: [
       'Вдвое больше практики каждую неделю',
       'Приоритетные слоты и индивидуальные маршруты',

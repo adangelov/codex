@@ -322,6 +322,11 @@ export default function HomePage() {
     }
   }, []);
 
+  const handleScrollToRefresh = useCallback(() => {
+    setForm((prev) => ({ ...prev, course: 'b_refresh' }));
+    handleScrollTo('contact');
+  }, [handleScrollTo, setForm]);
+
   const handleBrandClick = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -539,18 +544,11 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:gap-2">
+                <div className="mt-auto flex justify-center pt-6">
                   <button
                     type="button"
-                    onClick={() => handleScrollTo('contact')}
-                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
-                  >
-                    {t.price}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleScrollTo('contact')}
-                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
+                    onClick={handleScrollToRefresh}
+                    className="w-full rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100 sm:w-auto"
                   >
                     {t.plan}
                   </button>

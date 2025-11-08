@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, ChevronDown, ChevronLeft, Phone } from 'lucide-react';
 
@@ -13,6 +13,10 @@ export default function CourseDetailsPage() {
   const [showTopics, setShowTopics] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
 
   const gallery = {
     main: {

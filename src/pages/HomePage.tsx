@@ -18,7 +18,8 @@ import {
   Phone,
   Star,
   Stethoscope,
-  User
+  User,
+  X
 } from 'lucide-react';
 
 import { i18n, type Lang, type Strings } from '../i18n';
@@ -214,6 +215,9 @@ export default function HomePage() {
   const [form, setForm] = useState<ContactFormState>(() => ({ ...DEFAULT_CONTACT_FORM }));
   const formRef = useRef<HTMLFormElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
+  const [activeProcessStep, setActiveProcessStep] = useState<number | null>(null);
+  const [isMedicalModalOpen, setMedicalModalOpen] = useState(false);
+  const theoryCalendarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!startDate && upcomingStarts.length > 0) {
@@ -263,6 +267,19 @@ export default function HomePage() {
     }
     return undefined;
   }, [formState]);
+
+  useEffect(() => {
+    if (!isMedicalModalOpen) {
+      return undefined;
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMedicalModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMedicalModalOpen]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -322,6 +339,27 @@ export default function HomePage() {
     }
   }, []);
 
+  const scrollToTheoryCalendar = useCallback(() => {
+    const element = theoryCalendarRef.current;
+    if (element) {
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const elementTop = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: elementTop - headerHeight, behavior: 'smooth' });
+    }
+  }, []);
+
+  const closeMedicalModal = useCallback(() => {
+    setMedicalModalOpen(false);
+  }, []);
+
+  const handleProcessStepClick = useCallback(
+    (index: number, action?: () => void) => {
+      setActiveProcessStep(index);
+      action?.();
+    },
+    []
+  );
+
   const handleScrollToRefresh = useCallback(() => {
     setForm((prev) => ({ ...prev, course: 'b_refresh' }));
     handleScrollTo('contact');
@@ -351,6 +389,39 @@ export default function HomePage() {
     return upcomingStarts;
   }, [startDate, upcomingStarts]);
 
+  const processSteps = useMemo(
+    () => [
+      {
+        title: t.steps[0],
+        icon: <ClipboardCheck />,
+        action: () => scrollToTheoryCalendar()
+      },
+      {
+        title: t.steps[1],
+        icon: <Stethoscope />,
+        action: () => setMedicalModalOpen(true)
+      },
+      {
+        title: t.steps[2],
+        icon: <BookOpen />,
+        action: () => navigate('/courses/category-b')
+      },
+      {
+        title: t.steps[3],
+        icon: <Car />,
+        action: () => handleScrollTo('instructor')
+      },
+      {
+        title: t.steps[4],
+        icon: <GraduationCap />
+      }
+    ],
+    [t.steps, scrollToTheoryCalendar, navigate, handleScrollTo]
+  );
+
+  const medicalModalTitleId = 'medical-modal-title';
+  const medicalModalDescriptionId = 'medical-modal-description';
+
   const selectedStartDateLabel = startDate
     ? new Date(startDate).toLocaleDateString(t.locale, {
         day: '2-digit',
@@ -379,6 +450,109 @@ export default function HomePage() {
       />
 
       <main>
+        {isMedicalModalOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6"
+            onClick={closeMedicalModal}
+          >
+            <div
+              className="relative w-full max-w-3xl rounded-3xl bg-white p-6 shadow-xl sm:p-8"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={medicalModalTitleId}
+              aria-describedby={medicalModalDescriptionId}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={closeMedicalModal}
+                className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                aria-label={t.medicalModalClose}
+              >
+                <X size={18} />
+              </button>
+              <div className="space-y-4 text-sm text-neutral-700">
+                <div>
+                  <h3 id={medicalModalTitleId} className="text-xl font-semibold text-neutral-900">
+                    {t.medicalModalTitle}
+                  </h3>
+                  <p id={medicalModalDescriptionId} className="mt-2 text-neutral-600">
+                    {t.medicalModalDescription}
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-red-50 p-4 text-red-900">
+                  <div className="text-sm font-semibold">{t.medicalModalChecklistTitle}</div>
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+                    {t.medicalModalChecklist.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="rounded-2xl border border-red-100 p-4">
+                  <div className="text-sm font-semibold text-red-800">{t.medicalModalContactsTitle}</div>
+                  <p className="mt-2 text-xs uppercase tracking-wide text-red-500">{t.medicalModalContactIntro}</p>
+                  <dl className="mt-3 grid gap-3 text-sm text-neutral-700 sm:grid-cols-2">
+                    <div>
+                      <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                        {t.medicalModalPhoneLabel}
+                      </dt>
+                      <dd>
+                        <a className="text-red-700 hover:underline" href="tel:+35952612109">
+                          {t.medicalModalPhone}
+                        </a>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                        {t.medicalModalEmailLabel}
+                      </dt>
+                      <dd>
+                        <a className="text-red-700 hover:underline" href="mailto:varna@redcross.bg">
+                          {t.medicalModalEmail}
+                        </a>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                        {t.medicalModalHoursLabel}
+                      </dt>
+                      <dd>{t.medicalModalHours}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                        {t.medicalModalAddressLabel}
+                      </dt>
+                      <dd>{t.medicalModalAddress}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-neutral-800">{t.medicalModalMapTitle}</div>
+                  <div className="mt-2 overflow-hidden rounded-2xl border">
+                    <iframe
+                      title={t.medicalModalMapTitle}
+                      src="https://www.google.com/maps?q=%D0%91%D1%8A%D0%BB%D0%B3%D0%B0%D1%80%D1%81%D0%BA%D0%B8%20%D1%87%D0%B5%D1%80%D0%B2%D0%B5%D0%BD%20%D0%BA%D1%80%D1%8A%D1%81%D1%82%20-%20%D0%92%D0%B0%D1%80%D0%BD%D0%B0&output=embed"
+                      className="h-64 w-full"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-neutral-500">{t.medicalModalNote}</p>
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={closeMedicalModal}
+                    className="rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                  >
+                    {t.medicalModalClose}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <section className="border-b bg-gradient-to-b from-white to-neutral-100">
           <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-12 md:grid-cols-2 md:py-20">
             <div>
@@ -407,7 +581,11 @@ export default function HomePage() {
                 </a>
               </div>
 
-              <div className="mt-8 rounded-2xl border bg-white p-4 shadow-sm">
+              <div
+                ref={theoryCalendarRef}
+                id="theory-calendar"
+                className="mt-8 rounded-2xl border bg-white p-4 shadow-sm"
+              >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm font-semibold text-neutral-700">
                     <CalendarDays size={16} /> {t.theorySchedule}
@@ -423,6 +601,22 @@ export default function HomePage() {
                   onNext={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
                   onPick={onPickTheoryDate}
                 />
+                <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-neutral-600">
+                  <div className="flex items-center gap-2">
+                    <span
+                      aria-hidden="true"
+                      className="h-3 w-3 rounded bg-red-600"
+                    />
+                    <span>{t.theoryLegendStart}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      aria-hidden="true"
+                      className="h-3 w-3 rounded bg-red-200"
+                    />
+                    <span>{t.theoryLegendSession}</span>
+                  </div>
+                </div>
                 <div className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-xs text-red-800">
                   {t.startTheory}: {selectedStartDateLabel}
                 </div>
@@ -458,21 +652,33 @@ export default function HomePage() {
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.processTitle}</h2>
             <ol className="mt-6 grid gap-4 md:grid-cols-5">
-              {[
-                { title: t.steps[0], icon: <ClipboardCheck /> },
-                { title: t.steps[1], icon: <Stethoscope /> },
-                { title: t.steps[2], icon: <BookOpen /> },
-                { title: t.steps[3], icon: <Car /> },
-                { title: t.steps[4], icon: <GraduationCap /> }
-              ].map((step, index) => (
-                <li key={step.title} className="rounded-2xl border bg-white p-4 text-sm shadow-sm">
-                  <div className="mb-1 text-xs text-neutral-500">{t.stepLabel} {index + 1}</div>
-                  <div className="font-semibold text-center">{step.title}</div>
-                  <div className="mt-2 flex justify-center">
-                    <div className="inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">{step.icon}</div>
-                  </div>
-                </li>
-              ))}
+              {processSteps.map((step, index) => {
+                const isActive = index === activeProcessStep;
+                return (
+                  <li key={step.title} className="h-full">
+                    <button
+                      type="button"
+                      onClick={() => handleProcessStepClick(index, step.action)}
+                      className={`flex h-full w-full flex-col rounded-2xl border bg-white p-4 text-sm shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 ${
+                        isActive
+                          ? 'border-red-500 ring-2 ring-red-500 ring-offset-2'
+                          : 'border-neutral-200 hover:border-red-300'
+                      }`}
+                      aria-pressed={isActive}
+                    >
+                      <div className="mb-1 text-xs text-neutral-500">
+                        {t.stepLabel} {index + 1}
+                      </div>
+                      <div className="text-center font-semibold">{step.title}</div>
+                      <div className="mt-2 flex justify-center">
+                        <div className="inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">
+                          {step.icon}
+                        </div>
+                      </div>
+                    </button>
+                  </li>
+                );
+              })}
             </ol>
           </div>
         </section>

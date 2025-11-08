@@ -1,24 +1,64 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
 
-const smtpHost = 'mail.karailesno.bg';
-const smtpPort = 465;
-const smtpUser = 'websitenotification@karailesno.bg';
-const smtpPass = 'websitenotification';
-const contactRecipient = 'office@karailesno.bg';
-const corsOrigins = process.env.CONTACT_ALLOWED_ORIGINS;
+const boolFromEnv = (value, fallback) => {
+  if (value === undefined) return fallback;
+  if (typeof value === 'boolean') return value;
+  return ['1', 'true', 'yes', 'on'].includes(String(value).toLowerCase());
+};
 
-const transporter = nodemailer.createTransport({
-  host: smtpHost,
-  port: smtpPort,
-  secure: true,
-  logger: true,
-  debug: true,
-  auth: {
-    user: smtpUser,
-    pass: smtpPass
+const requiredEnv = (name) => {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable ${name}`);
   }
+  return value;
+};
+
+const smtpTransportMode = process.env.SMTP_TRANSPORT?.toLowerCase() ?? 'smtp';
+const smtpHost = process.env.SMTP_HOST ?? 'localhost';
+const smtpPort = Number.parseInt(process.env.SMTP_PORT ?? '465', 10);
+const smtpSecure = boolFromEnv(process.env.SMTP_SECURE, smtpPort === 465);
+const smtpUser = process.env.SMTP_USER;
+const smtpPass = process.env.SMTP_PASS;
+const contactRecipient = requiredEnv('CONTACT_RECIPIENT');
+const corsOrigins = process.env.CONTACT_ALLOWED_ORIGINS;
+const senderEmail = process.env.CONTACT_SENDER ?? smtpUser ?? 'no-reply@localhost';
+
+const transportOptions = (() => {
+  if (smtpTransportMode === 'json') {
+    console.log('Using Nodemailer JSON transport (emails will be logged, not sent).');
+    return { jsonTransport: true }; // Useful for local development without SMTP access
+  }
+
+  if (!smtpUser || !smtpPass) {
+    throw new Error('SMTP_USER and SMTP_PASS must be configured unless SMTP_TRANSPORT=json.');
+  }
+
+  return {
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    logger: true,
+    debug: boolFromEnv(process.env.SMTP_DEBUG, true),
+    auth: {
+      user: smtpUser,
+      pass: smtpPass
+    }
+  };
+})();
+
+const transporter = nodemailer.createTransport(transportOptions);
+
+console.log('Contact service configuration', {
+  transport: transportOptions.jsonTransport ? 'json' : 'smtp',
+  host: transportOptions.host ?? null,
+  port: transportOptions.port ?? null,
+  secure: transportOptions.secure ?? null,
+  recipient: contactRecipient,
+  allowedOrigins: corsOrigins ?? '*'
 });
 
 const smtpStatus = {
@@ -33,32 +73,38 @@ const lastSendStatus = {
   error: null
 };
 
-transporter
-  .verify()
-  .then(() => {
-    smtpStatus.lastCheckedAt = new Date().toISOString();
-    smtpStatus.verified = true;
-    smtpStatus.error = null;
-    console.log('SMTP transport ready');
-  })
-  .catch((error) => {
-    smtpStatus.lastCheckedAt = new Date().toISOString();
-    smtpStatus.verified = false;
-    smtpStatus.error = {
-      message: error?.message,
-      code: error?.code,
-      command: error?.command,
-      responseCode: error?.responseCode
-    };
-    console.error('SMTP verification failed', error);
-    console.error('SMTP verification error details', {
-      code: error?.code,
-      command: error?.command,
-      responseCode: error?.responseCode,
-      response: error?.response,
-      stack: error?.stack
+if (!transportOptions.jsonTransport) {
+  transporter
+    .verify()
+    .then(() => {
+      smtpStatus.lastCheckedAt = new Date().toISOString();
+      smtpStatus.verified = true;
+      smtpStatus.error = null;
+      console.log('SMTP transport ready');
+    })
+    .catch((error) => {
+      smtpStatus.lastCheckedAt = new Date().toISOString();
+      smtpStatus.verified = false;
+      smtpStatus.error = {
+        message: error?.message,
+        code: error?.code,
+        command: error?.command,
+        responseCode: error?.responseCode
+      };
+      console.error('SMTP verification failed', error);
+      console.error('SMTP verification error details', {
+        code: error?.code,
+        command: error?.command,
+        responseCode: error?.responseCode,
+        response: error?.response,
+        stack: error?.stack
+      });
     });
-  });
+} else {
+  smtpStatus.lastCheckedAt = new Date().toISOString();
+  smtpStatus.verified = true;
+  smtpStatus.error = null;
+}
 
 const app = express();
 
@@ -72,7 +118,7 @@ if (corsOrigins) {
   app.use(
     cors({
       origin: origins,
-      methods: ['POST'],
+      methods: ['POST', 'OPTIONS'],
       allowedHeaders: ['Content-Type']
     })
   );
@@ -170,14 +216,17 @@ app.post('/api/contact', async (req, res) => {
   });
 
   try {
-    await transporter.sendMail({
-      from: `Website Notification <${smtpUser}>`,
+    const mailInfo = await transporter.sendMail({
+      from: `Website Notification <${senderEmail}>`,
       to: contactRecipient,
       replyTo: email,
       subject: 'Записване през уебсайта',
       text: plainText,
       html: htmlContent
     });
+    if (transportOptions.jsonTransport) {
+      console.log('Contact email captured by JSON transport', mailInfo?.message);
+    }
     lastSendStatus.lastAttemptAt = new Date().toISOString();
     lastSendStatus.ok = true;
     lastSendStatus.error = null;
@@ -209,6 +258,7 @@ app.get('/api/contact/health', (req, res) => {
     serverTime: new Date().toISOString(),
     smtp: smtpStatus,
     lastSend: lastSendStatus,
+    transport: transportOptions.jsonTransport ? 'json' : 'smtp',
     allowedOrigins: configuredOrigins ?? '*'
   });
 });

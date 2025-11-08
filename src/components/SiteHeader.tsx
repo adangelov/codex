@@ -104,7 +104,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
   const headerClasses = isHomePage
     ? 'sticky top-0 z-40 border-b bg-white/90 backdrop-blur'
     : 'border-b bg-white/95 backdrop-blur';
-  const containerMaxWidth = isHomePage ? 'max-w-6xl' : 'max-w-4xl';
+  const containerMaxWidth = 'max-w-6xl';
   const brandGap = isHomePage ? 'gap-8' : 'gap-6';
 
   return (
@@ -116,7 +116,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
               type="button"
               onClick={handleBrand}
               aria-label={brandLabel}
-              className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+              className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 whitespace-nowrap"
             >
               {brandLabel}
             </button>
@@ -124,12 +124,12 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
             <Link
               to={brandHref}
               onClick={handleBrand}
-              className="text-lg font-semibold text-red-600 transition hover:text-red-700"
+              className="text-lg font-semibold text-red-600 transition hover:text-red-700 whitespace-nowrap"
             >
               {brandLabel}
             </Link>
           )}
-          <nav className="hidden gap-4 md:flex">
+          <nav className="hidden gap-4 md:flex md:flex-nowrap">
             {navEntries.map(({ label, item }) => {
               const isSection = item.type === 'section';
               const isActive = isSection

@@ -739,7 +739,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-neutral-600" htmlFor="course">
-                      {t.bStandard}
+                      {t.formCourseLabel}
                     </label>
                     <select
                       id="course"

@@ -1,4 +1,4 @@
-export const VERSION = 8;
+export const VERSION = 9;
 
 export type Lang = 'bg' | 'en' | 'ru';
 
@@ -16,6 +16,8 @@ export const i18n = {
     weekdayShort: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'],
     startTheory: 'Старт на теория',
     theory: 'Теория',
+    theoryLegendStart: 'Стартиране на курс',
+    theoryLegendSession: 'Теоретични занятия след старта',
     features: [
       ['Лицензиран инструктор с опит', 'Истинско внимание и личен подход.'],
       ['Практика в градски условия', 'Подготовка за реални ситуации и маневри.'],
@@ -72,6 +74,29 @@ export const i18n = {
       ['Мога ли да плащам разсрочено?', 'Да — предлагаме гъвкави планове.']
     ],
     installmentsNote: 'Предлагаме разсрочено плащане за всички курсове.',
+    medicalModalTitle: 'Медицинско свидетелство за водач',
+    medicalModalDescription:
+      'За издаване на медицинско свидетелство посетете лицензирано лечебно заведение или клон на Български Червен Кръст. Носете лична карта и, при нужда, очила/документи за хронични състояния.',
+    medicalModalChecklistTitle: 'Какво да подготвите',
+    medicalModalChecklist: [
+      'Лична карта',
+      'Предишно свидетелство за управление (ако имате)',
+      'Медицински документи при хронични заболявания',
+      'Такса за услугата (проверете на място)'
+    ],
+    medicalModalContactsTitle: 'Български Червен Кръст – Варна',
+    medicalModalContactIntro: 'Официални контакти за записване на преглед.',
+    medicalModalPhoneLabel: 'Телефон',
+    medicalModalPhone: '+359 52 612 109',
+    medicalModalEmailLabel: 'Имейл',
+    medicalModalEmail: 'varna@redcross.bg',
+    medicalModalHoursLabel: 'Работно време',
+    medicalModalHours: 'Понеделник – Петък: 09:00–17:30',
+    medicalModalAddressLabel: 'Адрес',
+    medicalModalAddress: 'ул. „Братя Миладинови“ 51, 9000 Варна',
+    medicalModalMapTitle: 'Локация на БЧК Варна',
+    medicalModalNote: 'Съвет: свържете се предварително, за да потвърдите графика и необходимите документи.',
+    medicalModalClose: 'Затвори',
     instructorTitle: 'Инструктор и класна стая',
     instructorCardTitle: 'Димитър — лицензиран инструктор',
     instructorCardText: 'Дългогодишен опит, спокоен подход и ясни обяснения. Индивидуално внимание според темпото ви.',
@@ -152,6 +177,8 @@ export const i18n = {
     weekdayShort: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
     startTheory: 'Theory start',
     theory: 'Theory',
+    theoryLegendStart: 'Course start date',
+    theoryLegendSession: 'Theory lessons after the start',
     features: [
       ['Licensed instructor', 'Personal attention and clear guidance.'],
       ['City driving practice', 'Training for real situations and maneuvers.'],
@@ -208,6 +235,29 @@ export const i18n = {
       ['Can I pay in installments?', 'Yes — flexible plans available.']
     ],
     installmentsNote: 'Installment payments are available for every course.',
+    medicalModalTitle: 'Medical certificate for drivers',
+    medicalModalDescription:
+      'To obtain the medical certificate, visit a licensed medical center or the Bulgarian Red Cross branch. Bring your ID card and any corrective lenses or medical records you rely on.',
+    medicalModalChecklistTitle: 'What to prepare',
+    medicalModalChecklist: [
+      'National ID card',
+      'Existing driving licence (if any)',
+      'Medical documents for chronic conditions',
+      'Service fee (confirm on site)'
+    ],
+    medicalModalContactsTitle: 'Bulgarian Red Cross – Varna',
+    medicalModalContactIntro: 'Official contacts for scheduling the medical exam.',
+    medicalModalPhoneLabel: 'Phone',
+    medicalModalPhone: '+359 52 612 109',
+    medicalModalEmailLabel: 'Email',
+    medicalModalEmail: 'varna@redcross.bg',
+    medicalModalHoursLabel: 'Working hours',
+    medicalModalHours: 'Monday – Friday: 09:00–17:30',
+    medicalModalAddressLabel: 'Address',
+    medicalModalAddress: '51 Bratya Miladinovi St., Varna 9000',
+    medicalModalMapTitle: 'Location of BRC Varna',
+    medicalModalNote: 'Tip: call ahead to confirm the schedule and documents you need.',
+    medicalModalClose: 'Close',
     instructorTitle: 'Instructor & classroom',
     instructorCardTitle: 'Dimitar — licensed instructor',
     instructorCardText: 'Many years of experience, calm approach and clear explanations.',
@@ -288,6 +338,8 @@ export const i18n = {
     weekdayShort: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
     startTheory: 'Начало теории',
     theory: 'Теория',
+    theoryLegendStart: 'Начало курса',
+    theoryLegendSession: 'Занятия по теории после старта',
     features: [
       ['Лицензированный инструктор', 'Личный подход и понятные объяснения.'],
       ['Практика в городе', 'Подготовка к реальным ситуациям и манёврам.'],
@@ -344,6 +396,29 @@ export const i18n = {
       ['Можно ли платить частями?', 'Да — гибкие планы оплаты.']
     ],
     installmentsNote: 'Рассрочка доступна для всех курсов.',
+    medicalModalTitle: 'Медицинская справка для водителей',
+    medicalModalDescription:
+      'Для оформления справки посетите лицензированное медучреждение или отделение Болгарского Красного Креста. Возьмите документ удостоверяющий личность и, при необходимости, очки/медицинские выписки.',
+    medicalModalChecklistTitle: 'Что подготовить',
+    medicalModalChecklist: [
+      'Личная карта (ID)',
+      'Удостоверение за управление (если есть)',
+      'Медицинские документы при хронических заболеваниях',
+      'Оплата услуги (уточните на месте)'
+    ],
+    medicalModalContactsTitle: 'Болгарский Красный Крест – Варна',
+    medicalModalContactIntro: 'Официальные контакты для записи на медкомиссию.',
+    medicalModalPhoneLabel: 'Телефон',
+    medicalModalPhone: '+359 52 612 109',
+    medicalModalEmailLabel: 'Email',
+    medicalModalEmail: 'varna@redcross.bg',
+    medicalModalHoursLabel: 'Рабочее время',
+    medicalModalHours: 'Понедельник – Пятница: 09:00–17:30',
+    medicalModalAddressLabel: 'Адрес',
+    medicalModalAddress: 'ул. „Братя Миладинови“ 51, 9000 Варна',
+    medicalModalMapTitle: 'Локация БЧК Варна',
+    medicalModalNote: 'Совет: свяжитесь заранее, чтобы уточнить график и нужные документы.',
+    medicalModalClose: 'Закрыть',
     instructorTitle: 'Инструктор и класс',
     instructorCardTitle: 'Димитар — лицензированный инструктор',
     instructorCardText: 'Большой опыт, спокойный подход и понятные пояснения.',

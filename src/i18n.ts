@@ -81,7 +81,7 @@ export const i18n = {
     medicalModalChecklist: [
       'Лична карта',
       'Предишно свидетелство за управление (ако имате)',
-      'Медицински документи при хронични заболявания',
+      'Медицинско свидетелство от лекар за актуално състояние.',
       'Такса за услугата (проверете на място)'
     ],
     medicalModalContactsTitle: 'Български Червен Кръст – Варна',
@@ -242,7 +242,7 @@ export const i18n = {
     medicalModalChecklist: [
       'National ID card',
       'Existing driving licence (if any)',
-      'Medical documents for chronic conditions',
+      'Medical certificate from your physician confirming current health status.',
       'Service fee (confirm on site)'
     ],
     medicalModalContactsTitle: 'Bulgarian Red Cross – Varna',
@@ -403,7 +403,7 @@ export const i18n = {
     medicalModalChecklist: [
       'Личная карта (ID)',
       'Удостоверение за управление (если есть)',
-      'Медицинские документы при хронических заболеваниях',
+      'Медицинское свидетельство от врача об актуальном состоянии здоровья.',
       'Оплата услуги (уточните на месте)'
     ],
     medicalModalContactsTitle: 'Болгарский Красный Крест – Варна',

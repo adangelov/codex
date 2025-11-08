@@ -215,7 +215,6 @@ export default function HomePage() {
   const [form, setForm] = useState<ContactFormState>(() => ({ ...DEFAULT_CONTACT_FORM }));
   const formRef = useRef<HTMLFormElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
-  const [activeProcessStep, setActiveProcessStep] = useState<number | null>(null);
   const [isMedicalModalOpen, setMedicalModalOpen] = useState(false);
   const theoryCalendarRef = useRef<HTMLDivElement | null>(null);
 
@@ -352,13 +351,9 @@ export default function HomePage() {
     setMedicalModalOpen(false);
   }, []);
 
-  const handleProcessStepClick = useCallback(
-    (index: number, action?: () => void) => {
-      setActiveProcessStep(index);
-      action?.();
-    },
-    []
-  );
+  const handleProcessStepClick = useCallback((action?: () => void) => {
+    action?.();
+  }, []);
 
   const handleScrollToRefresh = useCallback(() => {
     setForm((prev) => ({ ...prev, course: 'b_refresh' }));
@@ -652,20 +647,13 @@ export default function HomePage() {
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.processTitle}</h2>
             <ol className="mt-6 grid gap-4 md:grid-cols-5">
-              {processSteps.map((step, index) => {
-                const isActive = index === activeProcessStep;
-                return (
-                  <li key={step.title} className="h-full">
-                    <button
-                      type="button"
-                      onClick={() => handleProcessStepClick(index, step.action)}
-                      className={`flex h-full w-full flex-col rounded-2xl border bg-white p-4 text-sm shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 ${
-                        isActive
-                          ? 'border-red-500 ring-2 ring-red-500 ring-offset-2'
-                          : 'border-neutral-200 hover:border-red-300'
-                      }`}
-                      aria-pressed={isActive}
-                    >
+              {processSteps.map((step, index) => (
+                <li key={step.title} className="h-full">
+                  <button
+                    type="button"
+                    onClick={() => handleProcessStepClick(step.action)}
+                    className="flex h-full w-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 text-sm shadow-sm transition hover:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                  >
                       <div className="mb-1 text-xs text-neutral-500">
                         {t.stepLabel} {index + 1}
                       </div>
@@ -675,10 +663,9 @@ export default function HomePage() {
                           {step.icon}
                         </div>
                       </div>
-                    </button>
-                  </li>
-                );
-              })}
+                  </button>
+                </li>
+              ))}
             </ol>
           </div>
         </section>

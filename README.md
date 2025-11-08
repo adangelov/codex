@@ -16,7 +16,8 @@ The site will be available at http://localhost:5173/.
 
 The contact form now sends emails through a small Node.js service.
 
-1. Copy `.env.example` to `.env` and fill in `SMTP_PASS` with the mailbox password.
+1. Copy `.env.example` to `.env` and fill in the SMTP credentials. Set `SMTP_TRANSPORT=json`
+   if you want to capture messages locally without contacting the real mail server.
 2. In one terminal start the mail service:
 
    ```bash
@@ -24,6 +25,10 @@ The contact form now sends emails through a small Node.js service.
    ```
 
    It reads the SMTP configuration from `.env` and listens on port `3000`.
+   - Use `SMTP_PORT=587` and `SMTP_SECURE=false` if your provider expects STARTTLS
+     instead of implicit TLS.
+   - Override `CONTACT_SENDER` when your SMTP user differs from the `From` header
+     that should appear in outgoing emails.
 3. In a separate terminal run the Vite dev server (`npm run dev`). The frontend will send
    requests to `VITE_CONTACT_ENDPOINT` (defaults to `http://localhost:3000/api/contact`).
 

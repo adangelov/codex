@@ -1,4 +1,4 @@
-export const VERSION = 10;
+export const VERSION = 11;
 
 export type Lang = 'bg' | 'en' | 'ru';
 
@@ -56,7 +56,7 @@ export const i18n = {
     coursePriceLabel: 'Цена',
     intensiveTitle: 'Категория B – интензивен курс',
     intensiveDesc:
-      'Ускорена програма с приоритетни графици, комбинирани занятия и допълнителни практически упражнения.',
+      'Ускорена програма с комбинирани занятия и допълнителни практически упражнения.',
     intensivePrice: '1 850 лв/945,90 €',
     intensiveHighlights: [
       'Два пъти повече практика седмично',

@@ -61,7 +61,7 @@ export const i18n = {
     intensiveHighlights: [
       'Два пъти повече практика седмично',
       'Приоритетни часове и маршрут с инструктор',
-      'Подкрепа до изпита и финален пробен ден'
+      'Интензивна подготовка с висока честота на каране'
     ],
     intensiveCta: 'Запиши се за интензивен курс',
     faqTitle: 'Често задавани въпроси',
@@ -223,7 +223,7 @@ export const i18n = {
     intensiveHighlights: [
       'Twice the weekly driving practice',
       'Priority timeslots and tailored routes',
-      'Support until the exam with a mock drive day'
+      'High-frequency driving drills for intensive prep'
     ],
     intensiveCta: 'Apply for intensive course',
     faqTitle: 'Frequently asked questions',
@@ -384,7 +384,7 @@ export const i18n = {
     intensiveHighlights: [
       'Вдвое больше практики каждую неделю',
       'Приоритетные слоты и индивидуальные маршруты',
-      'Поддержка до экзамена и финальный пробный заезд'
+      'Интенсивная подготовка с частыми выездами'
     ],
     intensiveCta: 'Записаться на интенсивный курс',
     faqTitle: 'Частые вопросы',

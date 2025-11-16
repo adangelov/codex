@@ -168,7 +168,7 @@ export const i18n = {
       links: [
         { label: 'Общи условия', href: '/terms' },
         { label: 'Защита на личните данни', href: '/privacy' },
-        { label: 'Контакти', href: '/#contact' }
+        { label: 'Контакти', scrollToSection: 'contact' }
       ],
       hyundaiNotice: 'Hyundai imagery © respective owners.',
       copyright: (version: string) => `© Димитър Димитров · Всички права запазени · Site version: ${version}`,
@@ -340,7 +340,7 @@ export const i18n = {
       links: [
         { label: 'Terms & Conditions', href: '/terms' },
         { label: 'Privacy Policy', href: '/privacy' },
-        { label: 'Contacts', href: '/#contact' }
+        { label: 'Contacts', scrollToSection: 'contact' }
       ],
       hyundaiNotice: 'Hyundai imagery © respective owners.',
       copyright: (version: string) => `© Dimitar Dimitrov · All rights reserved · Site version: ${version}`,
@@ -512,7 +512,7 @@ export const i18n = {
       links: [
         { label: 'Условия', href: '/terms' },
         { label: 'Конфиденциальность', href: '/privacy' },
-        { label: 'Контакты', href: '/#contact' }
+        { label: 'Контакты', scrollToSection: 'contact' }
       ],
       hyundaiNotice: 'Hyundai imagery © respective owners.',
       copyright: (version: string) => `© Димитар Димитров · Все права защищены · Site version: ${version}`,

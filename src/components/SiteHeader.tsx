@@ -254,8 +254,8 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
           />
           <div
             id={MOBILE_MENU_ID}
-            className={`fixed inset-y-0 left-0 z-50 flex w-full max-w-xs flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${
-              menuOpen ? 'translate-x-0' : '-translate-x-full'
+            className={`fixed inset-y-0 right-0 z-50 flex h-full w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${
+              menuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
             data-nav-panel
             role={menuOpen ? 'dialog' : undefined}

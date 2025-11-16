@@ -51,6 +51,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
   const [menuVisible, setMenuVisible] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const menuPanelRef = useRef<HTMLDivElement | null>(null);
 
   const setHeaderRef = (node: HTMLElement | null) => {
     headerRef.current = node;
@@ -82,7 +83,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
 
   useEffect(() => {
     if (menuOpen) {
-      closeButtonRef.current?.focus();
+      menuPanelRef.current?.focus();
     }
   }, [menuOpen]);
 
@@ -246,7 +247,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
       {menuVisible && (
         <>
           <div
-            className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ease-out md:hidden ${
+            className={`fixed inset-0 z-[80] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out md:hidden ${
               menuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
             }`}
             aria-hidden="true"
@@ -254,9 +255,12 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
           />
           <div
             id={MOBILE_MENU_ID}
-            className={`fixed inset-y-0 left-0 z-50 flex w-full max-w-xs flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${
-              menuOpen ? 'translate-x-0' : '-translate-x-full'
+            ref={menuPanelRef}
+            tabIndex={-1}
+            className={`fixed inset-y-0 right-0 z-[90] flex h-full w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${
+              menuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
+            style={{ width: 'min(22rem, 50vw)' }}
             data-nav-panel
             role={menuOpen ? 'dialog' : undefined}
             aria-modal={menuOpen ? 'true' : undefined}

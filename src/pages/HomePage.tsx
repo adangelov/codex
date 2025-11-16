@@ -6,7 +6,6 @@ import {
   CalendarDays,
   Car,
   CheckCircle2,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
@@ -15,6 +14,7 @@ import {
   Home,
   Info,
   Mail,
+  MessageCircle,
   MapPin,
   Phone,
   Star,
@@ -825,14 +825,26 @@ export default function HomePage() {
         <section className="border-t bg-neutral-50" id="faq">
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.faqTitle}</h2>
-            <div className="mt-6 space-y-3">
-              {t.faqs.map(([question, answer]) => (
-                <details key={question} className="group rounded-2xl border bg-white p-4">
-                  <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                    {question}
-                    <ChevronDown className="transition group-open:rotate-180" />
+            <div className="mt-6 space-y-4">
+              {t.faqs.map(([question, answer], index) => (
+                <details
+                  key={question}
+                  className="group rounded-3xl border border-neutral-200 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between rounded-3xl px-4 py-4 font-medium text-neutral-900 transition hover:bg-neutral-50 sm:px-6">
+                    <div className="flex w-full items-center gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-red-500 to-red-600 text-lg font-bold text-white shadow-[0_10px_20px_rgba(239,68,68,0.35)]">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1 text-left text-base font-semibold md:text-lg">{question}</div>
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 transition group-open:bg-neutral-900 group-open:text-white">
+                        <MessageCircle size={20} />
+                      </div>
+                    </div>
                   </summary>
-                  <p className="mt-2 text-sm text-neutral-700">{answer}</p>
+                  <div className="border-t border-neutral-100 px-4 pb-5 pt-4 text-sm text-neutral-700 sm:px-6">
+                    {answer}
+                  </div>
                 </details>
               ))}
             </div>

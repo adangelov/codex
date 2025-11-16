@@ -106,6 +106,23 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
     : 'border-b bg-white/95 backdrop-blur';
   const containerMaxWidth = 'max-w-6xl';
   const brandGap = isHomePage ? 'gap-8' : 'gap-6';
+  const brandLines = useMemo(
+    () => brandLabel.split('\n').map((line) => line.trim()).filter(Boolean),
+    [brandLabel]
+  );
+  const brandAriaLabel = brandLines.join(' ');
+  const brandContent = (
+    <span className="flex flex-col leading-tight">
+      {brandLines.map((line, index) => (
+        <span
+          key={`${line}-${index}`}
+          className={`${index === 0 ? 'text-lg' : 'text-base'} font-semibold whitespace-nowrap`}
+        >
+          {line}
+        </span>
+      ))}
+    </span>
+  );
 
   return (
     <header ref={setHeaderRef} className={headerClasses}>
@@ -115,18 +132,19 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
             <button
               type="button"
               onClick={handleBrand}
-              aria-label={brandLabel}
-              className="border-0 bg-transparent p-0 text-lg font-semibold text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 whitespace-nowrap"
+              aria-label={brandAriaLabel}
+              className="border-0 bg-transparent p-0 text-left text-red-600 transition hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
             >
-              {brandLabel}
+              {brandContent}
             </button>
           ) : (
             <Link
               to={brandHref}
               onClick={handleBrand}
-              className="text-lg font-semibold text-red-600 transition hover:text-red-700 whitespace-nowrap"
+              aria-label={brandAriaLabel}
+              className="text-left text-red-600 transition hover:text-red-700"
             >
-              {brandLabel}
+              {brandContent}
             </Link>
           )}
           <nav className="hidden gap-4 md:flex md:flex-nowrap">
@@ -135,7 +153,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
               const isActive = isSection
                 ? activeSection === item.section
                 : activeRoute === item.to;
-              const baseClasses = 'rounded-full px-3 py-2 text-sm transition';
+              const baseClasses = 'rounded-full px-3 py-2 text-sm transition whitespace-nowrap';
               const className = `${baseClasses} ${
                 isActive ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
               }`;
@@ -185,7 +203,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
           </div>
           <a
             href={`tel:${PHONE_NUMBER}`}
-            className="hidden items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 md:inline-flex"
+            className="hidden items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 whitespace-nowrap md:inline-flex"
           >
             {callLabel}
             <Phone size={16} />

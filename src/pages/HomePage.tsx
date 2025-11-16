@@ -832,7 +832,7 @@ export default function HomePage() {
                   key={question}
                   className="group rounded-3xl border border-neutral-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.04)]"
                 >
-                  <summary className="flex cursor-pointer list-none items-stretch overflow-hidden rounded-3xl text-neutral-900">
+                  <summary className="flex w-full cursor-pointer list-none items-stretch overflow-hidden rounded-3xl text-neutral-900">
                     <div className="flex min-h-[4.5rem] w-20 shrink-0 items-center justify-center self-stretch bg-gradient-to-br from-red-600 to-red-500 text-lg font-semibold text-white sm:w-24">
                       <span className="tabular-nums">{index + 1}</span>
                     </div>

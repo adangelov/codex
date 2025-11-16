@@ -7,12 +7,8 @@ interface CourseHighlightItemProps {
 
 export default function CourseHighlightItem({ text, className = '' }: CourseHighlightItemProps) {
   return (
-    <li
-      className={`flex items-center gap-3 rounded-2xl bg-neutral-50/80 px-3 py-2.5 text-sm text-neutral-700 ${className}`}
-    >
-      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-50 text-green-600">
-        <CheckCircle2 className="h-3 w-3" />
-      </span>
+    <li className={`flex items-start gap-2 text-sm text-neutral-700 ${className}`}>
+      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
       <span className="text-left leading-tight">{text}</span>
     </li>
   );

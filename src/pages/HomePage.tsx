@@ -626,7 +626,7 @@ export default function HomePage() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <p className="mt-2 text-center text-xs text-neutral-500">Hyundai i30 (учебен автомобил).</p>
+              <p className="mt-2 text-center text-xs text-neutral-500">Hyundai i30 (учебен автомобил)</p>
             </div>
           </div>
         </section>

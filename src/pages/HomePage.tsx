@@ -13,6 +13,7 @@ import {
   Clock,
   GraduationCap,
   Home,
+  Info,
   Mail,
   MapPin,
   Phone,
@@ -652,11 +653,17 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={() => handleProcessStepClick(step.action)}
-                    className="flex h-full w-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 text-sm shadow-sm transition hover:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                    className="relative flex h-full w-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 text-sm shadow-sm transition hover:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                   >
-                      <div className="mb-1 text-xs text-neutral-500">
-                        {t.stepLabel} {index + 1}
-                      </div>
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-3 top-3 inline-flex h-5 w-5 items-center justify-center rounded-full bg-neutral-100 text-neutral-600 ring-1 ring-inset ring-neutral-200"
+                    >
+                      <Info className="h-3.5 w-3.5" strokeWidth={2.5} />
+                    </span>
+                    <div className="mb-1 text-xs text-neutral-500">
+                      {t.stepLabel} {index + 1}
+                    </div>
                       <div className="text-center font-semibold">{step.title}</div>
                       <div className="mt-2 flex justify-center">
                         <div className="inline-flex rounded-full bg-neutral-100 p-2 text-neutral-600">

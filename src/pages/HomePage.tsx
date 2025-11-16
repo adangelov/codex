@@ -629,7 +629,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="mx-auto max-w-6xl px-4 py-12" id="features">
+        <section className="mx-auto hidden max-w-6xl px-4 py-12 lg:block" id="features">
           <div className="grid gap-4 md:grid-cols-3">
             {t.features.map(([title, description]) => (
               <div key={title} className="rounded-2xl border bg-white p-5 shadow-sm">

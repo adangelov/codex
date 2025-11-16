@@ -1,6 +1,5 @@
 import { forwardRef, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Phone } from 'lucide-react';
 
 import { type Lang } from '../i18n';
@@ -219,16 +218,9 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
           </button>
         </div>
       </div>
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            id={MOBILE_MENU_ID}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="border-t bg-white md:hidden"
-          >
-            <div className="space-y-3 px-4 py-4" data-nav-panel>
+      {menuOpen && (
+        <div id={MOBILE_MENU_ID} className="border-t bg-white md:hidden" data-nav-panel>
+          <div className="space-y-3 px-4 py-4">
               <div className="flex gap-2">
                 {LANG_OPTIONS.map((code) => (
                   <button
@@ -298,10 +290,9 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
                   {mobileCtaLabel}
                 </button>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </header>
   );
 });

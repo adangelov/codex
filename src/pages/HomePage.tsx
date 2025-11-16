@@ -6,7 +6,6 @@ import {
   CalendarDays,
   Car,
   CheckCircle2,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
@@ -16,6 +15,7 @@ import {
   Info,
   Mail,
   MapPin,
+  MessageSquareText,
   Phone,
   Star,
   Stethoscope,
@@ -825,14 +825,26 @@ export default function HomePage() {
         <section className="border-t bg-neutral-50" id="faq">
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.faqTitle}</h2>
-            <div className="mt-6 space-y-3">
-              {t.faqs.map(([question, answer]) => (
-                <details key={question} className="group rounded-2xl border bg-white p-4">
-                  <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                    {question}
-                    <ChevronDown className="transition group-open:rotate-180" />
+            <div className="mt-6 space-y-4">
+              {t.faqs.map(([question, answer], index) => (
+                <details
+                  key={question}
+                  className="group rounded-3xl border border-neutral-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.04)]"
+                >
+                  <summary className="flex cursor-pointer list-none items-stretch overflow-hidden rounded-3xl text-neutral-900">
+                    <div className="flex h-16 w-16 items-center justify-center bg-gradient-to-br from-red-600 to-red-500 text-lg font-semibold text-white">
+                      <span className="tabular-nums">{index + 1}</span>
+                    </div>
+                    <div className="flex flex-1 items-center justify-between gap-4 border-l border-white/30 px-4 py-4 text-base font-semibold transition hover:bg-red-50/60 sm:px-6 md:text-lg">
+                      <div className="flex-1 text-left">{question}</div>
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-neutral-100 text-neutral-500 transition group-open:bg-neutral-900 group-open:text-white">
+                        <MessageSquareText size={20} strokeWidth={1.6} />
+                      </div>
+                    </div>
                   </summary>
-                  <p className="mt-2 text-sm text-neutral-700">{answer}</p>
+                  <div className="border-t border-neutral-100 px-4 pb-5 pt-4 text-sm text-neutral-700 sm:px-6">
+                    {answer}
+                  </div>
                 </details>
               ))}
             </div>

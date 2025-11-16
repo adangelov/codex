@@ -182,11 +182,16 @@ export default function CourseDetailsPage() {
                 </button>
                 <a
                   href="tel:+3598977777430"
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
+                  className="w-full inline-flex items-center justify-between gap-4 rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
                 >
-                  <Phone size={16} />
-                  <span>{t.call}</span>
-                  <span className="hidden text-xs text-neutral-500 sm:inline">+359 8977 777 430</span>
+                  <span className="inline-flex items-center gap-2">
+                    <Phone size={16} />
+                    <span>{t.call}</span>
+                  </span>
+                  <span className="flex flex-col text-right text-xs leading-tight text-neutral-500">
+                    <span>+359 8977</span>
+                    <span>777 430</span>
+                  </span>
                 </a>
               </div>
             </div>

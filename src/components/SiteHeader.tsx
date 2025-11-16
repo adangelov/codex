@@ -112,7 +112,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
   );
   const brandAriaLabel = brandLines.join(' ');
   const brandContent = (
-    <span className="flex flex-col leading-tight">
+    <span className="flex flex-col leading-[1.05]">
       {brandLines.map((line, index) => (
         <span
           key={`${line}-${index}`}

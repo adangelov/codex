@@ -116,7 +116,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
       {brandLines.map((line, index) => (
         <span
           key={`${line}-${index}`}
-          className={`${index === 0 ? 'text-base' : 'text-sm'} font-semibold whitespace-nowrap`}
+          className={`${index === 0 ? 'text-lg' : 'text-base'} font-semibold whitespace-nowrap`}
         >
           {line}
         </span>

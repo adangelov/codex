@@ -16,6 +16,7 @@ import {
   Mail,
   MessageCircle,
   MapPin,
+  MessageSquareText,
   Phone,
   Star,
   Stethoscope,
@@ -829,16 +830,16 @@ export default function HomePage() {
               {t.faqs.map(([question, answer], index) => (
                 <details
                   key={question}
-                  className="group rounded-3xl border border-neutral-200 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
+                  className="group rounded-3xl border border-neutral-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.04)]"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between rounded-3xl px-4 py-4 font-medium text-neutral-900 transition hover:bg-neutral-50 sm:px-6">
-                    <div className="flex w-full items-center gap-4">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-red-500 to-red-600 text-lg font-bold text-white shadow-[0_10px_20px_rgba(239,68,68,0.35)]">
-                        {index + 1}
-                      </div>
-                      <div className="flex-1 text-left text-base font-semibold md:text-lg">{question}</div>
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 transition group-open:bg-neutral-900 group-open:text-white">
-                        <MessageCircle size={20} />
+                  <summary className="flex cursor-pointer list-none items-stretch overflow-hidden rounded-3xl text-neutral-900">
+                    <div className="flex h-16 w-16 items-center justify-center bg-gradient-to-br from-red-600 to-red-500 text-lg font-semibold text-white">
+                      <span className="tabular-nums">{index + 1}</span>
+                    </div>
+                    <div className="flex flex-1 items-center justify-between gap-4 border-l border-white/30 px-4 py-4 text-base font-semibold transition hover:bg-red-50/60 sm:px-6 md:text-lg">
+                      <div className="flex-1 text-left">{question}</div>
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-neutral-100 text-neutral-500 transition group-open:bg-neutral-900 group-open:text-white">
+                        <MessageSquareText size={20} strokeWidth={1.6} />
                       </div>
                     </div>
                   </summary>

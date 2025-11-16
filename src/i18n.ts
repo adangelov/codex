@@ -162,7 +162,18 @@ export const i18n = {
       '20–30 часа — 35 лв/час / 17,90 €/час'
     ],
     perHour: 'лв/час',
-    footer: (year: number) => `© Руми ${year} · Всички права запазени · Версия ${VERSION}`,
+    footer: {
+      heading: 'Шофьорски курсове',
+      subheading: 'Димитър Димитров',
+      links: [
+        { label: 'Общи условия', href: '/terms' },
+        { label: 'Защита на личните данни', href: '/privacy' },
+        { label: 'Контакти', href: '/#contact' }
+      ],
+      hyundaiNotice: 'Hyundai imagery © respective owners.',
+      copyright: (version: string) => `© Димитър Димитров · Всички права запазени · Site version: ${version}`,
+      socialLabel: 'Социални мрежи'
+    },
     locale: 'bg-BG'
   },
   en: {
@@ -323,7 +334,18 @@ export const i18n = {
       '20–30 lessons — 35 BGN/hour / €17.90/hour'
     ],
     perHour: 'BGN/hour',
-    footer: (year: number) => `© Rumi ${year} · All rights reserved · Version ${VERSION}`,
+    footer: {
+      heading: 'Driving Courses',
+      subheading: 'Dimitar Dimitrov',
+      links: [
+        { label: 'Terms & Conditions', href: '/terms' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Contacts', href: '/#contact' }
+      ],
+      hyundaiNotice: 'Hyundai imagery © respective owners.',
+      copyright: (version: string) => `© Dimitar Dimitrov · All rights reserved · Site version: ${version}`,
+      socialLabel: 'Social networks'
+    },
     locale: 'en-US'
   },
   ru: {
@@ -484,7 +506,18 @@ export const i18n = {
       '20–30 часов — 35 лв/час / 17,90 €/час'
     ],
     perHour: 'лв/час',
-    footer: (year: number) => `© Руми ${year} · Все права защищены · Версия ${VERSION}`,
+    footer: {
+      heading: 'Курсы вождения',
+      subheading: 'Димитар Димитров',
+      links: [
+        { label: 'Условия', href: '/terms' },
+        { label: 'Конфиденциальность', href: '/privacy' },
+        { label: 'Контакты', href: '/#contact' }
+      ],
+      hyundaiNotice: 'Hyundai imagery © respective owners.',
+      copyright: (version: string) => `© Димитар Димитров · Все права защищены · Site version: ${version}`,
+      socialLabel: 'Социальные сети'
+    },
     locale: 'ru-RU'
   }
 } as const;

@@ -25,10 +25,10 @@ import {
 
 import { i18n, type Lang, type Strings } from '../i18n';
 import { NAV_SECTION_IDS, type NavSection } from '../navigation';
-import { SITE_VERSION } from '../siteVersion';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import SiteHeader from '../components/SiteHeader';
 import CourseHighlightItem from '../components/CourseHighlightItem';
+import Footer from '../components/Footer';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -1018,13 +1018,7 @@ export default function HomePage() {
 
       <ScrollToTopButton className="fixed bottom-6 right-6 z-50" />
 
-      <footer className="border-t bg-neutral-50">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-neutral-600 md:flex-row md:items-center md:justify-between">
-          <div>{t.footer(new Date().getFullYear())}</div>
-          <div className="text-xs text-neutral-400">Hyundai imagery © respective owners.</div>
-          <div className="text-xs text-neutral-400">Site version: {SITE_VERSION}</div>
-        </div>
-      </footer>
+      <Footer footer={t.footer} />
 
     </div>
   );

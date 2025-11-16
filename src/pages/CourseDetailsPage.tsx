@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronLeft, ChevronRight, Phone } from 'lucide-react';
 
 import { i18n, type Lang } from '../i18n';
-import { SITE_VERSION } from '../siteVersion';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import SiteHeader from '../components/SiteHeader';
 import CourseHighlightItem from '../components/CourseHighlightItem';
+import Footer from '../components/Footer';
 
 export default function CourseDetailsPage() {
   const [lang, setLang] = useState<Lang>('bg');
@@ -199,13 +199,7 @@ export default function CourseDetailsPage() {
 
       <ScrollToTopButton className="fixed bottom-6 right-6 z-50" />
 
-      <footer className="border-t bg-neutral-50">
-        <div className="mx-auto flex max-w-4xl flex-col gap-2 px-4 py-6 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
-          <div>{t.footer(new Date().getFullYear())}</div>
-          <div className="text-[11px] text-neutral-400">Hyundai imagery © respective owners.</div>
-          <div className="text-[11px] text-neutral-400">Site version: {SITE_VERSION}</div>
-        </div>
-      </footer>
+      <Footer footer={t.footer} />
     </div>
   );
 }

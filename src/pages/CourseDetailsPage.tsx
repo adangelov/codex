@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ChevronDown, ChevronLeft, Phone } from 'lucide-react';
+import { CheckCircle2, ChevronDown, Phone } from 'lucide-react';
 
 import { i18n, type Lang } from '../i18n';
 import { SITE_VERSION } from '../siteVersion';
@@ -60,21 +60,6 @@ export default function CourseDetailsPage() {
       />
 
       <main className="mx-auto max-w-4xl px-4 py-12">
-        <div className="flex items-center gap-2 text-sm text-neutral-500">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-1 rounded-full border px-3 py-1 transition hover:bg-neutral-100"
-          >
-            <ChevronLeft size={16} />
-            {t.coursesTitle}
-          </button>
-          <span aria-hidden className="hidden sm:inline">
-            ·
-          </span>
-          <span className="hidden text-neutral-400 sm:inline">{t.bStandard}</span>
-        </div>
-
         <section className="mt-8 rounded-3xl border bg-white p-6 shadow-sm">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
             <div className="space-y-5">

@@ -148,7 +148,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
   );
 
   return (
-    <header ref={setHeaderRef} className={headerClasses}>
+    <header ref={setHeaderRef} className={headerClasses} data-site-header="true">
       <div className={`mx-auto flex ${containerMaxWidth} items-center justify-between px-4 py-4`}>
         <div className={`flex items-center ${brandGap}`}>
           {isHomePage ? (

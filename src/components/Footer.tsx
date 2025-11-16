@@ -1,8 +1,10 @@
-import { Fragment } from 'react';
+import { Fragment, type MouseEvent } from 'react';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import type { Strings } from '../i18n';
 import { SITE_VERSION } from '../siteVersion';
+import type { NavSection } from '../navigation';
 
 const TikTokIcon = ({ size = 18 }: { size?: number }) => (
   <svg
@@ -29,7 +31,25 @@ interface FooterProps {
   footer: Strings['footer'];
 }
 
+function scrollToSection(section: NavSection) {
+  const element = document.getElementById(section);
+  if (!element) {
+    return;
+  }
+  const header = document.querySelector<HTMLElement>('header[data-site-header="true"]');
+  const headerHeight = header?.offsetHeight ?? 0;
+  const elementTop = element.getBoundingClientRect().top + window.scrollY;
+  window.scrollTo({ top: Math.max(elementTop - headerHeight, 0), behavior: 'smooth' });
+}
+
 export default function Footer({ footer }: FooterProps) {
+  const handleSectionLinkClick = (event: MouseEvent<HTMLAnchorElement>, section: NavSection) => {
+    if (window.location.pathname === '/') {
+      event.preventDefault();
+      scrollToSection(section);
+    }
+  };
+
   return (
     <footer className="border-t bg-neutral-50 text-neutral-800">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8">
@@ -41,9 +61,24 @@ export default function Footer({ footer }: FooterProps) {
           <nav className="flex flex-wrap items-center justify-center gap-3 text-sm font-medium text-neutral-600">
             {footer.links.map((link, index) => (
               <Fragment key={link.label}>
-                <a href={link.href} className="transition hover:text-neutral-900">
-                  {link.label}
-                </a>
+                {'scrollToSection' in link && link.scrollToSection ? (
+                  <Link
+                    to="/"
+                    state={{ scrollTo: link.scrollToSection }}
+                    onClick={(event) => handleSectionLinkClick(event, link.scrollToSection)}
+                    className="transition hover:text-neutral-900"
+                  >
+                    {link.label}
+                  </Link>
+                ) : link.href?.startsWith('/') ? (
+                  <Link to={link.href} className="transition hover:text-neutral-900">
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a href={link.href ?? '#'} className="transition hover:text-neutral-900">
+                    {link.label}
+                  </a>
+                )}
                 {index < footer.links.length - 1 && <span className="text-neutral-400">•</span>}
               </Fragment>
             ))}

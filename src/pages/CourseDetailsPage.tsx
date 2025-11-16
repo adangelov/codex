@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Phone } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Phone } from 'lucide-react';
 
 import { i18n, type Lang } from '../i18n';
 import { SITE_VERSION } from '../siteVersion';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import SiteHeader from '../components/SiteHeader';
+import CourseHighlightItem from '../components/CourseHighlightItem';
 
 export default function CourseDetailsPage() {
   const [lang, setLang] = useState<Lang>('bg');
@@ -145,12 +146,9 @@ export default function CourseDetailsPage() {
                   <div className="mt-2 text-2xl font-semibold text-neutral-900">{t.bStandardPrice}</div>
                 </div>
               </div>
-              <ul className="space-y-2 text-sm text-neutral-700">
+              <ul className="space-y-3">
                 {t.bStandardHighlights.map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
-                    <span>{item}</span>
-                  </li>
+                  <CourseHighlightItem key={item} text={item} />
                 ))}
               </ul>
               <div className="flex flex-col gap-4 rounded-2xl border bg-neutral-50 p-4 text-sm text-neutral-700">

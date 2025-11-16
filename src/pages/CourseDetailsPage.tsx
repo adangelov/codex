@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ChevronDown, Phone } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Phone } from 'lucide-react';
 
 import { i18n, type Lang } from '../i18n';
 import { SITE_VERSION } from '../siteVersion';
@@ -11,6 +11,7 @@ export default function CourseDetailsPage() {
   const [lang, setLang] = useState<Lang>('bg');
   const t = i18n[lang];
   const [showTopics, setShowTopics] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -39,8 +40,18 @@ export default function CourseDetailsPage() {
     ]
   } as const;
 
+  const galleryImages = [gallery.main, ...gallery.thumbs];
+
   const handleContact = () => {
     navigate('/', { state: { scrollTo: 'contact' } });
+  };
+
+  const handlePrevImage = () => {
+    setActiveImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
+
+  const handleNextImage = () => {
+    setActiveImageIndex((prev) => (prev + 1) % galleryImages.length);
   };
 
   return (
@@ -68,21 +79,52 @@ export default function CourseDetailsPage() {
                   {t.galleryTitle}
                 </span>
                 <figure className="space-y-4">
-                  <div className="overflow-hidden rounded-3xl shadow-lg">
+                  <div className="relative overflow-hidden rounded-3xl shadow-lg">
                     <img
-                      src={gallery.main.src}
-                      alt={gallery.main.alt}
+                      src={galleryImages[activeImageIndex].src}
+                      alt={galleryImages[activeImageIndex].alt}
                       className="h-60 w-full object-cover sm:h-72 lg:h-[24rem]"
                     />
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex w-full items-center justify-between px-2">
+                      <div className="h-full w-16 bg-gradient-to-r from-black/20 to-transparent" />
+                      <div className="h-full w-16 bg-gradient-to-l from-black/20 to-transparent" />
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-between px-2">
+                      <button
+                        type="button"
+                        onClick={handlePrevImage}
+                        aria-label="Previous image"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-neutral-700 shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleNextImage}
+                        aria-label="Next image"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-neutral-700 shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
                   </div>
                   <figcaption className="text-xs text-neutral-500">{t.galleryDescription}</figcaption>
                 </figure>
               </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                {gallery.thumbs.map((image) => (
-                  <div key={image.src} className="overflow-hidden rounded-2xl border bg-white shadow-sm">
-                    <img src={image.src} alt={image.alt} className="h-28 w-full object-cover sm:h-24 lg:h-28" />
-                  </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {galleryImages.map((image, index) => (
+                  <button
+                    key={image.src}
+                    type="button"
+                    onClick={() => setActiveImageIndex(index)}
+                    className={`overflow-hidden rounded-2xl border bg-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${
+                      activeImageIndex === index ? 'ring-2 ring-red-500' : ''
+                    }`}
+                    aria-label={`View image ${index + 1}`}
+                    aria-pressed={activeImageIndex === index}
+                  >
+                    <img src={image.src} alt={image.alt} className="h-24 w-full object-cover sm:h-20 lg:h-24" />
+                  </button>
                 ))}
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { Link } from 'react-router-dom';
-import { Phone } from 'lucide-react';
+import { Menu, Phone, X } from 'lucide-react';
 
 import { type Lang } from '../i18n';
 import { NAV_ITEMS, type NavItem, type NavSection } from '../navigation';
@@ -48,7 +48,9 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
   ref
 ) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const setHeaderRef = (node: HTMLElement | null) => {
     headerRef.current = node;
@@ -61,16 +63,38 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
 
   useEffect(() => {
     if (!menuOpen) {
+      document.body.style.removeProperty('overflow');
       return undefined;
     }
-    const handler = (event: MouseEvent) => {
-      if (event.target instanceof HTMLElement && event.target.closest('[data-nav-panel]')) {
-        return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
       }
-      setMenuOpen(false);
     };
-    document.addEventListener('click', handler);
-    return () => document.removeEventListener('click', handler);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (menuOpen) {
+      closeButtonRef.current?.focus();
+    }
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (menuOpen) {
+      setMenuVisible(true);
+      return undefined;
+    }
+    const timeout = window.setTimeout(() => {
+      setMenuVisible(false);
+    }, 250);
+    return () => window.clearTimeout(timeout);
   }, [menuOpen]);
 
   const navEntries = useMemo<NavEntry[]>(() => {
@@ -209,72 +233,106 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
           </a>
           <button
             type="button"
-            className="rounded-full border px-3 py-2 text-sm md:hidden"
+            className="inline-flex items-center justify-center rounded-full border p-2 text-sm md:hidden"
             onClick={() => setMenuOpen((prev) => !prev)}
             aria-expanded={menuOpen}
             aria-controls={MOBILE_MENU_ID}
+            aria-label={menuOpen ? 'Затвори навигацията' : 'Отвори навигацията'}
           >
-            ☰
+            {menuOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
           </button>
         </div>
       </div>
-      {menuOpen && (
-        <div id={MOBILE_MENU_ID} className="border-t bg-white md:hidden" data-nav-panel>
-          <div className="space-y-3 px-4 py-4">
-              <div className="flex gap-2">
+      {menuVisible && (
+        <>
+          <div
+            className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ease-out md:hidden ${
+              menuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
+            }`}
+            aria-hidden="true"
+            onClick={() => setMenuOpen(false)}
+          />
+          <div
+            id={MOBILE_MENU_ID}
+            className={`fixed inset-y-0 left-0 z-50 flex w-full max-w-xs flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${
+              menuOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
+            data-nav-panel
+            role={menuOpen ? 'dialog' : undefined}
+            aria-modal={menuOpen ? 'true' : undefined}
+            aria-hidden={menuOpen ? undefined : 'true'}
+          >
+            <div className="flex items-center justify-between border-b px-4 py-4">
+              <span className="text-sm font-semibold uppercase tracking-wide text-red-600">{brandLines[0]}</span>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border text-red-600 hover:bg-red-50"
+                aria-label="Затвори менюто"
+              >
+                <X size={18} aria-hidden="true" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4 py-6">
+              <div className="mb-6 flex flex-wrap gap-2">
                 {LANG_OPTIONS.map((code) => (
                   <button
                     key={code}
                     type="button"
                     onClick={() => onLangChange(code)}
-                    className={`rounded-full px-2 py-1 text-xs font-semibold transition ${
-                      lang === code ? 'bg-red-600 text-white' : 'border'
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      lang === code ? 'bg-red-600 text-white' : 'border border-red-100 text-red-600'
                     }`}
                   >
                     {code.toUpperCase()}
                   </button>
                 ))}
               </div>
-              {navEntries.map(({ label, item }) => {
-                const isSection = item.type === 'section';
-                const isActive = isSection
-                  ? activeSection === item.section
-                  : activeRoute === item.to;
-                const baseClasses = 'block w-full rounded-xl px-3 py-2 text-left text-sm transition';
-                const className = `${baseClasses} ${
-                  isActive ? 'bg-red-100 text-red-700' : 'hover:bg-neutral-100'
-                }`;
+              <nav className="flex flex-col gap-4" aria-label="Мобилна навигация">
+                {navEntries.map(({ label, item }) => {
+                  const isSection = item.type === 'section';
+                  const isActive = isSection
+                    ? activeSection === item.section
+                    : activeRoute === item.to;
+                  const className = `block text-left text-lg font-semibold transition-colors ${
+                    isActive ? 'text-red-700' : 'text-red-600 hover:text-red-700'
+                  }`;
 
-                if (isSection) {
+                  if (isSection) {
+                    return (
+                      <button
+                        key={`${item.type}-${label}`}
+                        type="button"
+                        onClick={() => handleSection(item.section)}
+                        className={`${className} w-full`}
+                        aria-current={isActive ? 'true' : undefined}
+                      >
+                        {label}
+                      </button>
+                    );
+                  }
+
                   return (
-                    <button
+                    <Link
                       key={`${item.type}-${label}`}
-                      type="button"
-                      onClick={() => handleSection(item.section)}
+                      to={item.to}
                       className={className}
-                      aria-current={isActive ? 'true' : undefined}
+                      onClick={() => handleRoute(item.to)}
+                      aria-current={isActive ? 'page' : undefined}
                     >
                       {label}
-                    </button>
+                    </Link>
                   );
-                }
-
-                return (
-                  <Link
-                    key={`${item.type}-${label}`}
-                    to={item.to}
-                    className={className}
-                    onClick={() => handleRoute(item.to)}
-                    aria-current={isActive ? 'page' : undefined}
-                  >
-                    {label}
-                  </Link>
-                );
-              })}
-              <div className="flex gap-2">
+                })}
+              </nav>
+            </div>
+            <div className="border-t px-4 py-4">
+              <div className="flex flex-col gap-3">
                 <a
                   href={`tel:${PHONE_NUMBER}`}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 px-3 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
+                  onClick={() => setMenuOpen(false)}
                 >
                   {callLabel}
                   <Phone size={16} />
@@ -285,13 +343,14 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
                     setMenuOpen(false);
                     onMobileCtaClick();
                   }}
-                  className="w-full rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white"
+                  className="w-full rounded-2xl border border-red-600 px-3 py-3 text-sm font-semibold text-red-600"
                 >
                   {mobileCtaLabel}
                 </button>
               </div>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

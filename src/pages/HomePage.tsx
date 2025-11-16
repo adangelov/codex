@@ -20,8 +20,7 @@ import {
   Phone,
   Star,
   Stethoscope,
-  User,
-  X
+  User
 } from 'lucide-react';
 
 import { i18n, type Lang, type Strings } from '../i18n';
@@ -453,7 +452,7 @@ export default function HomePage() {
             onClick={closeMedicalModal}
           >
             <div
-              className="relative w-full max-w-3xl rounded-3xl bg-white p-6 shadow-xl sm:p-8"
+              className="relative w-full max-w-3xl rounded-3xl bg-white p-6 shadow-xl sm:p-8 max-h-[calc(100vh-3rem)] overflow-y-auto sm:max-h-[calc(100vh-4rem)]"
               role="dialog"
               aria-modal="true"
               aria-labelledby={medicalModalTitleId}
@@ -463,12 +462,12 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={closeMedicalModal}
-                className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 bg-neutral-50 text-lg font-semibold text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                 aria-label={t.medicalModalClose}
               >
-                <X size={18} />
+                <span aria-hidden="true">×</span>
               </button>
-              <div className="space-y-4 text-sm text-neutral-700">
+              <div className="space-y-4 pt-4 text-sm text-neutral-700">
                 <div>
                   <h3 id={medicalModalTitleId} className="text-xl font-semibold text-neutral-900">
                     {t.medicalModalTitle}

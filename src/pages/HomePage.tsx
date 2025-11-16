@@ -28,6 +28,7 @@ import { NAV_SECTION_IDS, type NavSection } from '../navigation';
 import { SITE_VERSION } from '../siteVersion';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import SiteHeader from '../components/SiteHeader';
+import CourseHighlightItem from '../components/CourseHighlightItem';
 
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
@@ -693,12 +694,9 @@ export default function HomePage() {
                   </div>
                   <div className="mt-2 text-2xl font-semibold text-neutral-900">{t.bStandardPrice}</div>
                 </div>
-                <ul className="mt-6 space-y-2 text-sm text-neutral-700">
+                <ul className="mt-6 space-y-3">
                   {t.bStandardHighlights.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
-                      <span>{item}</span>
-                    </li>
+                    <CourseHighlightItem key={item} text={item} />
                   ))}
                 </ul>
                 <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:gap-2">
@@ -736,12 +734,9 @@ export default function HomePage() {
                     ))}
                   </ul>
                 </div>
-                <ul className="mt-6 space-y-2 text-sm text-neutral-700">
+                <ul className="mt-6 space-y-3">
                   {t.refreshHighlights.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
-                      <span>{item}</span>
-                    </li>
+                    <CourseHighlightItem key={item} text={item} />
                   ))}
                 </ul>
                 <div className="mt-auto flex justify-center pt-6">

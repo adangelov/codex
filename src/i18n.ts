@@ -4,7 +4,7 @@ export type Lang = 'bg' | 'en' | 'ru';
 
 export const i18n = {
   bg: {
-    brand: 'РУМИ · Автошкола',
+    brand: 'Шофьорски курсове\nДимитър Димитров',
     nav: ['Как протича', 'Курсове', 'Категория B', 'Инструктор', 'FAQ', 'Контакти'],
     heroTitle: 'Увереното шофиране започва тук.',
     heroLead:
@@ -165,7 +165,7 @@ export const i18n = {
     locale: 'bg-BG'
   },
   en: {
-    brand: 'RUMI · Driving School',
+    brand: 'Driving Courses\nDimitar Dimitrov',
     nav: ['How it works', 'Courses', 'Category B', 'Instructor', 'FAQ', 'Contacts'],
     heroTitle: 'Confident driving starts here.',
     heroLead:
@@ -326,7 +326,7 @@ export const i18n = {
     locale: 'en-US'
   },
   ru: {
-    brand: 'РУМИ · Автошкола',
+    brand: 'Курсы вождения\nДимитар Димитров',
     nav: ['Как проходит', 'Курсы', 'Категория B', 'Инструктор', 'Вопросы', 'Контакты'],
     heroTitle: 'Уверенное вождение начинается здесь.',
     heroLead:

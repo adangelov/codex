@@ -14,6 +14,7 @@ import {
   Home,
   Info,
   Mail,
+  MessageCircle,
   MapPin,
   MessageSquareText,
   Phone,

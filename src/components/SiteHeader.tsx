@@ -247,7 +247,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
       {menuVisible && (
         <>
           <div
-            className={`fixed inset-0 z-[80] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out md:hidden ${
+            className={`fixed inset-0 z-[80] bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-out md:hidden ${
               menuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
             }`}
             aria-hidden="true"
@@ -257,7 +257,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
             id={MOBILE_MENU_ID}
             ref={menuPanelRef}
             tabIndex={-1}
-            className={`fixed inset-x-0 top-0 z-[90] flex h-full flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${
+            className={`fixed inset-x-0 top-0 z-[90] flex min-h-screen flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:hidden ${
               menuOpen ? 'translate-y-0' : '-translate-y-full'
             }`}
             data-nav-panel
@@ -277,81 +277,79 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
                 <X size={18} aria-hidden="true" />
               </button>
             </div>
-            <div className="flex-1 px-4 pb-6 pt-4">
-              <div className="max-h-[calc(100vh-4.5rem)] overflow-y-auto">
-                <div className="space-y-8">
-                  <div className="flex flex-wrap gap-2">
-                    {LANG_OPTIONS.map((code) => (
-                      <button
-                        key={code}
-                        type="button"
-                        onClick={() => onLangChange(code)}
-                        className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                          lang === code ? 'bg-red-600 text-white' : 'border border-red-100 text-red-600'
-                        }`}
-                      >
-                        {code.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
-                  <nav className="flex flex-col gap-4" aria-label="Мобилна навигация">
-                    {navEntries.map(({ label, item }) => {
-                      const isSection = item.type === 'section';
-                      const isActive = isSection
-                        ? activeSection === item.section
-                        : activeRoute === item.to;
-                      const className = `block text-left text-lg font-semibold transition-colors ${
-                        isActive ? 'text-red-700' : 'text-red-600 hover:text-red-700'
-                      }`;
+            <div className="flex-1 overflow-y-auto px-4 pb-8 pt-4">
+              <div className="space-y-8">
+                <div className="flex flex-wrap gap-2">
+                  {LANG_OPTIONS.map((code) => (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => onLangChange(code)}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                        lang === code ? 'bg-red-600 text-white' : 'border border-red-100 text-red-600'
+                      }`}
+                    >
+                      {code.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+                <nav className="flex flex-col gap-4" aria-label="Мобилна навигация">
+                  {navEntries.map(({ label, item }) => {
+                    const isSection = item.type === 'section';
+                    const isActive = isSection
+                      ? activeSection === item.section
+                      : activeRoute === item.to;
+                    const className = `block text-left text-lg font-semibold transition-colors ${
+                      isActive ? 'text-red-700' : 'text-red-600 hover:text-red-700'
+                    }`;
 
-                      if (isSection) {
-                        return (
-                          <button
-                            key={`${item.type}-${label}`}
-                            type="button"
-                            onClick={() => handleSection(item.section)}
-                            className={`${className} w-full`}
-                            aria-current={isActive ? 'true' : undefined}
-                          >
-                            {label}
-                          </button>
-                        );
-                      }
-
+                    if (isSection) {
                       return (
-                        <Link
+                        <button
                           key={`${item.type}-${label}`}
-                          to={item.to}
-                          className={className}
-                          onClick={() => handleRoute(item.to)}
-                          aria-current={isActive ? 'page' : undefined}
+                          type="button"
+                          onClick={() => handleSection(item.section)}
+                          className={`${className} w-full`}
+                          aria-current={isActive ? 'true' : undefined}
                         >
                           {label}
-                        </Link>
+                        </button>
                       );
-                    })}
-                  </nav>
-                  <div className="border-t pt-4">
-                    <div className="flex flex-col gap-3">
-                      <a
-                        href={`tel:${PHONE_NUMBER}`}
-                        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 px-3 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
-                        onClick={() => setMenuOpen(false)}
+                    }
+
+                    return (
+                      <Link
+                        key={`${item.type}-${label}`}
+                        to={item.to}
+                        className={className}
+                        onClick={() => handleRoute(item.to)}
+                        aria-current={isActive ? 'page' : undefined}
                       >
-                        {callLabel}
-                        <Phone size={16} />
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMenuOpen(false);
-                          onMobileCtaClick();
-                        }}
-                        className="w-full rounded-2xl border border-red-600 px-3 py-3 text-sm font-semibold text-red-600"
-                      >
-                        {mobileCtaLabel}
-                      </button>
-                    </div>
+                        {label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+                <div className="border-t pt-4">
+                  <div className="flex flex-col gap-3">
+                    <a
+                      href={`tel:${PHONE_NUMBER}`}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 px-3 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {callLabel}
+                      <Phone size={16} />
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMenuOpen(false);
+                        onMobileCtaClick();
+                      }}
+                      className="w-full rounded-2xl border border-red-600 px-3 py-3 text-sm font-semibold text-red-600"
+                    >
+                      {mobileCtaLabel}
+                    </button>
                   </div>
                 </div>
               </div>

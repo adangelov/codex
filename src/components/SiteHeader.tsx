@@ -273,7 +273,7 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
                 <X size={18} aria-hidden="true" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto px-4 pb-8 pt-4">
+            <div className="max-h-[calc(100vh-4.5rem)] overflow-y-auto px-4 pb-8 pt-4 touch-pan-y">
               <div className="space-y-8">
                 <div className="flex flex-wrap gap-2">
                   {LANG_OPTIONS.map((code) => (

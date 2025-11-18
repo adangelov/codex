@@ -64,11 +64,8 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
 
   useEffect(() => {
     if (!menuOpen) {
-      document.body.style.removeProperty('overflow');
       return undefined;
     }
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setMenuOpen(false);
@@ -76,7 +73,6 @@ const SiteHeader = forwardRef<HTMLElement | null, SiteHeaderProps>(function Site
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [menuOpen]);

@@ -1,4 +1,4 @@
-export const VERSION = 11;
+export const VERSION = 12;
 
 export type Lang = 'bg' | 'en' | 'ru';
 
@@ -106,6 +106,9 @@ export const i18n = {
     carSection: 'Автомобил',
     carBullet: 'Hyundai i30 · дизел · ръчна шестстепенна скоростна кутия',
     reviews: 'Отзиви',
+    reviewNavigationLabel: 'Навигация на отзиви',
+    reviewPreviousLabel: 'Предишен отзив',
+    reviewNextLabel: 'Следващ отзив',
     contacts: 'Контакти',
     mapTitle: 'Карта: Автошкола Руми',
     hours: 'Пн–Пт 09:00–19:00, Сб 10:00–15:00',
@@ -278,6 +281,9 @@ export const i18n = {
     carSection: 'Car',
     carBullet: 'Hyundai i30 · diesel · six-speed manual gearbox',
     reviews: 'Reviews',
+    reviewNavigationLabel: 'Review navigation',
+    reviewPreviousLabel: 'Previous review',
+    reviewNextLabel: 'Next review',
     contacts: 'Contacts',
     mapTitle: 'Map: Rumi Driving School',
     hours: 'Mon–Fri 09:00–19:00, Sat 10:00–15:00',
@@ -450,6 +456,9 @@ export const i18n = {
     carSection: 'Автомобиль',
     carBullet: 'Hyundai i30 · дизель · шестиступенчатая механика',
     reviews: 'Отзывы',
+    reviewNavigationLabel: 'Навигация по отзывам',
+    reviewPreviousLabel: 'Предыдущий отзыв',
+    reviewNextLabel: 'Следующий отзыв',
     contacts: 'Контакты',
     mapTitle: 'Карта: Автошкола Руми',
     hours: 'Пн–Пт 09:00–19:00, Сб 10:00–15:00',

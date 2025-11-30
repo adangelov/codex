@@ -259,6 +259,10 @@ export default function HomePage() {
   const [isMedicalModalOpen, setMedicalModalOpen] = useState(false);
   const theoryCalendarRef = useRef<HTMLDivElement | null>(null);
   const [isReviewPaused, setIsReviewPaused] = useState(false);
+  const [reviewStep, setReviewStep] = useState(0);
+  const [reviewTouchStart, setReviewTouchStart] = useState<number | null>(null);
+  const reviewContainerRef = useRef<HTMLDivElement | null>(null);
+  const reviewTrackRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!startDate && upcomingStarts.length > 0) {
@@ -321,6 +325,65 @@ export default function HomePage() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMedicalModalOpen]);
+
+  const updateReviewStep = useCallback(() => {
+    const track = reviewTrackRef.current;
+    if (!track) {
+      return;
+    }
+    const firstCard = track.querySelector<HTMLElement>('[data-review-card="true"]');
+    const gapValue = parseFloat(getComputedStyle(track).columnGap || '0');
+    const measuredWidth = firstCard?.getBoundingClientRect().width ?? 0;
+    const fallbackWidth = track.parentElement?.clientWidth ?? 320;
+    const step = (measuredWidth || fallbackWidth) + gapValue;
+    setReviewStep(step);
+  }, []);
+
+  useEffect(() => {
+    updateReviewStep();
+    window.addEventListener('resize', updateReviewStep);
+    return () => window.removeEventListener('resize', updateReviewStep);
+  }, [updateReviewStep]);
+
+  useEffect(() => {
+    if (!isReviewPaused && reviewContainerRef.current) {
+      reviewContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  }, [isReviewPaused]);
+
+  const handleReviewShift = useCallback(
+    (direction: 1 | -1) => {
+      if (!reviewContainerRef.current || !reviewStep) {
+        return;
+      }
+      setIsReviewPaused(true);
+      reviewContainerRef.current.scrollBy({ left: direction * reviewStep, behavior: 'smooth' });
+    },
+    [reviewStep]
+  );
+
+  const handleReviewTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    setIsReviewPaused(true);
+    setReviewTouchStart(event.touches[0]?.clientX ?? null);
+  };
+
+  const handleReviewTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const startX = reviewTouchStart;
+    setReviewTouchStart(null);
+    if (startX === null) {
+      setIsReviewPaused(false);
+      return;
+    }
+    const endX = event.changedTouches[0]?.clientX ?? startX;
+    const deltaX = endX - startX;
+    const swipeThreshold = 40;
+    if (Math.abs(deltaX) > swipeThreshold) {
+      handleReviewShift(deltaX > 0 ? -1 : 1);
+      setIsReviewPaused(true);
+    } else {
+      setIsReviewPaused(false);
+    }
+  };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -891,19 +954,42 @@ export default function HomePage() {
             <h2 className="text-2xl font-bold md:text-3xl">{t.reviews}</h2>
             <div
               className="relative mt-6 overflow-hidden"
+              ref={reviewContainerRef}
               onMouseEnter={() => setIsReviewPaused(true)}
               onMouseLeave={() => setIsReviewPaused(false)}
-              onTouchStart={() => setIsReviewPaused(true)}
-              onTouchEnd={() => setIsReviewPaused(false)}
+              onTouchStart={handleReviewTouchStart}
+              onTouchEnd={handleReviewTouchEnd}
               onTouchCancel={() => setIsReviewPaused(false)}
             >
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-white via-white to-transparent" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white via-white to-transparent" />
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-1 sm:px-3" aria-label={t.reviewNavigationLabel}>
+                <button
+                  type="button"
+                  className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-700 shadow-sm transition hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+                  aria-label={t.reviewPreviousLabel}
+                  onClick={() => handleReviewShift(-1)}
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type="button"
+                  className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-700 shadow-sm transition hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+                  aria-label={t.reviewNextLabel}
+                  onClick={() => handleReviewShift(1)}
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
               <div
+                ref={reviewTrackRef}
                 className={`flex min-w-max gap-4 animate-review-marquee${isReviewPaused ? ' review-marquee-paused' : ''}`}
               >
                 {[...REVIEWS, ...REVIEWS].map((review, index) => (
                   <div
                     key={`${review.name}-${index}`}
                     className="w-[320px] shrink-0 rounded-2xl border bg-white p-5 shadow-sm"
+                    data-review-card="true"
                   >
                     <div className="mb-2 flex items-center gap-1 text-yellow-600">
                       {Array.from({ length: 5 }).map((_, starIndex) => (

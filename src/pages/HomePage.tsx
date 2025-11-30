@@ -258,6 +258,7 @@ export default function HomePage() {
   const headerRef = useRef<HTMLElement | null>(null);
   const [isMedicalModalOpen, setMedicalModalOpen] = useState(false);
   const theoryCalendarRef = useRef<HTMLDivElement | null>(null);
+  const [isReviewPaused, setIsReviewPaused] = useState(false);
 
   useEffect(() => {
     if (!startDate && upcomingStarts.length > 0) {
@@ -888,8 +889,17 @@ export default function HomePage() {
         <section className="border-t bg-white">
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.reviews}</h2>
-            <div className="relative mt-6 overflow-hidden">
-              <div className="flex min-w-max gap-4 animate-review-marquee">
+            <div
+              className="relative mt-6 overflow-hidden"
+              onMouseEnter={() => setIsReviewPaused(true)}
+              onMouseLeave={() => setIsReviewPaused(false)}
+              onTouchStart={() => setIsReviewPaused(true)}
+              onTouchEnd={() => setIsReviewPaused(false)}
+              onTouchCancel={() => setIsReviewPaused(false)}
+            >
+              <div
+                className={`flex min-w-max gap-4 animate-review-marquee${isReviewPaused ? ' review-marquee-paused' : ''}`}
+              >
                 {[...REVIEWS, ...REVIEWS].map((review, index) => (
                   <div
                     key={`${review.name}-${index}`}

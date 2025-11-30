@@ -26,3 +26,7 @@ a {
 .animate-review-marquee {
   animation: review-marquee 45s linear infinite;
 }
+
+.review-marquee-paused {
+  animation-play-state: paused;
+}

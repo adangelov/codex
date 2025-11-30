@@ -203,6 +203,50 @@ const DEFAULT_CONTACT_FORM: ContactFormState = {
   course: 'b_standard',
   gdpr: false
 };
+
+type ReviewCard = {
+  name: string;
+  text: string;
+};
+
+const REVIEWS: ReviewCard[] = [
+  {
+    name: 'Мария Т.',
+    text: 'Инструкторът е търпелив и обяснява всяка ситуация на пътя без излишно напрежение.'
+  },
+  {
+    name: 'Иван П.',
+    text: 'Курсовете са много добре организирани и графикът ми пасна идеално – взех книжка от първия опит.'
+  },
+  {
+    name: 'Виктория Р.',
+    text: 'Практическите часове бяха насочени към реални градски ситуации и ме подготвиха за изпита.'
+  },
+  {
+    name: 'Олена К.',
+    text: 'Дойдох от Украйна и получих топло посрещане и ясни указания на разбираем български.'
+  },
+  {
+    name: 'Георги Л.',
+    text: 'Много добро оборудване на автомобилите и спокойна атмосфера по време на уроците.'
+  },
+  {
+    name: 'Сергій М.',
+    text: 'Инструкторът ми помогна да се адаптирам към местните правила и да карам уверено още от първите часове.'
+  },
+  {
+    name: 'Петър Д.',
+    text: 'Теорията е поднесена стъпка по стъпка и винаги има време за допълнителни въпроси.'
+  },
+  {
+    name: 'Антоанета Ж.',
+    text: 'Гъвкавостта при насрочването на часове ми позволи да комбинирам обучението с работата.'
+  },
+  {
+    name: 'Николай С.',
+    text: 'Благодарение на постоянната обратна връзка коригирах грешките си и развих увереност зад волана.'
+  }
+];
 export default function HomePage() {
   const [lang, setLang] = useState<Lang>('bg');
   const t = i18n[lang];
@@ -219,6 +263,7 @@ export default function HomePage() {
   const headerRef = useRef<HTMLElement | null>(null);
   const [isMedicalModalOpen, setMedicalModalOpen] = useState(false);
   const theoryCalendarRef = useRef<HTMLDivElement | null>(null);
+  const marqueeReviews = useMemo(() => [...REVIEWS, ...REVIEWS], []);
 
   useEffect(() => {
     if (!startDate && upcomingStarts.length > 0) {
@@ -847,20 +892,23 @@ export default function HomePage() {
         <section className="border-t bg-white">
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.reviews}</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <div key={item} className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <div className="mb-2 flex items-center gap-1 text-yellow-600">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <Star key={index} size={16} fill="currentColor" />
-                    ))}
+            <div className="relative mt-6 overflow-hidden">
+              <div className="flex w-max gap-4 review-marquee" aria-label="Customer reviews carousel">
+                {marqueeReviews.map((review, index) => (
+                  <div
+                    key={`${review.name}-${index}`}
+                    className="min-w-[260px] max-w-[360px] shrink-0 rounded-2xl border bg-white p-5 shadow-sm md:min-w-[300px]"
+                  >
+                    <div className="mb-2 flex items-center gap-1 text-yellow-600">
+                      {Array.from({ length: 5 }).map((_, starIndex) => (
+                        <Star key={starIndex} size={16} fill="currentColor" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-neutral-700">“{review.text}”</p>
+                    <div className="mt-3 text-xs text-neutral-500">— {review.name}</div>
                   </div>
-                  <p className="text-sm text-neutral-700">
-                    “Страхотно отношение и ясни обяснения. Създадох увереност и взех изпита от първия път!”
-                  </p>
-                  <div className="mt-3 text-xs text-neutral-500">— Иван П.</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>

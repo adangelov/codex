@@ -13,3 +13,20 @@ body {
 a {
   color: inherit;
 }
+
+@keyframes review-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.review-marquee {
+  animation: review-marquee 42s linear infinite;
+}
+
+.review-marquee:hover {
+  animation-play-state: paused;
+}

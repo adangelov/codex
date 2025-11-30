@@ -109,12 +109,10 @@ export default function TermsPage() {
         navLabels={t.nav}
         brandLabel={t.brand}
         callLabel={t.call}
-        mobileCtaLabel={t.contacts}
         activeSection={null}
         activeRoute={location.pathname}
         onLangChange={setLang}
         onSectionSelect={(section) => navigate('/', { state: { scrollTo: section } })}
-        onMobileCtaClick={() => navigate('/', { state: { scrollTo: 'contact' } })}
         onBrandClick={() => navigate('/')}
       />
 

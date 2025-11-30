@@ -436,13 +436,11 @@ export default function HomePage() {
         navLabels={t.nav}
         brandLabel={t.brand}
         callLabel={t.call}
-        mobileCtaLabel={t.ctaEnroll}
         activeSection={activeSection}
         activeRoute={location.pathname}
         isHomePage
         onLangChange={setLang}
         onSectionSelect={handleScrollTo}
-        onMobileCtaClick={() => handleScrollTo('contact')}
         onBrandClick={handleBrandClick}
       />
 

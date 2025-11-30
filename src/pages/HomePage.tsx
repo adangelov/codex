@@ -33,6 +33,45 @@ import Footer from '../components/Footer';
 
 const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
 
+const REVIEWS = [
+  {
+    quote: 'Страхотно отношение и ясни обяснения. Създадох увереност и взех изпита от първия път!',
+    name: 'Иван П.'
+  },
+  {
+    quote: 'Инструкторът обяснява спокойно и систематично, а часовете минават неусетно.',
+    name: 'Мария Л.'
+  },
+  {
+    quote: 'Много ценни примери от практиката и отзивчив екип, който наистина помага.',
+    name: 'Георги Н.'
+  },
+  {
+    quote: 'Организацията е безупречна, а графикът е гъвкав и удобен.',
+    name: 'Десислава Р.'
+  },
+  {
+    quote: 'Дойдох от Харков и бях приет с разбиране. Подкрепата беше голяма през целия курс.',
+    name: 'Олена К.'
+  },
+  {
+    quote: 'Школата ме научи да мисля спокойно на пътя и да реагирам уверено.',
+    name: 'Петър С.'
+  },
+  {
+    quote: 'Много добра теория и още по-добра практика. Чувствах се сигурна зад волана.',
+    name: 'Светлана М.'
+  },
+  {
+    quote: 'Получих детайлни обяснения за всеки маневър и подкрепа до самия изпит.',
+    name: 'Андрій М.'
+  },
+  {
+    quote: 'Лекциите са интересни, а карането е структурирано и спокойното отношение помага много.',
+    name: 'Ралица Ж.'
+  }
+];
+
 function mondayOnOrBefore(date: Date): Date {
   const clone = new Date(date);
   const day = clone.getDay();
@@ -849,20 +888,23 @@ export default function HomePage() {
         <section className="border-t bg-white">
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.reviews}</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <div key={item} className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <div className="mb-2 flex items-center gap-1 text-yellow-600">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <Star key={index} size={16} fill="currentColor" />
-                    ))}
+            <div className="relative mt-6 overflow-hidden">
+              <div className="flex min-w-max gap-4 animate-review-marquee">
+                {[...REVIEWS, ...REVIEWS].map((review, index) => (
+                  <div
+                    key={`${review.name}-${index}`}
+                    className="w-[320px] shrink-0 rounded-2xl border bg-white p-5 shadow-sm"
+                  >
+                    <div className="mb-2 flex items-center gap-1 text-yellow-600">
+                      {Array.from({ length: 5 }).map((_, starIndex) => (
+                        <Star key={starIndex} size={16} fill="currentColor" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-neutral-700">“{review.quote}”</p>
+                    <div className="mt-3 text-xs text-neutral-500">— {review.name}</div>
                   </div>
-                  <p className="text-sm text-neutral-700">
-                    “Страхотно отношение и ясни обяснения. Създадох увереност и взех изпита от първия път!”
-                  </p>
-                  <div className="mt-3 text-xs text-neutral-500">— Иван П.</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>

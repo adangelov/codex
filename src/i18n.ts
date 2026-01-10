@@ -1,4 +1,4 @@
-export const VERSION = 12;
+export const VERSION = 13;
 
 export type Lang = 'bg' | 'en' | 'ru';
 
@@ -34,7 +34,7 @@ export const i18n = {
     bStandard: 'Категория B – стандартен курс',
     bStandardDesc:
       'Пълен курс теория (40 учебни часа) + 31 учебни часа практика, вътрешни изпити и включени учебни материали.',
-    bStandardPrice: '1 500 лв/766,95 €',
+    bStandardPrice: '750 €/1466,85 лв',
     bStandardHighlights: [
       'Онлайн учебници.',
       'Вътрешен изпит теория и практика',
@@ -112,7 +112,7 @@ export const i18n = {
     contacts: 'Контакти',
     mapTitle: 'Карта: Автошкола Руми',
     hours: 'Пн–Пт 09:00–19:00, Сб 10:00–15:00',
-    mapAddress: 'ж.к. Трошево, "бул. Владислав Варненчик" 184, 9009, Варна',
+    mapAddress: 'ж.к. Победа, "ул. Орех" 12, 9009, Варна',
     formTitle: 'Записване за курс',
     formName: 'Име и фамилия',
     formPhone: 'Телефон',
@@ -210,7 +210,7 @@ export const i18n = {
     bStandard: 'Category B – standard course',
     bStandardDesc:
       'Complete theory + 31 driving lessons, internal exams and learning materials included.',
-    bStandardPrice: 'BGN 1,500 / €766.95',
+    bStandardPrice: '750 €/1466,85 лв',
     bStandardHighlights: [
       'Course books + online prep tools',
       'Internal theory & driving mock exams',
@@ -287,7 +287,7 @@ export const i18n = {
     contacts: 'Contacts',
     mapTitle: 'Map: Rumi Driving School',
     hours: 'Mon–Fri 09:00–19:00, Sat 10:00–15:00',
-    mapAddress: 'zh.k. Troshevo, "Vladislav Varnenchik" Blvd 184, 9009, Varna',
+    mapAddress: 'zh.k. Pobeda, "Oreh" St 12, 9009, Varna',
     formTitle: 'Course enrollment',
     formName: 'Full name',
     formPhone: 'Phone',
@@ -385,7 +385,7 @@ export const i18n = {
     bStandard: 'Категория B – стандартный курс',
     bStandardDesc:
       'Полный курс: теория + 31 урок практики, внутренние экзамены и включённые учебные материалы.',
-    bStandardPrice: '1 500 лв/766,95 €',
+    bStandardPrice: '750 €/1466,85 лв',
     bStandardHighlights: [
       'Учебники и онлайн-подготовка',
       'Внутренние экзамены теория и практика',
@@ -462,7 +462,7 @@ export const i18n = {
     contacts: 'Контакты',
     mapTitle: 'Карта: Автошкола Руми',
     hours: 'Пн–Пт 09:00–19:00, Сб 10:00–15:00',
-    mapAddress: 'ж.к. Трошево, бул. «Владислав Варненчик» 184, 9009, Варна',
+    mapAddress: 'ж.к. Победа, ул. «Орех» 12, 9009, Варна',
     formTitle: 'Запись на курс',
     formName: 'Имя и фамилия',
     formPhone: 'Телефон',

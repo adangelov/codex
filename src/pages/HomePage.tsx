@@ -668,7 +668,7 @@ export default function HomePage() {
                   {t.ctaEnrollNow}
                 </button>
                 <a
-                  href="tel:+3598977777430"
+                  href="tel:+3598777777430"
                   className="inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm hover:bg-neutral-100"
                 >
                   <Phone size={18} /> +359 877 777 430

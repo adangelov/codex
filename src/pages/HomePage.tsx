@@ -671,7 +671,7 @@ export default function HomePage() {
                   href="tel:+3598977777430"
                   className="inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm hover:bg-neutral-100"
                 >
-                  <Phone size={18} /> +359 8977 777 430
+                  <Phone size={18} /> +359 877 777 430
                 </a>
               </div>
 
@@ -1004,7 +1004,7 @@ export default function HomePage() {
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               <div className="space-y-3 text-sm text-neutral-700">
                 <div className="flex items-center gap-2">
-                  <Phone size={18} /> +359 8977 777 430
+                  <Phone size={18} /> +359 877 777 430
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail size={18} />

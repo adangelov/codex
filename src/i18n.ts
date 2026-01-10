@@ -1,4 +1,4 @@
-export const VERSION = 13;
+export const VERSION = 14;
 
 export type Lang = 'bg' | 'en' | 'ru';
 
@@ -57,7 +57,7 @@ export const i18n = {
     intensiveTitle: 'Категория B – интензивен курс',
     intensiveDesc:
       'Ускорена програма с комбинирани занятия и допълнителни практически упражнения.',
-    intensivePrice: '1 850 лв/945,90 €',
+    intensivePrice: '950 €/1858.04 лв',
     intensiveHighlights: [
       'Два пъти повече практика седмично',
       'Приоритетни часове и маршрут с инструктор',
@@ -159,10 +159,10 @@ export const i18n = {
     chooseDateRefresh: 'Избери дата за опреснителни',
     priceTitle: 'Цени — опреснителни/индивидуални',
     prices: [
-      'до 5 часа — 45 лв/час / 23,01 €/час',
-      '6–10 часа — 40 лв/час / 20,45 €/час',
-      '11–15 часа — 38 лв/час / 19,43 €/час',
-      '20–30 часа — 35 лв/час / 17,90 €/час'
+      'до 5 часа — 22 €/час / 43,03 лв/час',
+      '6–10 часа — 20 €/час / 39,12 лв/час',
+      '11–15 часа — 18 €/час / 35,20 лв/час',
+      '20–30 часа — 16 €/час / 31,29 лв/час'
     ],
     perHour: 'лв/час',
     footer: {
@@ -233,7 +233,7 @@ export const i18n = {
     intensiveTitle: 'Category B – intensive course',
     intensiveDesc:
       'Accelerated program with priority scheduling, combined sessions and extra driving drills.',
-    intensivePrice: 'BGN 1,850 / €945.90',
+    intensivePrice: '€950 / BGN 1858.04',
     intensiveHighlights: [
       'Twice the weekly driving practice',
       'Priority timeslots and tailored routes',
@@ -334,10 +334,10 @@ export const i18n = {
     chooseDateRefresh: 'Choose date for refresher',
     priceTitle: 'Prices — refresher/individual',
     prices: [
-      'up to 5 lessons — 45 BGN/hour / €23.01/hour',
-      '6–10 lessons — 40 BGN/hour / €20.45/hour',
-      '11–15 lessons — 38 BGN/hour / €19.43/hour',
-      '20–30 lessons — 35 BGN/hour / €17.90/hour'
+      'up to 5 lessons — €22/hour / BGN 43.03/hour',
+      '6–10 lessons — €20/hour / BGN 39.12/hour',
+      '11–15 lessons — €18/hour / BGN 35.20/hour',
+      '20–30 lessons — €16/hour / BGN 31.29/hour'
     ],
     perHour: 'BGN/hour',
     footer: {
@@ -408,7 +408,7 @@ export const i18n = {
     intensiveTitle: 'Категория B – интенсивный курс',
     intensiveDesc:
       'Ускоренная программа с приоритетным расписанием, комбинированными занятиями и дополнительной практикой.',
-    intensivePrice: '1 850 лв/945,90 €',
+    intensivePrice: '950 €/1858.04 лв',
     intensiveHighlights: [
       'Вдвое больше практики каждую неделю',
       'Приоритетные слоты и индивидуальные маршруты',
@@ -509,10 +509,10 @@ export const i18n = {
     chooseDateRefresh: 'Выберите дату для повторных',
     priceTitle: 'Цены — повторные/индивидуальные',
     prices: [
-      'до 5 часов — 45 лв/час / 23,01 €/час',
-      '6–10 часов — 40 лв/час / 20,45 €/час',
-      '11–15 часов — 38 лв/час / 19,43 €/час',
-      '20–30 часов — 35 лв/час / 17,90 €/час'
+      'до 5 часов — 22 €/час / 43,03 лв/час',
+      '6–10 часов — 20 €/час / 39,12 лв/час',
+      '11–15 часов — 18 €/час / 35,20 лв/час',
+      '20–30 часов — 16 €/час / 31,29 лв/час'
     ],
     perHour: 'лв/час',
     footer: {

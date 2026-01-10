@@ -31,7 +31,8 @@ import CourseHighlightItem from '../components/CourseHighlightItem';
 import Footer from '../components/Footer';
 
 
-const BASE_MONDAY = mondayOnOrBefore(new Date(2024, 0, 1));
+const BASE_START_DATE = new Date(2026, 0, 5);
+const COURSE_LENGTH_DAYS = 14;
 
 const REVIEWS = [
   {
@@ -72,63 +73,56 @@ const REVIEWS = [
   }
 ];
 
-function mondayOnOrBefore(date: Date): Date {
-  const clone = new Date(date);
-  const day = clone.getDay();
-  const diff = (day + 6) % 7;
-  clone.setDate(clone.getDate() - diff);
-  clone.setHours(0, 0, 0, 0);
-  return clone;
-}
-
 function monthName(year: number, month: number, locale: string) {
   return new Date(year, month, 1).toLocaleDateString(locale, {
     month: 'long',
     year: 'numeric'
   });
 }
-function getCycleStartMonday(date: Date, baseMonday: Date): Date | null {
+function getCycleStartDate(date: Date, baseStartDate: Date): Date | null {
   const millisPerDay = 24 * 60 * 60 * 1000;
   const diffDays = Math.floor(
     (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
-      Date.UTC(baseMonday.getFullYear(), baseMonday.getMonth(), baseMonday.getDate())) /
+      Date.UTC(baseStartDate.getFullYear(), baseStartDate.getMonth(), baseStartDate.getDate())) /
       millisPerDay
   );
-  const weekOffset = Math.floor(diffDays / 7);
-  const dayOfWeek = date.getDay();
-  const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
-  const phase = ((weekOffset % 3) + 3) % 3;
-  if (phase === 2 || !isWeekday) {
+  if (diffDays < 0) {
     return null;
   }
-  const cycleStartWeeks = weekOffset - phase;
-  const start = new Date(baseMonday);
-  start.setDate(start.getDate() + cycleStartWeeks * 7);
+  const cycleIndex = Math.floor(diffDays / COURSE_LENGTH_DAYS);
+  const start = new Date(baseStartDate);
+  start.setDate(start.getDate() + cycleIndex * COURSE_LENGTH_DAYS);
+  start.setHours(0, 0, 0, 0);
   return start;
 }
 
-function classifyTheoryDate(date: Date, baseMonday: Date) {
-  const start = getCycleStartMonday(date, baseMonday);
+function classifyTheoryDate(date: Date, baseStartDate: Date) {
+  const start = getCycleStartDate(date, baseStartDate);
   if (!start) {
     return { theory: false, start: false, startIso: null as string | null };
   }
+  const end = new Date(start);
+  end.setDate(end.getDate() + COURSE_LENGTH_DAYS);
   const iso = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}-${String(start.getDate()).padStart(2, '0')}`;
   const startSame =
     start.getFullYear() === date.getFullYear() &&
     start.getMonth() === date.getMonth() &&
     start.getDate() === date.getDate();
-  return { theory: true, start: startSame, startIso: iso };
+  const dayOfWeek = date.getDay();
+  const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+  const theory = (isWeekday || startSame) && date >= start && date < end;
+  return { theory, start: startSame, startIso: iso };
 }
 
-function listUpcomingStarts(baseMonday: Date, count = 12) {
+function listUpcomingStarts(baseStartDate: Date, count = 12) {
   const results: { iso: string; date: Date }[] = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   let weekIndex = 0;
   while (results.length < count && weekIndex < 160) {
-    const candidate = new Date(baseMonday);
+    const candidate = new Date(baseStartDate);
     candidate.setDate(candidate.getDate() + weekIndex * 7);
-    const classification = classifyTheoryDate(candidate, baseMonday);
+    const classification = classifyTheoryDate(candidate, baseStartDate);
     if (classification.start && candidate >= today) {
       const iso = `${candidate.getFullYear()}-${String(candidate.getMonth() + 1).padStart(2, '0')}-${String(candidate.getDate()).padStart(2, '0')}`;
       results.push({ iso, date: candidate });
@@ -142,14 +136,14 @@ interface SmallCalendarProps {
   value: Date;
   locale: string;
   weekdays: readonly string[];
-  baseMonday: Date;
+  baseStartDate: Date;
   selectedStart: string | null;
   onPrev: () => void;
   onNext: () => void;
   onPick: (iso: string) => void;
 }
 
-function SmallCalendar({ value, locale, weekdays, baseMonday, selectedStart, onPrev, onNext, onPick }: SmallCalendarProps) {
+function SmallCalendar({ value, locale, weekdays, baseStartDate, selectedStart, onPrev, onNext, onPick }: SmallCalendarProps) {
   const year = value.getFullYear();
   const month = value.getMonth();
   const first = new Date(year, month, 1);
@@ -195,7 +189,7 @@ function SmallCalendar({ value, locale, weekdays, baseMonday, selectedStart, onP
           }
           const iso = `${ym}-${String(day).padStart(2, '0')}`;
           const currentDate = new Date(year, month, day);
-          const { theory, start, startIso } = classifyTheoryDate(currentDate, baseMonday);
+          const { theory, start, startIso } = classifyTheoryDate(currentDate, baseStartDate);
           const isSelected = selectedStart && startIso === selectedStart;
           const baseClasses = 'h-8 rounded-md text-sm transition-colors';
           const className = theory
@@ -250,7 +244,7 @@ export default function HomePage() {
   const location = useLocation();
   const locationState = location.state as { scrollTo?: NavSection } | null;
   const [viewDate, setViewDate] = useState(() => new Date());
-  const upcomingStarts = useMemo(() => listUpcomingStarts(BASE_MONDAY, 12), []);
+  const upcomingStarts = useMemo(() => listUpcomingStarts(BASE_START_DATE, 12), []);
   const [startDate, setStartDate] = useState<string>(() => upcomingStarts[0]?.iso ?? '');
   const [formState, setFormState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [form, setForm] = useState<ContactFormState>(() => ({ ...DEFAULT_CONTACT_FORM }));
@@ -674,10 +668,10 @@ export default function HomePage() {
                   {t.ctaEnrollNow}
                 </button>
                 <a
-                  href="tel:+3598977777430"
+                  href="tel:+3598777777430"
                   className="inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm hover:bg-neutral-100"
                 >
-                  <Phone size={18} /> +359 8977 777 430
+                  <Phone size={18} /> +359 877 777 430
                 </a>
               </div>
 
@@ -695,7 +689,7 @@ export default function HomePage() {
                   value={viewDate}
                   locale={t.locale}
                   weekdays={t.weekdayShort}
-                  baseMonday={BASE_MONDAY}
+                  baseStartDate={BASE_START_DATE}
                   selectedStart={startDate || null}
                   onPrev={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}
                   onNext={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
@@ -1010,7 +1004,7 @@ export default function HomePage() {
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               <div className="space-y-3 text-sm text-neutral-700">
                 <div className="flex items-center gap-2">
-                  <Phone size={18} /> +359 8977 777 430
+                  <Phone size={18} /> +359 877 777 430
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail size={18} />

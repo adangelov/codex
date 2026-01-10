@@ -179,7 +179,7 @@ export default function CourseDetailsPage() {
                   {t.enroll}
                 </button>
                 <a
-                  href="tel:+3598977777430"
+                  href="tel:+3598777777430"
                   className="w-full inline-flex items-center justify-between gap-4 rounded-xl border px-4 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
                 >
                   <span className="inline-flex items-center gap-2">
@@ -187,7 +187,7 @@ export default function CourseDetailsPage() {
                     <span>{t.call}</span>
                   </span>
                   <span className="flex flex-col text-right text-xs leading-tight text-neutral-500">
-                    <span>+359 8977</span>
+                    <span>+359 877</span>
                     <span>777 430</span>
                   </span>
                 </a>

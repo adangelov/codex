@@ -19,7 +19,7 @@ const POLICY_SECTIONS = [
     content: [
       'Администратор на данните: Димитър Димитров',
       'Имейл за GDPR запитвания: office@karailesno.bg',
-      'Телефон: +359 8977 777 430'
+      'Телефон: +359 877 777 430'
     ]
   },
   {
@@ -97,7 +97,7 @@ const POLICY_SECTIONS = [
     title: '12. Контакт за GDPR въпроси',
     content: [
       'Имейл: office@karailesno.bg',
-      'Телефон: +359 8977 777 430'
+      'Телефон: +359 877 777 430'
     ]
   }
 ] as const;

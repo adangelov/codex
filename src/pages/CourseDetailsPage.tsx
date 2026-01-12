@@ -7,6 +7,7 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import SiteHeader from '../components/SiteHeader';
 import CourseHighlightItem from '../components/CourseHighlightItem';
 import Footer from '../components/Footer';
+import { categoryBGallery } from '../assets/gallery/categoryBGallery';
 
 export default function CourseDetailsPage() {
   const [lang, setLang] = useState<Lang>('bg');
@@ -22,21 +23,17 @@ export default function CourseDetailsPage() {
 
   const gallery = {
     main: {
-      src: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1600&q=80',
+      src: categoryBGallery.main,
       alt: t.galleryLabels.main
     },
     thumbs: [
       {
-        src: 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=800&q=80',
+        src: categoryBGallery.dash,
         alt: t.galleryLabels.dash
       },
       {
-        src: 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=800&q=80',
+        src: categoryBGallery.exterior,
         alt: t.galleryLabels.exterior
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1517940310602-0052c1d53016?auto=format&fit=crop&w=800&q=80',
-        alt: t.galleryLabels.class
       }
     ]
   } as const;

@@ -73,6 +73,8 @@ const REVIEWS = [
   }
 ];
 
+const SHOW_REVIEWS_SECTION = false;
+
 function monthName(year: number, month: number, locale: string) {
   return new Date(year, month, 1).toLocaleDateString(locale, {
     month: 'long',
@@ -943,61 +945,63 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="border-t bg-white">
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <h2 className="text-2xl font-bold md:text-3xl">{t.reviews}</h2>
-            <div
-              className="relative mt-6 overflow-hidden"
-              ref={reviewContainerRef}
-              onMouseEnter={() => setIsReviewPaused(true)}
-              onMouseLeave={() => setIsReviewPaused(false)}
-              onTouchStart={handleReviewTouchStart}
-              onTouchEnd={handleReviewTouchEnd}
-              onTouchCancel={() => setIsReviewPaused(false)}
-            >
-              <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-white via-white to-transparent" />
-              <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white via-white to-transparent" />
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-1 sm:px-3" aria-label={t.reviewNavigationLabel}>
-                <button
-                  type="button"
-                  className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-700 shadow-sm transition hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
-                  aria-label={t.reviewPreviousLabel}
-                  onClick={() => handleReviewShift(-1)}
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <button
-                  type="button"
-                  className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-700 shadow-sm transition hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
-                  aria-label={t.reviewNextLabel}
-                  onClick={() => handleReviewShift(1)}
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
+        {SHOW_REVIEWS_SECTION && (
+          <section className="border-t bg-white">
+            <div className="mx-auto max-w-6xl px-4 py-12">
+              <h2 className="text-2xl font-bold md:text-3xl">{t.reviews}</h2>
               <div
-                ref={reviewTrackRef}
-                className={`flex min-w-max gap-4 animate-review-marquee${isReviewPaused ? ' review-marquee-paused' : ''}`}
+                className="relative mt-6 overflow-hidden"
+                ref={reviewContainerRef}
+                onMouseEnter={() => setIsReviewPaused(true)}
+                onMouseLeave={() => setIsReviewPaused(false)}
+                onTouchStart={handleReviewTouchStart}
+                onTouchEnd={handleReviewTouchEnd}
+                onTouchCancel={() => setIsReviewPaused(false)}
               >
-                {[...REVIEWS, ...REVIEWS].map((review, index) => (
-                  <div
-                    key={`${review.name}-${index}`}
-                    className="w-[320px] shrink-0 rounded-2xl border bg-white p-5 shadow-sm"
-                    data-review-card="true"
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-white via-white to-transparent" />
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white via-white to-transparent" />
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-1 sm:px-3" aria-label={t.reviewNavigationLabel}>
+                  <button
+                    type="button"
+                    className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-700 shadow-sm transition hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+                    aria-label={t.reviewPreviousLabel}
+                    onClick={() => handleReviewShift(-1)}
                   >
-                    <div className="mb-2 flex items-center gap-1 text-yellow-600">
-                      {Array.from({ length: 5 }).map((_, starIndex) => (
-                        <Star key={starIndex} size={16} fill="currentColor" />
-                      ))}
+                    <ChevronLeft size={18} />
+                  </button>
+                  <button
+                    type="button"
+                    className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/90 text-neutral-700 shadow-sm transition hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
+                    aria-label={t.reviewNextLabel}
+                    onClick={() => handleReviewShift(1)}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+                <div
+                  ref={reviewTrackRef}
+                  className={`flex min-w-max gap-4 animate-review-marquee${isReviewPaused ? ' review-marquee-paused' : ''}`}
+                >
+                  {[...REVIEWS, ...REVIEWS].map((review, index) => (
+                    <div
+                      key={`${review.name}-${index}`}
+                      className="w-[320px] shrink-0 rounded-2xl border bg-white p-5 shadow-sm"
+                      data-review-card="true"
+                    >
+                      <div className="mb-2 flex items-center gap-1 text-yellow-600">
+                        {Array.from({ length: 5 }).map((_, starIndex) => (
+                          <Star key={starIndex} size={16} fill="currentColor" />
+                        ))}
+                      </div>
+                      <p className="text-sm text-neutral-700">“{review.quote}”</p>
+                      <div className="mt-3 text-xs text-neutral-500">— {review.name}</div>
                     </div>
-                    <p className="text-sm text-neutral-700">“{review.quote}”</p>
-                    <div className="mt-3 text-xs text-neutral-500">— {review.name}</div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
         <section className="border-t bg-white" id="contact">
           <div className="mx-auto max-w-6xl px-4 py-12">
             <h2 className="text-2xl font-bold md:text-3xl">{t.contacts}</h2>

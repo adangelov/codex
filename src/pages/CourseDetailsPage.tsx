@@ -34,6 +34,14 @@ export default function CourseDetailsPage() {
       {
         src: categoryBGallery.exterior,
         alt: t.galleryLabels.exterior
+      },
+      {
+        src: categoryBGallery.student1,
+        alt: 'Курсист с инструктор до червен учебен автомобил'
+      },
+      {
+        src: categoryBGallery.student2,
+        alt: 'Курсист с инструктор до червен учебен автомобил (портрет)'
       }
     ]
   } as const;

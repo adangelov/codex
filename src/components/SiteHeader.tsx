@@ -6,7 +6,7 @@ import { type Lang } from '../i18n';
 import { NAV_ITEMS, type NavItem, type NavSection } from '../navigation';
 
 const LANG_OPTIONS = ['bg', 'en', 'ru'] as const;
-const PHONE_NUMBER = '+3598777777430';
+const PHONE_NUMBER = '+359877777430';
 const MOBILE_MENU_ID = 'site-mobile-menu';
 
 interface SiteHeaderProps {
